@@ -2,11 +2,15 @@ import urllib3
 import re
 import os
 import time
+import random
 
 webUrl = "http://www.26ksw.cc/book/36090/";
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 file = "output.txt";
-readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
+ini = "ouput.ini";
+#readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
+readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)">([^<>]*)<\/a>');
+r = random.Random();
 
 def openWriteAdd(s:str):
     '''
@@ -16,11 +20,13 @@ def openWriteAdd(s:str):
         f.write(s);
     return;
 
-def openWtite(s:str):
+def openWtite(path:str,s:str):
     '''
     打开一个不存在的文件并写内容
     '''
-    return
+    with open(path,"w",encoding="utf-8") as f:
+        f.write(s);
+    return;
 
 def openWrites(s:list):
     '''
@@ -33,6 +39,36 @@ def openWrites(s:list):
             f.writelines(x);
     return;
 
+def exists(path:str):
+    '''
+    判断文件是否存在
+    '''
+    return os._exists(path);
+
+def openReadLines(path:str):
+    '''
+    打开文件读取里面的所有行
+    '''
+    with open(path,"r",encoding="utf-8") as f:
+        allValue = f.readlines();
+        return allValue;
+    return []
+
+def saveIni(url:str,urladds:list,names:list,index:int):
+    '''
+    保存INI
+    '''
+    openWtite(ini,"URL:"+str(url)+"\nURLADDS:"+','.join(urladds)+"\nNAMES:"+','.join(names)+"\nINDEX:"+str(index));
+    return;
+
+def changeIniIndex(index:int):
+    '''
+    修改ini中指针指向
+    '''
+    lines = openReadLines(ini);
+    lines[3] = "INDEX:"+str(index);
+    openWtite(ini,"".join(lines));
+    return;
 
 try:
     # 实例化产生请求对象
@@ -62,11 +98,54 @@ try:
 
     allDD = readDD.findall(data);
     allDD = allDD[12:]              #消除初始推荐章节
-
+    
+    urladds = [];
+    names = [];
     i = 0;
-    for x in allDD:
-        y = x.split("/")
-        url = webUrl+y[len(y)-1];
+
+    #判断INI是否存在
+    try:
+        lines = openReadLines(ini);
+        if len(lines)!=4:
+            for x in allDD:
+                y = x[0].split("/")
+                urladds.append(y[len(y)-1]);
+                y = x[1].replace("\n","");
+                y = y.replace("  ","");
+                y = y.replace(",","，"); #防止章节名称中出现逗号导致读取分割失败
+                names.append(y);
+            saveIni(webUrl,urladds,names,0);
+        else:
+            x = lines[1]
+            x = x.split(":");
+            x = x[1]
+            urladds = x.split(",");
+            x = lines[2]
+            x = x.split(":");
+            x = x[1]
+            names = x.split(",");
+            x = lines[3];
+            x = x.split(":");
+            i = int(x[1]);
+    except:
+        for x in allDD:
+            y = x[0].split("/")
+            urladds.append(y[len(y)-1]);
+            y = x[1].replace("\n","");
+            y = y.replace("  ","");
+            y = y.replace(",","，"); #防止章节名称中出现逗号导致读取分割失败
+            y = y.replace(":","："); #防止章节名称中出现冒号导致读取分割失败
+            names.append(y);
+        saveIni(webUrl,urladds,names,0);
+
+    urladds = urladds[i:]             #跳过已有章节
+    names = names[i:]             #跳过已有章节
+    need = len(urladds) - i;
+    
+    for j in range(0,need):
+        x = urladds[j];
+        y = names[j];
+        url = webUrl+x;
         res = http.request("GET",url);
         #print(res.status);
         try:
@@ -81,10 +160,13 @@ try:
         #allText = allText.replace("&nbsp;"," ");
         #allText = allText.replace("<br /><br />","\n");
         #openWriteAdd(allText);
+        openWriteAdd(y);
         openWrites(allText);
-        i+=1;
         print("第"+str(i)+"章已经下载完成");
-        time.sleep(10);
+        i+=1;
+        changeIniIndex(i);
+        time.sleep(r.randint(3,10));
 
 except Exception as e:
+    #changeIniIndex(i);
     raise e;
