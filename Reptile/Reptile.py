@@ -4,15 +4,17 @@ import os
 import time
 import random
 
-webUrl = "http://www.cits0871.com/books/294432717/";
-webUrlForEach = "http://www.cits0871.com";
+webUrl = "http://www.cits0871.com/books/1617205736/";
+webUrlForEach = "https://www.guodongxs.com";
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 file = "output.txt";
 ini = "ouput.ini";
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
-readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
+#readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
+readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 r = random.Random();
-start = 0               #初始推荐章节数量
+start = 15               #初始推荐章节数量
+passItem = '/html/13/13722/7099871.shtml'   #排除的对象
 
 def openWriteAdd(s:str):
     '''
@@ -98,6 +100,7 @@ try:
     except UnicodeDecodeError as err:
         data = res.data.decode("gbk");
 
+    #data.replace("\<!\>","")              #删除特殊注释
     allDD = readDD.findall(data);
     allDD = allDD[start:]              #消除初始推荐章节
     
@@ -112,8 +115,10 @@ try:
             for x in allDD:
                 #y = x[0].split("/")
                 #urladds.append(y[len(y)-1]);
-                urladds.append(x[0]);
-                y = x[1].replace("\n","");
+                #urladds.append(x[0]);
+                #y = x[1].replace("\n","");
+                urladds.append(x[1]);
+                y = x[2].replace("\n","");
                 y = y.replace("  ","");
                 y = y.replace(",","，"); #防止章节名称中出现逗号导致读取分割失败
                 names.append(y);
@@ -134,8 +139,10 @@ try:
         for x in allDD:
             #y = x[0].split("/")
             #urladds.append(y[len(y)-1]);
-            urladds.append(x[0]);
-            y = x[1].replace("\n","");
+            #urladds.append(x[0]);
+            #y = x[1].replace("\n","");
+            urladds.append(x[1]);
+            y = x[2].replace("\n","");
             y = y.replace("  ","");
             y = y.replace(",","，"); #防止章节名称中出现逗号导致读取分割失败
             y = y.replace(":","："); #防止章节名称中出现冒号导致读取分割失败
@@ -147,9 +154,46 @@ try:
     need = len(urladds) - i;
     
     for j in range(0,need):
+        
+        #以下是读取P行的代码
+
+        #x = urladds[j];
+        #y = names[j];
+        #url = webUrlForEach+x;
+        #res = http.request("GET",url);
+        ##print(res.status);
+        #try:
+        #    eachData = res.data.decode("utf-8");
+        #except UnicodeDecodeError as err2:
+        #    eachData = res.data.decode("gbk");
+
+        ##print(eachData);
+        
+        ##text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
+        #text = re.compile(r'<p>([^<>]*)<\/p>')
+        
+        #allText = text.findall(eachData);
+        ##allText = allText[0];
+        ##allText = allText.replace("&nbsp;"," ");
+        ##allText = allText.replace("<br /><br />","\n");
+        ##openWriteAdd(allText);
+        #openWriteAdd("\r\n");
+        #openWriteAdd(y);
+        #openWriteAdd("\r\n");
+        ##openWrites(allText);
+        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        #print("第"+str(i)+"章已经下载完成");
+        #i+=1;
+        #changeIniIndex(i);
+        #time.sleep(r.randint(3,7));
+
+        
         x = urladds[j];
         y = names[j];
         url = webUrlForEach+x;
+        if url == webUrlForEach+passItem:
+            i+=1;
+            continue;
         res = http.request("GET",url);
         #print(res.status);
         try:
@@ -160,20 +204,30 @@ try:
         #print(eachData);
         
         #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        text = re.compile(r'<p>([^<>]*)<\/p>')
+        #text = re.compile(r'<p>([^<>]*)<\/p>')
+        #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
+        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
+        #text = re.compile(r'div id="content">')
         
         allText = text.findall(eachData);
-        #allText = allText[0];
-        #allText = allText.replace("&nbsp;"," ");
-        #allText = allText.replace("<br /><br />","\n");
+        allText = allText[0];
+        allText = allText.replace("&nbsp;"," ");
+        allText = allText.replace("<br /><br />","\n");
+        allText = allText.replace("<br />","\n");
+        allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
         #openWriteAdd(allText);
-        openWriteAdd(y);
-        #openWrites(allText);
-        openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        openWriteAdd("\n");
+        openWriteAdd("第"+str(i)+"章 "+ y);
+        #openWriteAdd(y);
+        openWriteAdd("\n");
+        openWrites(allText);
+        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         print("第"+str(i)+"章已经下载完成");
         i+=1;
         changeIniIndex(i);
-        time.sleep(r.randint(3,10));
+        time.sleep(r.randint(0,1));
 
 except Exception as e:
     #changeIniIndex(i);
