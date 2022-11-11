@@ -5,7 +5,7 @@ import time
 import random
 
 webUrl = "http://www.cits0871.com/books/1617205736/";
-webUrlForEach = "https://www.guodongxs.com";
+webUrlForEach = "http://www.cits0871.com";
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 file = "output.txt";
 ini = "ouput.ini";
@@ -13,8 +13,9 @@ ini = "ouput.ini";
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 r = random.Random();
-start = 15               #初始推荐章节数量
-passItem = '/html/13/13722/7099871.shtml'   #排除的对象
+start = 10               #初始推荐章节数量
+passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
+passName = "无标题章节";                    #排除的对象(章节名排除)
 
 def openWriteAdd(s:str):
     '''
@@ -39,8 +40,9 @@ def openWrites(s:list):
     with open(file,"a",encoding="utf-8") as f:
         for x in s:
             x = x.replace(" ","");
-            x = x.replace("\n\n","\n");
-            f.writelines(x);
+            x = x.replace("\n","");
+            x = x.replace("\r","");
+            f.writelines(x+"\n");
     return;
 
 def exists(path:str):
@@ -151,7 +153,7 @@ try:
 
     urladds = urladds[i:]             #跳过已有章节
     names = names[i:]             #跳过已有章节
-    need = len(urladds) - i;
+    need = len(urladds);
     
     for j in range(0,need):
         
@@ -191,7 +193,7 @@ try:
         x = urladds[j];
         y = names[j];
         url = webUrlForEach+x;
-        if url == webUrlForEach+passItem:
+        if url == webUrlForEach+passUrl or y==passName:
             i+=1;
             continue;
         res = http.request("GET",url);
@@ -204,26 +206,30 @@ try:
         #print(eachData);
         
         #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        #text = re.compile(r'<p>([^<>]*)<\/p>')
+        text = re.compile(r'<p>([^<>]*)<\/p>')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
-        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
+        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
         #text = re.compile(r'div id="content">')
         
         allText = text.findall(eachData);
-        allText = allText[0];
-        allText = allText.replace("&nbsp;"," ");
-        allText = allText.replace("<br /><br />","\n");
-        allText = allText.replace("<br />","\n");
-        allText = allText.replace("\n\n","\n");
-        allText = allText.replace("\n\n","\n");
-        allText = allText.replace("\n\n","\n");
+
+        #allText = allText[0];
+        #allText = allText.replace("&nbsp;"," ");
+        #allText = allText.replace("<br /><br />","\n");
+        #allText = allText.replace("<br />","\n");
+        #allText = allText.replace("\n\n","\n");
+        #allText = allText.replace("\n\n","\n");
+        #allText = allText.replace("\n\n","\n");
+        
         #openWriteAdd(allText);
         openWriteAdd("\n");
-        openWriteAdd("第"+str(i)+"章 "+ y);
-        #openWriteAdd(y);
-        openWriteAdd("\n");
-        openWrites(allText);
-        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        #openWriteAdd("第"+str(i)+"章 "+ y);
+        openWriteAdd(y);
+        openWriteAdd("\n\n");
+
+        #openWrites(allText);
+        openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        
         print("第"+str(i)+"章已经下载完成");
         i+=1;
         changeIniIndex(i);
