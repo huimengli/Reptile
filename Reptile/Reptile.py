@@ -4,8 +4,8 @@ import os
 import time
 import random
 
-webUrl = "http://www.cits0871.com/books/1617205736/";
-webUrlForEach = "http://www.cits0871.com";
+webUrl = "https://www.147xs.org/book/131800/";
+webUrlForEach = "https://www.147xs.org/";
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 file = "output.txt";
 ini = "ouput.ini";
@@ -13,7 +13,7 @@ ini = "ouput.ini";
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 r = random.Random();
-start = 10               #初始推荐章节数量
+start = 16               #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 
