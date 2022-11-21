@@ -6,16 +6,20 @@ import random
 
 webUrl = "https://www.147xs.org/book/131800/";
 webUrlForEach = "https://www.147xs.org/";
-headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 file = "output.txt";
 ini = "ouput.ini";
+start = 16               #初始推荐章节数量
+passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
+passName = "无标题章节";                    #排除的对象(章节名排除)
+
+#----------------------------------------------------------#
+headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 r = random.Random();
-start = 16               #初始推荐章节数量
-passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
-passName = "无标题章节";                    #排除的对象(章节名排除)
+iniCount = 4;                               #ini行数
+#----------------------------------------------------------#
 
 def openWriteAdd(s:str):
     '''
@@ -113,7 +117,7 @@ try:
     #判断INI是否存在
     try:
         lines = openReadLines(ini);
-        if len(lines)!=4:
+        if len(lines)!=iniCount:
             for x in allDD:
                 #y = x[0].split("/")
                 #urladds.append(y[len(y)-1]);
@@ -137,6 +141,19 @@ try:
             x = lines[3];
             x = x.split(":");
             i = int(x[1]);
+            #判断一下ini文件和网站读取的数据是否相符合
+            oldCount = len(urladds);
+            newCount = len(allDD);
+            if oldCount!=newCount:
+                for j in range(oldCount,newCount):
+                    x = allDD[j];
+                    urladds.append(x[1]);
+                    y = x[2].replace("\n","");
+                    y = y.replace("  ","");
+                    y = y.replace(",","，"); #防止章节名称中出现逗号导致读取分割失败
+                    y = y.replace(":","："); #防止章节名称中出现冒号导致读取分割失败
+                    names.append(y);
+                saveIni(webUrl,urladds,names,i);#刷新并保存ini
     except:
         for x in allDD:
             #y = x[0].split("/")
@@ -227,8 +244,8 @@ try:
         openWriteAdd(y);
         openWriteAdd("\n\n");
 
-        #openWrites(allText);
-        openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        openWrites(allText);
+        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
         print("第"+str(i)+"章已经下载完成");
         i+=1;
