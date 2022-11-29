@@ -4,11 +4,11 @@ import os
 import time
 import random
 
-webUrl = "https://www.lvsewx.com/books/33/33642/53999959.html";
-webUrlForEach = "https://www.lvsewx.com";
+webUrl = "https://www.23qb.com/book/192153/";
+webUrlForEach = "https://www.23qb.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 20               #初始推荐章节数量
+start = 6               #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 
@@ -224,30 +224,30 @@ try:
         #print(eachData);
         
         #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        #text = re.compile(r'<p>([^<>]*)<\/p>')
+        text = re.compile(r'<p>([^<>]*)<\/p>')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
         #text = re.compile(r'<script>read2();</script>([\s\S]*)<script>app2();</script>')
         
         allText = text.findall(eachData);
 
-        allText = allText[0];
-        allText = allText.replace("&nbsp;"," ");
-        allText = allText.replace("<br /><br />","\n");
-        allText = allText.replace("<br />","\n");
-        allText = allText.replace("\n\n","\n");
+        #allText = allText[0];
+        #allText = allText.replace("&nbsp;"," ");
+        #allText = allText.replace("<br /><br />","\n");
+        #allText = allText.replace("<br />","\n");
+        #allText = allText.replace("\n\n","\n");
         #allText = allText.replace("\n\n","\n");
         #allText = allText.replace("\n\n","\n");
         
         openWriteAdd("\n");
-        #openWriteAdd("第"+str(i)+"章 "+ y);
-        openWriteAdd(y);
+        openWriteAdd("第"+str(i)+"章 "+ y);
+        #openWriteAdd(y);
         openWriteAdd("\n\n");
 
         #openWrites(allText);                       #多行内容
-        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
-        openWriteAdd(allText);                      #单行内容
+        openWrites(allText[:len(allText)-2]);       #去掉最后行尾网站信息
+        #openWriteAdd(allText);                      #单行内容
         
         print("第"+str(i)+"章已经下载完成");
         i+=1;
