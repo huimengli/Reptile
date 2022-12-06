@@ -4,22 +4,26 @@ import os
 import time
 import random
 
-webUrl = "https://www.23qb.com/book/192153/";
-webUrlForEach = "https://www.23qb.com";
+webUrl = "https://www.biqugeg.cc/72327_72327504/";
+webUrlForEach = "https://www.biqugeg.cc";
 file = "output.txt";
 ini = "ouput.ini";
-start = 6               #初始推荐章节数量
+start = 22               #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
+needProxy = True;                           #下载网站是否需要代理
 
 #----------------------------------------------------------#
-headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36','Cookie':'fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; fikker-TiPI-ZIdg=rmfYpsRWNibUbSRID3fMT3LwMIvenNb3; bgcolor=; font=; size=; fontcolor=; width=; bookid=36090%2C36090; Hm_lvt_20aa077072a9d85797a5443f74cc080e=1664966679,1664970894; chapterid=58701020%2C58701751; chaptername=%u7B2C1%u7AE0%20%u624B%u4E2D%u63E1%u7684%u4FBF%u662F%u6574%u4E2A%u4EBA%u751F%2C%u7B2C712%u7AE0%20%u7EFF%u9152%u65B0%u8BCD; Hm_lpvt_20aa077072a9d85797a5443f74cc080e=1664970936'  }
+headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 r = random.Random();
 iniCount = 4;                               #ini行数
+if needProxy:                               #设置代理(小飞机)
+    os.environ["http_proxy"] = "http://127.0.0.1:33210";
+    os.environ["https_proxy"] = "http://127.0.0.1:33210";
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -83,10 +87,20 @@ def changeIniIndex(index:int):
 
 try:
     # 实例化产生请求对象
-    http = urllib3.PoolManager()
+    
+    if needProxy:
+        #proxy = {
+        #    'http':'127.0.0.1:33210',    
+        #    'https':'127.0.0.1:33210',    
+        #};
+        #http = urllib3.ProxyManager(proxy,headers = headers);
+        http = urllib3.ProxyManager("http://127.0.0.1:33210",headers = headers);
+    else:
+        http = urllib3.PoolManager()
 
     # get请求指定网址
-    res = http.request("GET",webUrl)
+    #res = http.request("GET",webUrl)
+    res = http.request("GET",webUrl,None,headers);
 
     #res = http.request(
     #   "GET",
@@ -214,7 +228,7 @@ try:
         if url == webUrlForEach+passUrl or y==passName:
             i+=1;
             continue;
-        res = http.request("GET",url);
+        res = http.request("GET",url,None,headers);
         #print(res.status);
         try:
             eachData = res.data.decode("utf-8");
@@ -224,30 +238,30 @@ try:
         #print(eachData);
         
         #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        text = re.compile(r'<p>([^<>]*)<\/p>')
+        #text = re.compile(r'<p>([^<>]*)<\/p>')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+        text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
         #text = re.compile(r'<script>read2();</script>([\s\S]*)<script>app2();</script>')
         
         allText = text.findall(eachData);
 
-        #allText = allText[0];
-        #allText = allText.replace("&nbsp;"," ");
-        #allText = allText.replace("<br /><br />","\n");
-        #allText = allText.replace("<br />","\n");
-        #allText = allText.replace("\n\n","\n");
+        allText = allText[0];
+        allText = allText.replace("&nbsp;"," ");
+        allText = allText.replace("<br /><br />","\n");
+        allText = allText.replace("<br />","\n");
+        allText = allText.replace("\n\n","\n");
         #allText = allText.replace("\n\n","\n");
         #allText = allText.replace("\n\n","\n");
         
         openWriteAdd("\n");
-        openWriteAdd("第"+str(i)+"章 "+ y);
-        #openWriteAdd(y);
+        #openWriteAdd("第"+str(i)+"章 "+ y);
+        openWriteAdd(y);
         openWriteAdd("\n\n");
 
         #openWrites(allText);                       #多行内容
-        openWrites(allText[:len(allText)-2]);       #去掉最后行尾网站信息
-        #openWriteAdd(allText);                      #单行内容
+        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+        openWriteAdd(allText);                      #单行内容
         
         print("第"+str(i)+"章已经下载完成");
         i+=1;
