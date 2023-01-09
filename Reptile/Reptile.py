@@ -4,14 +4,16 @@ import os
 import time
 import random
 
-webUrl = "https://www.biqugeg.cc/72327_72327504/";
-webUrlForEach = "https://www.biqugeg.cc";
+webUrl = "https://www.lewenn.net/lw71738613/";
+webUrlForEach = "https://www.lewenn.net";
 file = "output.txt";
 ini = "ouput.ini";
-start = 22               #初始推荐章节数量
-passUrl = '/html/13/13722/7099871.shtml'   #排除的对象(URL排除)
+start = 23               #初始推荐章节数量
+passUrl = '/html/13/13722/7099871.shtml'    #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
-needProxy = True;                           #下载网站是否需要代理
+needProxy = False;                          #下载网站是否需要代理
+needVerify = False;                         #是否需要网页ssl证书验证
+ignoreDecode = True;                        #忽略解码错误内容
 
 #----------------------------------------------------------#
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
@@ -24,6 +26,9 @@ iniCount = 4;                               #ini行数
 if needProxy:                               #设置代理(小飞机)
     os.environ["http_proxy"] = "http://127.0.0.1:33210";
     os.environ["https_proxy"] = "http://127.0.0.1:33210";
+
+if needVerify==False:
+    urllib3.disable_warnings();
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -94,9 +99,9 @@ try:
         #    'https':'127.0.0.1:33210',    
         #};
         #http = urllib3.ProxyManager(proxy,headers = headers);
-        http = urllib3.ProxyManager("http://127.0.0.1:33210",headers = headers);
+        http = urllib3.ProxyManager("http://127.0.0.1:33210",headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
     else:
-        http = urllib3.PoolManager()
+        http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
 
     # get请求指定网址
     #res = http.request("GET",webUrl)
@@ -233,7 +238,7 @@ try:
         try:
             eachData = res.data.decode("utf-8");
         except UnicodeDecodeError as err2:
-            eachData = res.data.decode("gbk");
+            eachData = res.data.decode("gbk",errors= (ignoreDecode==False and 'replace'or'ignore'));
 
         #print(eachData);
         
@@ -241,9 +246,11 @@ try:
         #text = re.compile(r'<p>([^<>]*)<\/p>')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-        #text = re.compile(r'<script>read2();</script>([\s\S]*)<script>app2();</script>')
+        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+        text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         
+        eachData = eachData.replace("\x3C","<");    #修复特殊字符
+
         allText = text.findall(eachData);
 
         allText = allText[0];
@@ -251,10 +258,10 @@ try:
         allText = allText.replace("<br /><br />","\n");
         allText = allText.replace("<br />","\n");
         allText = allText.replace("\n\n","\n");
-        #allText = allText.replace("\n\n","\n");
-        #allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
         
-        openWriteAdd("\n");
+        openWriteAdd("\n\n");
         #openWriteAdd("第"+str(i)+"章 "+ y);
         openWriteAdd(y);
         openWriteAdd("\n\n");
@@ -266,7 +273,7 @@ try:
         print("第"+str(i)+"章已经下载完成");
         i+=1;
         changeIniIndex(i);
-        time.sleep(r.randint(0,1));
+        time.sleep(r.randint(3,7));
 
 except Exception as e:
     #changeIniIndex(i);
