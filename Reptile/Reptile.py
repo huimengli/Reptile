@@ -4,15 +4,15 @@ import os
 import time
 import random
 
-webUrl = "https://www.147xs.org/book/131800/";
-webUrlForEach = "https://www.147xs.org";
+webUrl = "https://fozhidao.cc/book/68757431/";
+webUrlForEach = "https://fozhidao.cc";
 file = "output.txt";
 ini = "ouput.ini";
-start = 16               #初始推荐章节数量
+start = 20                                   #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'    #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
-needVerify = False;                         #是否需要网页ssl证书验证
+needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 
 #----------------------------------------------------------#
@@ -243,38 +243,40 @@ try:
         #print(eachData);
         
         #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        text = re.compile(r'<p>([^<>]*)<\/p>')
+        #text = re.compile(r'<p>([^<>]*)<\/p>')
+        #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
         #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-        #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+        text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         
         #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
         allText = text.findall(eachData);
 
-        #allText = allText[0];
-        #allText = allText.replace("&nbsp;"," ");
-        #allText = allText.replace("<br /><br />","\n");
-        #allText = allText.replace("<br />","\n");
-        #allText = allText.replace("\n\n","\n");
-        #allText = allText.replace("\n\n","\n");
-        #allText = allText.replace("\n\n","\n");
+        allText = allText[0];
+        allText = allText.replace("&nbsp;"," ");
+        allText = allText.replace("<br /><br />","\n");
+        allText = allText.replace("<br />","\n");
+        allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
+        allText = allText.replace("\n\n","\n");
         
         openWriteAdd("\n\n");
         #openWriteAdd("第"+str(i)+"章 "+ y);
         openWriteAdd(y);
         openWriteAdd("\n\n");
 
-        openWrites(allText);                       #多行内容
+        #openWrites(allText);                       #多行内容
         #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
-        #openWriteAdd(allText);                      #单行内容
+        openWriteAdd(allText);                      #单行内容
         
         print("第"+str(i)+"章已经下载完成");
         i+=1;
         changeIniIndex(i);
         #time.sleep(r.randint(3,7));             #有爬取限制的网站
-        time.sleep(r.randint(0,1));             #无爬取限制的网站
+        #time.sleep(r.randint(0,1));             #无爬取限制的网站
+        time.sleep(r.randint(1,4));             #无爬取限制的网站
 
 except Exception as e:
     #changeIniIndex(i);
