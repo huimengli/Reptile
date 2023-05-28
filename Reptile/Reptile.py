@@ -4,8 +4,8 @@ import os
 import time
 import random
 
-webUrl = "https://www.mibiquge.com/60_60211/index.html";
-webUrlForEach = "https://www.mibiquge.com";
+webUrl = "https://www.86wxw.com/0/301/";
+webUrlForEach = "https://www.86wxw.com";
 file = "output.txt";
 ini = "ouput.ini";
 start = 23-4                                   #初始推荐章节数量
@@ -20,7 +20,8 @@ headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
-readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
+#readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
+readDD = re.compile(r'<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 r = random.Random();
 iniCount = 4;                               #ini行数
 if needProxy:                               #设置代理(小飞机)
@@ -247,7 +248,8 @@ try:
         #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
         #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
         #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
         #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
