@@ -4,8 +4,8 @@ import os
 import time
 import random
 
-webUrl = "https://www.biqudd.com/125_125716/";
-webUrlForEach = "https://www.biqudd.com/125_125716/";
+webUrl = "https://www.800xs.org/book_115716/";
+webUrlForEach = "https://www.800xs.org/book_115716/";
 file = "output.txt";
 ini = "ouput.ini";
 start = 21                                  #初始推荐章节数量
@@ -277,8 +277,8 @@ try:
         allText = allText.replace("</div>","\n");
         
         openWriteAdd("\n\n");
-        openWriteAdd("第"+str(i+1)+"章 "+ y);
-        #openWriteAdd(y);
+        #openWriteAdd("第"+str(i+1)+"章 "+ y);
+        openWriteAdd(y);
         openWriteAdd("\n\n");
 
         #openWrites(allText);                       #多行内容
@@ -290,7 +290,7 @@ try:
         changeIniIndex(i);
         #time.sleep(r.randint(3,7));             #有爬取限制的网站
         #time.sleep(r.randint(0,1));             #无爬取限制的网站
-        time.sleep(r.randint(3,4));             #无爬取限制的网站
+        time.sleep(r.randint(1,4));             #无爬取限制的网站
 
 except Exception as e:
     #changeIniIndex(i);
