@@ -4,11 +4,11 @@ import os
 import time
 import random
 
-webUrl = "https://www.800xs.org/book_115716/";
-webUrlForEach = "https://www.800xs.org/book_115716/";
+webUrl = "https://www.juzixs.com/files/article/html/20/20012/";
+webUrlForEach = "https://www.juzixs.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 21                                  #初始推荐章节数量
+start = 11                                  #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'    #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -248,11 +248,11 @@ try:
         #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
         #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
         #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
         #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
-        text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
+        #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
         #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
         #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
         #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
@@ -267,8 +267,10 @@ try:
         allText = allText.replace("&nbsp;"," ");
         allText = allText.replace("<br /><br />","\n");
         allText = allText.replace("<br/><br/>","\n");
+        allText = allText.replace("<br><br>","\n");
         allText = allText.replace("<br />","\n");
         allText = allText.replace("<br/>","\n");
+        allText = allText.replace("<br>","\n");
         allText = allText.replace("<p>","");
         allText = allText.replace("</p>","\n");
         allText = allText.replace("\n\n","\n");
