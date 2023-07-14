@@ -5,16 +5,17 @@ import time
 import random
 import math
 
-webUrl = "https://www.ibiquges.com/14/14795/";
-webUrlForEach = "https://www.ibiquges.com";
+webUrl = "https://www.97xiaoshuo.net/22_22905/";
+webUrlForEach = "https://www.97xiaoshuo.net";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10                                  #初始推荐章节数量
+start = 10 + 13                                 #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'    #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
+isLines = False;                             #内容是否是多行的
 timeWait = [2,4];                           #等待时间([最小值,最大值])
 
 #----------------------------------------------------------#
@@ -265,53 +266,59 @@ try:
 
         #print(eachData);
         
-        #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        #text = re.compile(r'<p>([^<>]*)<\/p>')
-        #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
-        #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
-        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-        #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-        #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-        #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
-        #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
-        #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
-        #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
-        #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
-        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-        text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
-        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-        #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
-        #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+        
+        if isLines:
+            #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
+            #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
+            #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
+            #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
+            #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
+            #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+        else:
+            text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
+            #text = re.compile(r'<p>([^<>]*)<\/p>')
         
         #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
         allText = text.findall(eachData);
 
-        allText = allText[0];
-        allText = allText.replace("&nbsp;"," ");
-        allText = allText.replace("<br /><br />","\n");
-        allText = allText.replace("<br/><br/>","\n");
-        allText = allText.replace("<br><br>","\n");
-        allText = allText.replace("<br />","\n");
-        allText = allText.replace("<br/>","\n");
-        allText = allText.replace("<br>","\n");
-        allText = allText.replace("<p>","");
-        allText = allText.replace("</p>","\n");
-        allText = allText.replace("\n\n","\n");
-        allText = allText.replace("\n\n","\n");
-        allText = allText.replace("\n\n","\n");
-        allText = allText.replace("</div>","\n");
+        if isLines:
+            allText = allText[0];
+            allText = allText.replace("&nbsp;"," ");
+            allText = allText.replace("<br /><br />","\n");
+            allText = allText.replace("<br/><br/>","\n");
+            allText = allText.replace("<br><br>","\n");
+            allText = allText.replace("<br />","\n");
+            allText = allText.replace("<br/>","\n");
+            allText = allText.replace("<br>","\n");
+            allText = allText.replace("<p>","");
+            allText = allText.replace("</p>","\n");
+            allText = allText.replace("\n\n","\n");
+            allText = allText.replace("\n\n","\n");
+            allText = allText.replace("\n\n","\n");
+            allText = allText.replace("</div>","\n");
         
         openWriteAdd("\n\n");
         #openWriteAdd("第"+str(i+1)+"章 "+ y);
         openWriteAdd(y);
         openWriteAdd("\n\n");
 
-        #openWrites(allText);                       #多行内容
-        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
-        openWriteAdd(allText);                      #单行内容
+        if isLines:
+            openWriteAdd(allText);                      #单行内容
+        else:
+            openWrites(allText);                        #多行内容
+            #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
         print("\r","第"+str(i)+"章已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
         i+=1;
