@@ -5,8 +5,8 @@ import time
 import random
 import math
 
-webUrl = "https://www.97xiaoshuo.net/22_22905/";
-webUrlForEach = "https://www.97xiaoshuo.net";
+webUrl = "https://www.114zw8.com/book/13918/";
+webUrlForEach = "https://www.114zw8.com";
 file = "output.txt";
 ini = "ouput.ini";
 start = 10 + 13                                 #初始推荐章节数量
@@ -267,7 +267,7 @@ try:
         #print(eachData);
         
         
-        if isLines:
+        if isLines==False:
             #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
@@ -280,11 +280,12 @@ try:
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+            text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
@@ -293,7 +294,7 @@ try:
 
         allText = text.findall(eachData);
 
-        if isLines:
+        if isLines == False:
             allText = allText[0];
             allText = allText.replace("&nbsp;"," ");
             allText = allText.replace("<br /><br />","\n");
@@ -314,7 +315,7 @@ try:
         openWriteAdd(y);
         openWriteAdd("\n\n");
 
-        if isLines:
+        if isLines == False:
             openWriteAdd(allText);                      #单行内容
         else:
             openWrites(allText);                        #多行内容
