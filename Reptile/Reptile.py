@@ -5,18 +5,20 @@ import time
 import random
 import math
 
-webUrl = "https://www.114zw8.com/book/13918/";
-webUrlForEach = "https://www.114zw8.com";
+webUrl = "http://www.xinbqg.com/114/114770/";
+webUrlForEach = "http://www.xinbqg.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 13                                 #初始推荐章节数量
+start = 10                                 #初始推荐章节数量
 passUrl = '/html/13/13722/7099871.shtml'    #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-timeWait = [2,4];                           #等待时间([最小值,最大值])
+haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+timeWait = [10,13];                           #等待时间([最小值,最大值])
+maxErrorTimes = 50;                          #章节爬取最大错误次数
 
 #----------------------------------------------------------#
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
@@ -30,12 +32,17 @@ readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style=[^<>]*)? href ?=["\']
 #readDD = re.compile(r'<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 r = random.Random();
 iniCount = 4;                               #ini行数
+errorTimes = 0;                             #错误次数
 if needProxy:                               #设置代理(小飞机)
     os.environ["http_proxy"] = "http://127.0.0.1:33210";
     os.environ["https_proxy"] = "http://127.0.0.1:33210";
 
 if needVerify==False:
     urllib3.disable_warnings();
+
+#os.environ["TERM"] = "ansi";                #设置环境变量用于显示有色终端内容(无效)
+file_path = os.path.abspath(__file__)
+dir_path = os.path.dirname(file_path)       #当前文件所在文件夹
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -112,6 +119,44 @@ def getTime(second:int):
     ret += m and str(m) + "分钟" or ""
     ret += str(s) + "秒"
     return ret;
+
+def write(text, color):
+    '''
+    打印有颜色的字,不换行
+    '''
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'purple': '\033[95m',
+        'white': '\033[97m',
+        'grey': '\033[90m',
+        'black': '\033[30m',
+        'default': '\033[0m',
+    }
+    print(colors[color] + str(text) + colors['default'],end="");
+    
+def writeLine(text, color):
+    '''
+    打印有颜色的字
+    '''
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'purple': '\033[95m',
+        'white': '\033[97m',
+        'grey': '\033[90m',
+        'black': '\033[30m',
+        'default': '\033[0m',
+    }
+    print(colors[color] + str(text) + colors['default']);
+
+def consoleWrite(text,color):
+    value = dir_path+"\\write.exe "+text+" -C "+color;
+    os.system(value);
 
 try:
     # 实例化产生请求对象
@@ -215,7 +260,7 @@ try:
     names = names[i:]             #跳过已有章节
     need = len(urladds);
     pageCount = len(allDD);         #总章节数量
-    
+
     for j in range(0,need):
         
         #以下是读取P行的代码
@@ -280,12 +325,12 @@ try:
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
-            text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+            #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
@@ -295,7 +340,17 @@ try:
         allText = text.findall(eachData);
 
         if isLines == False:
-            allText = allText[0];
+            try:
+                allText = allText[0];
+                errorTimes = 0;
+            except IndexError:
+                #休眠一次时间后重试
+                errorTimes +=1;
+                print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
+                if errorTimes>maxErrorTimes:
+                    raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
+                time.sleep(r.randint(timeWait[0],timeWait[1]));
+                continue;
             allText = allText.replace("&nbsp;"," ");
             allText = allText.replace("<br /><br />","\n");
             allText = allText.replace("<br/><br/>","\n");
@@ -309,10 +364,23 @@ try:
             allText = allText.replace("\n\n","\n");
             allText = allText.replace("\n\n","\n");
             allText = allText.replace("</div>","\n");
+        else:
+            if len(allText)==0:
+                #休眠一次时间后重试
+                errorTimes +=1;
+                print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
+                if errorTimes>maxErrorTimes:
+                    raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
+                time.sleep(r.randint(timeWait[0],timeWait[1]));
+                continue;
+            else:
+                errorTimes = 0;
         
         openWriteAdd("\n\n");
-        #openWriteAdd("第"+str(i+1)+"章 "+ y);
-        openWriteAdd(y);
+        if haveTitle:
+            openWriteAdd(y);
+        else:
+            openWriteAdd("第"+str(i+1)+"章 "+ y);
         openWriteAdd("\n\n");
 
         if isLines == False:
@@ -321,13 +389,16 @@ try:
             openWrites(allText);                        #多行内容
             #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
-        print("\r","第"+str(i)+"章已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+        print("\r","第"+str(i+1)+"章已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
         i+=1;
         changeIniIndex(i);
         #time.sleep(r.randint(3,7));             #有爬取限制的网站
         #time.sleep(r.randint(0,1));             #无爬取限制的网站
-        time.sleep(r.randint(timeWait[0],timeWait[1]));             #无爬取限制的网站
+        time.sleep(r.randint(timeWait[0],timeWait[1]));
 
 except Exception as e:
     #changeIniIndex(i);
+    #print("\x1b[31;1m[Error]\x1b[0m\t" + str(e) + "\n");
+    consoleWrite("[Error]","red");
+    print(str(e));
     raise e;
