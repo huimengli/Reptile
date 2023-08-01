@@ -5,8 +5,8 @@ import time
 import random
 import math
 
-webUrl = "http://www.xinbqg.com/114/114770/";
-webUrlForEach = "http://www.xinbqg.com";
+webUrl = "http://www.bqwu.com/biquge/72_72300/";
+webUrlForEach = "http://www.bqwu.com";
 file = "output.txt";
 ini = "ouput.ini";
 start = 10                                 #初始推荐章节数量
@@ -16,8 +16,8 @@ needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
-timeWait = [10,13];                           #等待时间([最小值,最大值])
+haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+timeWait = [2,4];                           #等待时间([最小值,最大值])
 maxErrorTimes = 50;                          #章节爬取最大错误次数
 
 #----------------------------------------------------------#
@@ -325,9 +325,9 @@ try:
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
+            text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
