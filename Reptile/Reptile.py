@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "http://www.cxbz958.org/xianzibienaole/?wkbatg=q54vx3";
-webUrlForEach = "http://www.cxbz958.org";
+webUrl = "https://www.eexiaoshuo.net/wobeikunzaitongyitianshiwannian/";
+webUrlForEach = "https://www.eexiaoshuo.net";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 +13                                #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -43,6 +43,7 @@ if needVerify==False:
 #os.environ["TERM"] = "ansi";                #设置环境变量用于显示有色终端内容(无效)
 file_path = os.path.abspath(__file__)
 dir_path = os.path.dirname(file_path)       #当前文件所在文件夹
+reptileGet = True;                          #爬取成功
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -256,12 +257,12 @@ try:
             names.append(y);
         saveIni(webUrl,urladds,names,0);
 
-    urladds = urladds[i:]             #跳过已有章节
-    names = names[i:]             #跳过已有章节
+    #urladds = urladds[i:]             #跳过已有章节
+    #names = names[i:]             #跳过已有章节
     need = len(urladds);
     pageCount = len(allDD);         #总章节数量
 
-    for j in range(0,need):
+    while(i<len(names)):
         
         #以下是读取P行的代码
 
@@ -296,8 +297,8 @@ try:
         #time.sleep(r.randint(3,7));
 
         
-        x = urladds[j];
-        y = names[j];
+        x = urladds[i];
+        y = names[i];
         url = webUrlForEach+x;
         if url == webUrlForEach+passUrl or y==passName:
             i+=1;
@@ -326,8 +327,9 @@ try:
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-            text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
@@ -347,7 +349,8 @@ try:
             except IndexError:
                 #休眠一次时间后重试
                 errorTimes +=1;
-                print("当前章节指针:"+str(i),"章节名称:",x,"\n","章节网址:",y);
+                if errorTimes==1:
+                    print("当前章节指针:"+str(i),"章节名称:",x,"\n","章节网址:",y);
                 print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
                 if errorTimes>maxErrorTimes:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
