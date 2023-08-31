@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "https://www.xbiqugexx.org/72_72038/";
-webUrlForEach = "https://www.xbiqugexx.org";
+webUrl = "https://www.922zw.com/zw/63605/";
+webUrlForEach = "https://www.922zw.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 19                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -17,7 +17,7 @@ needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
-timeWait = [4,6];                           #等待时间([最小值,最大值])
+timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 50;                          #章节爬取最大错误次数
 
 #----------------------------------------------------------#
@@ -328,7 +328,8 @@ try:
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
-            text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
+            #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
+            text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
@@ -351,7 +352,7 @@ try:
                 #休眠一次时间后重试
                 errorTimes +=1;
                 if errorTimes==1:
-                    print("当前章节指针:"+str(i),"章节名称:",x,"\n","章节网址:",y);
+                    print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
                 print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
                 if errorTimes>maxErrorTimes:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
@@ -370,10 +371,18 @@ try:
             allText = allText.replace("\n\n","\n");
             allText = allText.replace("\n\n","\n");
             allText = allText.replace("</div>","\n");
+            allText = allText.replace("&ldquo;","\"");
+            allText = allText.replace("&lsquo;","'");
+            allText = allText.replace("&rsquo;","'");
+            allText = allText.replace("&rdquo;","\"");
+            allText = allText.replace("&hellip;","…");
+            allText = allText.replace("&mdash;","—");
         else:
             if len(allText)==0:
                 #休眠一次时间后重试
                 errorTimes +=1;
+                if errorTimes==1:
+                    print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
                 print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
                 if errorTimes>maxErrorTimes:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
