@@ -380,6 +380,7 @@ try:
             allText = allText.replace("&rdquo;","\"");
             allText = allText.replace("&hellip;","…");
             allText = allText.replace("&mdash;","—");
+            allText = allText.replace("澹","淡");
         else:
             if len(allText)==0:
                 #休眠一次时间后重试
