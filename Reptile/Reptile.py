@@ -5,14 +5,14 @@ import time
 import random
 import math
 
-webUrl = "https://www.letnovel.org/257/257831/";
-webUrlForEach = "https://www.letnovel.org";
+webUrl = "https://www.3zmxs.com/files/article/html/49132/49132665/";
+webUrlForEach = "https://www.3zmxs.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
-needProxy = False;                          #下载网站是否需要代理
+needProxy = True;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
@@ -329,6 +329,7 @@ try:
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
@@ -338,7 +339,7 @@ try:
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
-            #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+            text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
@@ -356,6 +357,7 @@ try:
                 errorTimes +=1;
                 if errorTimes==1:
                     print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
+                consoleWrite("[error] ","red");
                 print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
                 if errorTimes>maxErrorTimes:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
@@ -380,6 +382,9 @@ try:
             allText = allText.replace("&rdquo;","\"");
             allText = allText.replace("&hellip;","…");
             allText = allText.replace("&mdash;","—");
+            allText = allText.replace("&amp;","&");
+            allText = allText.replace("&lt;","<");
+            allText = allText.replace("&gt;",">");
             allText = allText.replace("澹","淡");
         else:
             if len(allText)==0:
@@ -387,6 +392,7 @@ try:
                 errorTimes +=1;
                 if errorTimes==1:
                     print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
+                consoleWrite("[error] ","red");
                 print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
                 if errorTimes>maxErrorTimes:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
