@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "https://www.3zmxs.com/files/article/html/49132/49132665/";
-webUrlForEach = "https://www.3zmxs.com";
+webUrl = "https://www.116522.com/biquge/1898_1898233/";
+webUrlForEach = "https://www.116522.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 13                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = True;                          #下载网站是否需要代理
@@ -18,7 +18,8 @@ ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
-maxErrorTimes = 50;                          #章节爬取最大错误次数
+maxErrorTimes = 10;                          #章节爬取最大错误次数
+removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 
 #----------------------------------------------------------#
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
@@ -339,7 +340,7 @@ try:
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
-            text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+            #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
@@ -386,6 +387,9 @@ try:
             allText = allText.replace("&lt;","<");
             allText = allText.replace("&gt;",">");
             allText = allText.replace("澹","淡");
+            if removeHTML:
+                re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
+
         else:
             if len(allText)==0:
                 #休眠一次时间后重试

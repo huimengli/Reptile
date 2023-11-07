@@ -1,5 +1,6 @@
 @echo off
-cd ../..
-python Reptile.py
+exit
+::此文件已经废弃
+python.exe ../../Reptile.py
 pause
 exit
