@@ -5,18 +5,18 @@ import time
 import random
 import math
 
-webUrl = "https://www.116522.com/biquge/1898_1898233/";
-webUrlForEach = "https://www.116522.com";
+webUrl = "http://www.xinbqg.org/112/112048/";
+webUrlForEach = "http://www.xinbqg.org";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
-needProxy = True;                          #下载网站是否需要代理
+needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
@@ -331,10 +331,10 @@ try:
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
-            text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
+            #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
