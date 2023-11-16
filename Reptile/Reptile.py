@@ -5,18 +5,18 @@ import time
 import random
 import math
 
-webUrl = "https://www.116522.com/biquge/1898_1898233/";
-webUrlForEach = "https://www.116522.com";
+webUrl = "https://www.ibiquges.org/19/15428/";
+webUrlForEach = "https://www.ibiquges.org";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = True;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
@@ -158,8 +158,153 @@ def writeLine(text, color):
     print(colors[color] + str(text) + colors['default']);
 
 def consoleWrite(text,color):
+    '''
+    调用c#写控制台软件
+    用于写有颜色的字符串
+    '''
     value = dir_path+"\\write.exe "+text+" -C "+color;
     os.system(value);
+
+def format_string(s,max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    '''
+    if len(s) > max_len:
+        s = s[:17] + "..."
+    else:
+        s = s.ljust(max_len)
+    s = to_fullwidth(s);
+    return s;
+
+def format_string2(s,max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    for x in s:
+        code = ord(x);
+        if 32<=code<=126:
+            max_len = max_len + 1;
+
+    if len(s) > max_len:
+        s = s[:max_len-3] + "..."
+    else:
+        s = s.ljust(max_len)
+            
+    return s;
+
+def format_string3(s, max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    # 初始化实际占用宽度
+    display_width = 0
+    
+    # 对字符串进行遍历，累计每个字符的显示宽度
+    for x in s:
+        code = ord(x)
+        if 32 <= code <= 126:  # 对于半角字符，宽度增加2
+            display_width += 2
+        else:  # 对于非半角字符，宽度增加1
+            display_width += 1
+            
+    # 如果计算的显示宽度超过最大宽度，需要截断
+    if display_width > max_len:
+        adjusted_width = 0
+        for i, char in enumerate(s):
+            code = ord(char)
+            if 32 <= code <= 126:
+                adjusted_width += 2
+            else:
+                adjusted_width += 1
+            # 确定截断位置
+            if adjusted_width + 3 > max_len:
+                s = s[:i] + "..."
+                break
+    # 如果不足最大宽度，填充空格
+    else:
+        extra_spaces = (max_len - display_width) // 2
+        s = s + ' ' * extra_spaces
+            
+    return s;
+
+def format_string3(s, max_len=30):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    # 初始化实际占用宽度
+    display_width = 0
+    # 确定插入省略号的位置
+    cut_off_point = max_len - 3
+
+    # 对字符串进行遍历，累计每个字符的显示宽度
+    for i, char in enumerate(s):
+        code = ord(char)
+        if 32 <= code <= 126:  # 半角字符
+            display_width += 1
+        else:  # 全角字符
+            display_width += 2
+
+        # 检查是否需要截断并添加省略号
+        if display_width >= cut_off_point:
+            # 截取字符串直到截断点，加上省略号
+            s = s[:i] + "..."
+            break
+    else:  # 如果循环结束后，宽度还不足max_len
+        # 添加空格到字符串末尾以达到max_len
+        s += ' ' * (max_len - display_width)
+
+    return s;
+
+def format_string3(s, max_len=30):
+    '''
+    格式化字符串到给定的显示宽度。
+    全角字符算作2个宽度单位，半角字符算作1个宽度单位。
+    如果字符串宽度超出max_len，则截断并在末尾添加省略号。
+    如果字符串宽度不足max_len，则在末尾添加空格。
+    '''
+    max_len *= 2  # 由于全角字符计为2，所以乘以2
+    cur_len = 0
+    for i, char in enumerate(s):
+        if 32<= ord(char) <= 126:
+            cur_len += 1
+        else:
+            cur_len += 2
+
+        if cur_len > max_len:
+            s = s[:i] + "..."
+            break
+    else:
+        s += ' ' * (max_len - cur_len)  # 添加空格补足长度
+
+    return s
+
+def to_fullwidth(s):
+    '''
+    将字符串中的内容全部转为全角字符串
+    '''
+    fullwidth_chars = ""
+    for char in s:
+        code = ord(char)
+        # ASCII字符的码点从33到126可以直接转换为全角字符
+        if 33 <= code <= 126:
+            fullwidth_chars += chr(code + 65248)
+        # 空格字符特殊处理
+        elif code == 32:
+            fullwidth_chars += chr(12288)
+        else:
+            fullwidth_chars += char
+    return fullwidth_chars
 
 try:
     # 实例化产生请求对象
@@ -331,10 +476,10 @@ try:
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
-            text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
+            #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
@@ -419,10 +564,13 @@ try:
             #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
         if haveTitle:
-            print("\r",y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+            #print("\r",y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+            consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
+            print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
         else:
-            print("\r","第"+str(i+1)+"章"+y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
-
+            #print("\r","第"+str(i+1)+"章"+y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+            consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
+            print(format_string3("第"+str(i+1)+"章"+y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
 
         i+=1;
         changeIniIndex(i);
