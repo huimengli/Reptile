@@ -5,14 +5,14 @@ import time
 import random
 import math
 
-webUrl = "https://www.ibiquges.org/19/15428/";
-webUrlForEach = "https://www.ibiquges.org";
+webUrl = "http://www.xinbqg.org/112/112048/";
+webUrlForEach = "http://www.xinbqg.org";
 file = "output.txt";
 ini = "ouput.ini";
 start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
-needProxy = True;                          #下载网站是否需要代理
+needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
