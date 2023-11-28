@@ -5,8 +5,8 @@ import time
 import random
 import math
 
-webUrl = "http://www.xinbqg.org/112/112048/";
-webUrlForEach = "http://www.xinbqg.org";
+webUrl = "https://www.42zw.la/book/38443/";
+webUrlForEach = "https://www.42zw.la";
 file = "output.txt";
 ini = "ouput.ini";
 start = 10 + 0                              #初始推荐章节数量
