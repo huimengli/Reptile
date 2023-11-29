@@ -9,14 +9,14 @@ webUrl = "https://www.42zw.la/book/38443/";
 webUrlForEach = "https://www.42zw.la";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 0                              #初始推荐章节数量
+start = 10 + 14                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
-haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+isLines = True;                             #内容是否是多行的
+haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
@@ -306,6 +306,35 @@ def to_fullwidth(s):
             fullwidth_chars += char
     return fullwidth_chars
 
+# 原始代码中的替换操作可以通过创建一个替换字典来简化
+replacements = {
+    "&nbsp;": " ",
+    "<br /><br />": "\n",
+    "<br/><br/>": "\n",
+    "<br><br>": "\n",
+    "<br />": "\n",
+    "<br/>": "\n",
+    "<br>": "\n",
+    "<p>": "",
+    "</p>": "\n",
+    "\t":"",
+    "    ":" ",
+    #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
+    "\n \n": "\n",
+    "\n    \n": "\n",
+    "</div>": "\n",
+    "&ldquo;": "\"",
+    "&lsquo;": "'",
+    "&rsquo;": "'",
+    "&rdquo;": "\"",
+    "&hellip;": "…",
+    "&mdash;": "—",
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "澹": "淡"
+}
+
 try:
     # 实例化产生请求对象
     
@@ -465,8 +494,6 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
             #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
@@ -476,9 +503,11 @@ try:
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
+            text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
@@ -509,29 +538,33 @@ try:
                     raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
                 time.sleep(r.randint(timeWait[0],timeWait[1]));
                 continue;
-            allText = allText.replace("&nbsp;"," ");
-            allText = allText.replace("<br /><br />","\n");
-            allText = allText.replace("<br/><br/>","\n");
-            allText = allText.replace("<br><br>","\n");
-            allText = allText.replace("<br />","\n");
-            allText = allText.replace("<br/>","\n");
-            allText = allText.replace("<br>","\n");
-            allText = allText.replace("<p>","");
-            allText = allText.replace("</p>","\n");
-            allText = allText.replace("\n\n","\n");
-            allText = allText.replace("\n\n","\n");
-            allText = allText.replace("\n\n","\n");
-            allText = allText.replace("</div>","\n");
-            allText = allText.replace("&ldquo;","\"");
-            allText = allText.replace("&lsquo;","'");
-            allText = allText.replace("&rsquo;","'");
-            allText = allText.replace("&rdquo;","\"");
-            allText = allText.replace("&hellip;","…");
-            allText = allText.replace("&mdash;","—");
-            allText = allText.replace("&amp;","&");
-            allText = allText.replace("&lt;","<");
-            allText = allText.replace("&gt;",">");
-            allText = allText.replace("澹","淡");
+            #allText = allText.replace("&nbsp;"," ");
+            #allText = allText.replace("<br /><br />","\n");
+            #allText = allText.replace("<br/><br/>","\n");
+            #allText = allText.replace("<br><br>","\n");
+            #allText = allText.replace("<br />","\n");
+            #allText = allText.replace("<br/>","\n");
+            #allText = allText.replace("<br>","\n");
+            #allText = allText.replace("<p>","");
+            #allText = allText.replace("</p>","\n");
+            #allText = allText.replace("\n\n","\n");
+            #allText = allText.replace("\n\n","\n");
+            #allText = allText.replace("\n\n","\n");
+            #allText = allText.replace("</div>","\n");
+            #allText = allText.replace("&ldquo;","\"");
+            #allText = allText.replace("&lsquo;","'");
+            #allText = allText.replace("&rsquo;","'");
+            #allText = allText.replace("&rdquo;","\"");
+            #allText = allText.replace("&hellip;","…");
+            #allText = allText.replace("&mdash;","—");
+            #allText = allText.replace("&amp;","&");
+            #allText = allText.replace("&lt;","<");
+            #allText = allText.replace("&gt;",">");
+            #allText = allText.replace("澹","淡");
+
+            # 使用循环进行替换
+            for old, new in replacements.items():
+                allText = allText.replace(old, new)
             if removeHTML:
                 re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
 
@@ -548,8 +581,11 @@ try:
                 time.sleep(r.randint(timeWait[0],timeWait[1]));
                 continue;
             else:
-                errorTimes = 0;
-        
+                for j in range(0,len(allText)):
+                    for old, new in replacements.items():
+                        allText[j] = allText[j].replace(old,new);
+                errorTimes = 0;        
+
         openWriteAdd("\n\n");
         if haveTitle:
             openWriteAdd(y);
