@@ -5,17 +5,17 @@ import time
 import random
 import math
 
-webUrl = "https://www.42zw.la/book/38443/";
-webUrlForEach = "https://www.42zw.la";
+webUrl = "https://www.liewenn.com/b/22416/22416717/";
+webUrlForEach = "https://www.liewenn.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 14                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = True;                             #内容是否是多行的
+isLines = False;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
@@ -46,6 +46,34 @@ if needVerify==False:
 file_path = os.path.abspath(__file__)
 dir_path = os.path.dirname(file_path)       #当前文件所在文件夹
 reptileGet = True;                          #爬取成功
+# 原始代码中的替换操作可以通过创建一个替换字典来简化
+replacements = {
+    "&nbsp;": " ",
+    "<br /><br />": "\n",
+    "<br/><br/>": "\n",
+    "<br><br>": "\n",
+    "<br />": "\n",
+    "<br/>": "\n",
+    "<br>": "\n",
+    "<p>": "",
+    "</p>": "\n",
+    "\t":"",
+    "    ":" ",
+    #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
+    "\n \n": "\n",
+    "\n    \n": "\n",
+    "</div>": "\n",
+    "&ldquo;": "\"",
+    "&lsquo;": "'",
+    "&rsquo;": "'",
+    "&rdquo;": "\"",
+    "&hellip;": "…",
+    "&mdash;": "—",
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "澹": "淡"
+}
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -306,35 +334,6 @@ def to_fullwidth(s):
             fullwidth_chars += char
     return fullwidth_chars
 
-# 原始代码中的替换操作可以通过创建一个替换字典来简化
-replacements = {
-    "&nbsp;": " ",
-    "<br /><br />": "\n",
-    "<br/><br/>": "\n",
-    "<br><br>": "\n",
-    "<br />": "\n",
-    "<br/>": "\n",
-    "<br>": "\n",
-    "<p>": "",
-    "</p>": "\n",
-    "\t":"",
-    "    ":" ",
-    #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
-    "\n \n": "\n",
-    "\n    \n": "\n",
-    "</div>": "\n",
-    "&ldquo;": "\"",
-    "&lsquo;": "'",
-    "&rsquo;": "'",
-    "&rdquo;": "\"",
-    "&hellip;": "…",
-    "&mdash;": "—",
-    "&amp;": "&",
-    "&lt;": "<",
-    "&gt;": ">",
-    "澹": "淡"
-}
-
 try:
     # 实例化产生请求对象
     
@@ -498,6 +497,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
             #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
+            text = re.compile(r'div id="content">([\s\S]*)<br /><br />.https:')
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
@@ -506,7 +506,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
-            text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
