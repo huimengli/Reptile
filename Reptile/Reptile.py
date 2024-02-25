@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "https://www.mxgbqg.com/book/20302/";
-webUrlForEach = "https://www.mxgbqg.com";
+webUrl = "https://www.biqukan8.cc/84433_84433303/";
+webUrlForEach = "https://www.biqukan8.cc";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 12                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
