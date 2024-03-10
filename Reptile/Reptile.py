@@ -5,18 +5,18 @@ import time
 import random
 import math
 
-webUrl = "https://www.x33xs6.com/33xs/426/426397/";
-webUrlForEach = "https://www.x33xs6.com";
+webUrl = "https://www.ahfgb.com/127_127595/";
+webUrlForEach = "https://www.ahfgb.com";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 2                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
@@ -493,7 +493,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
             #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
             #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
@@ -510,7 +510,7 @@ try:
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
-            text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
+            #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
