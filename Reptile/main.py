@@ -151,6 +151,264 @@ replacements = {
 }
 #----------------------------------------------------------#
 
+def openWriteAdd(s:str):
+    '''
+    打开文件写内容
+    '''
+    with open(file,"a",encoding="utf-8") as f:
+        f.write(s);
+    return;
+
+def openWtite(path:str,s:str):
+    '''
+    打开一个不存在的文件并写内容
+    '''
+    with open(path,"w",encoding="utf-8") as f:
+        f.write(s);
+    return;
+
+def openWrites(s:list):
+    '''
+    打开文件写内容
+    '''
+    with open(file,"a",encoding="utf-8") as f:
+        for x in s:
+            x = x.replace(" ","");
+            x = x.replace("\n","");
+            x = x.replace("\r","");
+            f.writelines(x+"\n");
+    return;
+
+def exists(path:str):
+    '''
+    判断文件是否存在
+    '''
+    return os._exists(path);
+
+def openReadLines(path:str):
+    '''
+    打开文件读取里面的所有行
+    '''
+    with open(path,"r",encoding="utf-8") as f:
+        allValue = f.readlines();
+        return allValue;
+    return []
+
+def saveIni(url:str,urladds:list,names:list,index:int):
+    '''
+    保存INI
+    '''
+    openWtite(ini,"URL:"+str(url)+"\nURLADDS:"+','.join(urladds)+"\nNAMES:"+','.join(names)+"\nINDEX:"+str(index));
+    return;
+
+def changeIniIndex(index:int):
+    '''
+    修改ini中指针指向
+    '''
+    lines = openReadLines(ini);
+    lines[3] = "INDEX:"+str(index);
+    openWtite(ini,"".join(lines));
+    return;
+
+def getTime(second:int):
+    '''
+    根据秒计算时间
+    '''
+    s = second % 60
+    second = second // 60
+    m = second % 60
+    second = second // 60
+    h = second % 24
+    second = second // 24
+    ret = second and str(second) + "天" or ""
+    ret+= h and str(h) + "小时" or ""
+    ret += m and str(m) + "分钟" or ""
+    ret += str(s) + "秒"
+    return ret;
+
+def write(text, color):
+    '''
+    打印有颜色的字,不换行
+    '''
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'purple': '\033[95m',
+        'white': '\033[97m',
+        'grey': '\033[90m',
+        'black': '\033[30m',
+        'default': '\033[0m',
+    }
+    print(colors[color] + str(text) + colors['default'],end="");
+    
+def writeLine(text, color):
+    '''
+    打印有颜色的字
+    '''
+    colors = {
+        'red': '\033[91m',
+        'green': '\033[92m',
+        'yellow': '\033[93m',
+        'blue': '\033[94m',
+        'purple': '\033[95m',
+        'white': '\033[97m',
+        'grey': '\033[90m',
+        'black': '\033[30m',
+        'default': '\033[0m',
+    }
+    print(colors[color] + str(text) + colors['default']);
+
+def consoleWrite(text,color):
+    '''
+    调用c#写控制台软件
+    用于写有颜色的字符串
+    '''
+    value = dir_path+"\\write.exe "+text+" -C "+color;
+    os.system(value);
+
+def format_string(s,max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    '''
+    if len(s) > max_len:
+        s = s[:17] + "..."
+    else:
+        s = s.ljust(max_len)
+    s = to_fullwidth(s);
+    return s;
+
+def format_string2(s,max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    for x in s:
+        code = ord(x);
+        if 32<=code<=126:
+            max_len = max_len + 1;
+
+    if len(s) > max_len:
+        s = s[:max_len-3] + "..."
+    else:
+        s = s.ljust(max_len)
+            
+    return s;
+
+def format_string3(s, max_len=20):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    # 初始化实际占用宽度
+    display_width = 0
+    
+    # 对字符串进行遍历，累计每个字符的显示宽度
+    for x in s:
+        code = ord(x)
+        if 32 <= code <= 126:  # 对于半角字符，宽度增加2
+            display_width += 2
+        else:  # 对于非半角字符，宽度增加1
+            display_width += 1
+            
+    # 如果计算的显示宽度超过最大宽度，需要截断
+    if display_width > max_len:
+        adjusted_width = 0
+        for i, char in enumerate(s):
+            code = ord(char)
+            if 32 <= code <= 126:
+                adjusted_width += 2
+            else:
+                adjusted_width += 1
+            # 确定截断位置
+            if adjusted_width + 3 > max_len:
+                s = s[:i] + "..."
+                break
+    # 如果不足最大宽度，填充空格
+    else:
+        extra_spaces = (max_len - display_width) // 2
+        s = s + ' ' * extra_spaces
+            
+    return s;
+
+def format_string3(s, max_len=30):
+    '''
+    限制字符串长度,
+    如果超过限制则只打印max_len-3的内容和三个点
+    如果不足则在后面补足空格
+    字符串中每有一个半角字符,就补一个空格
+    '''
+    # 初始化实际占用宽度
+    display_width = 0
+    # 确定插入省略号的位置
+    cut_off_point = max_len - 3
+
+    # 对字符串进行遍历，累计每个字符的显示宽度
+    for i, char in enumerate(s):
+        code = ord(char)
+        if 32 <= code <= 126:  # 半角字符
+            display_width += 1
+        else:  # 全角字符
+            display_width += 2
+
+        # 检查是否需要截断并添加省略号
+        if display_width >= cut_off_point:
+            # 截取字符串直到截断点，加上省略号
+            s = s[:i] + "..."
+            break
+    else:  # 如果循环结束后，宽度还不足max_len
+        # 添加空格到字符串末尾以达到max_len
+        s += ' ' * (max_len - display_width)
+
+    return s;
+
+def format_string3(s, max_len=30):
+    '''
+    格式化字符串到给定的显示宽度。
+    全角字符算作2个宽度单位，半角字符算作1个宽度单位。
+    如果字符串宽度超出max_len，则截断并在末尾添加省略号。
+    如果字符串宽度不足max_len，则在末尾添加空格。
+    '''
+    max_len *= 2  # 由于全角字符计为2，所以乘以2
+    cur_len = 0
+    for i, char in enumerate(s):
+        if 32<= ord(char) <= 126:
+            cur_len += 1
+        else:
+            cur_len += 2
+
+        if cur_len > max_len:
+            s = s[:i] + "..."
+            break
+    else:
+        s += ' ' * (max_len - cur_len)  # 添加空格补足长度
+
+    return s
+
+def to_fullwidth(s):
+    '''
+    将字符串中的内容全部转为全角字符串
+    '''
+    fullwidth_chars = ""
+    for char in s:
+        code = ord(char)
+        # ASCII字符的码点从33到126可以直接转换为全角字符
+        if 33 <= code <= 126:
+            fullwidth_chars += chr(code + 65248)
+        # 空格字符特殊处理
+        elif code == 32:
+            fullwidth_chars += chr(12288)
+        else:
+            fullwidth_chars += char
+    return fullwidth_chars
+
 try:
     # 实例化产生请求对象
     
