@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "https://www.ahfgb.com/127_127595/";
-webUrlForEach = "https://www.ahfgb.com";
+webUrl = "https://www.zzxx.org/xs/26162/";
+webUrlForEach = "https://www.zzxx.org";
 file = "output.txt";
 ini = "ouput.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -493,7 +493,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
             #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
             #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
@@ -519,7 +519,7 @@ try:
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
-            #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
+            text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
