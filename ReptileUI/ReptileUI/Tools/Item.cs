@@ -606,5 +606,51 @@ namespace ReptileUI.Tools
 
             return ret.ToString();
         }
+
+        /// <summary>
+        /// 对字典进行过滤
+        /// </summary>
+        /// <typeparam name="Tkey"></typeparam>
+        /// <typeparam name="Tvalue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static Dictionary<Tkey,Tvalue> Filter<Tkey, Tvalue>(this Dictionary<Tkey,Tvalue> dict,Func<Tkey,Tvalue,bool> filter)
+        {
+            var ret = new Dictionary<Tkey, Tvalue>();
+            foreach (var item in dict)
+            {
+                if (filter(item.Key,item.Value))
+                {
+                    ret.Add(item.Key,item.Value);
+                }
+            }
+            return ret;
+        }
+
+        public static List<Tvalue> ValueList<Tkey,Tvalue>(this Dictionary<Tkey,Tvalue> dict)
+        {
+            var values = dict.Values;
+            return new List<Tvalue>(values);
+        }
+
+        public static List<Tkey> KeyList<Tkey,Tvalue>(this Dictionary<Tkey,Tvalue> dict)
+        {
+            var keys = dict.Keys;
+            return new List<Tkey>(keys);
+        }
+
+        public static List<R> Amplify<T,R>(this List<T> ts,Func<T,R> func)
+        {
+            var ret = new List<R>();
+
+            ts.ForEach(t =>
+            {
+                ret.Add(func(t));
+            });
+
+            return ret;
+        }
+
     }
 }

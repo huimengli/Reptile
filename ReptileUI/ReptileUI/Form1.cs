@@ -28,9 +28,16 @@ namespace ReptileUI
             //设置图标
             this.Icon = (Icon)resource.GetObject("favicon");
 
+            //读取INI
+            Program.iniFile = new IniFileOperation(Program.settingIni);
+            this.textBox1.Text = Program.iniFile.Read(Program.uiSetting, "webUrl");
+            this.textBox2.Text = Program.iniFile.Read(Program.uiSetting, "webUrlForEach");
+
             //设置初始导出文件位置
-            this.textBox3.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.txt";
-            this.textBox4.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.ini";
+            this.textBox3.Text = Program.iniFile.Read(Program.uiSetting, "file", 
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.txt");
+            this.textBox4.Text = Program.iniFile.Read(Program.uiSetting, "ini",
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.ini");
 
             //设置toolTip
             this.toolTip1.SetToolTip(label1, "爬取的小说的目录网址");
