@@ -17,6 +17,16 @@ namespace ReptileUI.Rule
         /// 读取章节的正则存储
         /// </summary>
         private List<Regex> readDDs = new List<Regex>();
+
+        /// <summary>
+        /// 读取大段文章的正则存储
+        /// </summary>
+        private List<Regex> readTexts = new List<Regex>();
+
+        /// <summary>
+        /// 读取多行文章的正则存储
+        /// </summary>
+        private List<Regex> readLines = new List<Regex>();
         
         /// <summary>
         /// 给外部访问用的
@@ -26,6 +36,28 @@ namespace ReptileUI.Rule
             get
             {
                 return new List<Regex>(readDDs);
+            }
+        }
+
+        /// <summary>
+        /// 给外部访问用的
+        /// </summary>
+        public List<Regex> ReadTexts
+        {
+            get
+            {
+                return new List<Regex>(readTexts);
+            }
+        }
+
+        /// <summary>
+        /// 给外部访问用的
+        /// </summary>
+        public List<Regex> ReadLines
+        {
+            get
+            {
+                return new List<Regex>(readLines);
             }
         }
 
@@ -44,16 +76,57 @@ namespace ReptileUI.Rule
         }
 
         /// <summary>
+        /// 添加读取大段文章的正则表达式
+        /// </summary>
+        /// <param name="regex"></param>
+        public void AddReadText(Regex regex)
+        {
+            readTexts.Add(regex);
+            Program.iniFile.Write(
+                Program.readText,
+                $"text{readTexts.Count}",
+                regex.ToString()
+            );
+        }
+        
+        /// <summary>
+        /// 读取多行文章的正则表达式
+        /// </summary>
+        /// <param name="regex"></param>
+        public void AddReadLine(Regex regex)
+        {
+            readLines.Add(regex);
+            Program.iniFile.Write(
+                Program.readLine,
+                $"text{readLines.Count}",
+                regex.ToString()
+            );
+        }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         public ReadRules()
         {
-            var read = new Regex(@"readDD[\d+]");
+            var read = new Regex(@"readDD[\d]+");
             var dict = Program.iniFile.ReadSection(Program.readDD);
             readDDs = dict
                 .Filter((k,v)=> read.IsMatch(k))
                 .ValueList()
                 .Amplify(t=>new Regex(t));
+
+            read = new Regex(@"text[\d]+");
+            dict = Program.iniFile.ReadSection(Program.readText);
+            readTexts = dict
+                .Filter((k, v) => read.IsMatch(k))
+                .ValueList()
+                .Amplify(t => new Regex(t));
+
+            dict = Program.iniFile.ReadSection(Program.readLine);
+            readLines = dict
+                .Filter((k, v) => read.IsMatch(k))
+                .ValueList()
+                .Amplify(t => new Regex(t));
         }
     }
 }
