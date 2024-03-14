@@ -452,5 +452,159 @@ namespace ReptileUI.Tools
         {
             return Task.Factory.StartNew(action);
         }
+
+        /// <summary>
+        /// 将列表转为字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objects"></param>
+        /// <param name="tf"></param>
+        /// <returns></returns>
+        public static string ToString<T>(this T[] objects, bool tf)
+        {
+            if (tf)
+            {
+                var ret = typeof(T).ToString();
+                ret += "[" + objects.Length + "] { ";
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    ret += objects[i].ToString();
+                    if (i < objects.Length - 1)
+                    {
+                        ret += ", ";
+                    }
+                }
+                ret += " }";
+                return ret;
+            }
+            else
+            {
+                return objects.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 将列表转为字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="tf"></param>
+        /// <returns></returns>
+        public static string ToString<T>(this List<T> ts, bool tf)
+        {
+            if (tf == false)
+            {
+                return ts.ToString();
+            }
+            else
+            {
+                var ret = "List<" + typeof(T).ToString() + "> ";
+                ret += "[" + ts.Count + "] { ";
+                for (int i = 0; i < ts.Count; i++)
+                {
+                    ret += ts[i].ToString();
+                    if (i < ts.Count - 1)
+                    {
+                        ret += ", ";
+                    }
+                }
+                ret += " }";
+                return ret;
+            }
+        }
+
+        /// <summary>
+        /// 连接
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="add"></param>
+        /// <returns></returns>
+        public static string Join<T>(this List<T> ts, string add)
+        {
+            var ret = new StringBuilder();
+            for (int i = 0; i < ts.Count - 1; i++)
+            {
+                ret.Append(ts[i]);
+                ret.Append(add);
+            }
+            ret.Append(ts[ts.Count - 1]);
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// 连接
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="add"></param>
+        /// <returns></returns>
+        public static string Join<T>(this T[] ts, string add)
+        {
+            var ret = new StringBuilder();
+            for (int i = 0; i < ts.Length - 1; i++)
+            {
+                ret.Append(ts[i]);
+                ret.Append(add);
+            }
+            ret.Append(ts[ts.Length - 1]);
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// 连接
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="add"></param>
+        /// <returns></returns>
+        public static string Join<T>(this IEnumerator<T> ts, string add)
+        {
+            if (ts == null || !ts.MoveNext())
+            {
+                // 如果枚举器为null或没有元素，返回空字符串
+                return string.Empty;
+            }
+
+            var ret = new StringBuilder();
+            ret.Append(ts.Current); // 先添加第一个元素
+
+            while (ts.MoveNext()) // 检查是否有更多元素
+            {
+                ret.Append(add); // 先添加分隔符
+                ret.Append(ts.Current); // 再添加元素
+            }
+
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// 连接
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="add"></param>
+        /// <returns></returns>
+        public static string Join<T>(this IEnumerable<T> ts, string add)
+        {
+            var ret = new StringBuilder();
+            using (var enumerator = ts.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return string.Empty;  // 处理空集合
+                }
+
+                ret.Append(enumerator.Current);  // 添加第一个元素，避免在它之前添加分隔符
+
+                while (enumerator.MoveNext())
+                {
+                    ret.Append(add);  // 在元素之间添加分隔符
+                    ret.Append(enumerator.Current);
+                }
+            }
+
+            return ret.ToString();
+        }
     }
 }
