@@ -1,4 +1,5 @@
 ﻿using ReptileUI.Properties;
+using ReptileUI.Rule;
 using ReptileUI.Tools;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace ReptileUI
         /// </summary>
         ComponentResourceManager resource = new ComponentResourceManager(typeof(Resources));
 
+        /// <summary>
+        /// 正则存放块
+        /// </summary>
+        ReadRules readRules;
+
         public Form1()
         {
             InitializeComponent();
@@ -38,6 +44,11 @@ namespace ReptileUI
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.txt");
             this.textBox4.Text = Program.iniFile.Read(Program.uiSetting, "ini",
                 Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output.ini");
+
+            //设置默认使用的正则表达式
+            this.readRules = new ReadRules();
+            this.comboBox1.DataSource = readRules.ReadDDs;
+            this.comboBox1.Text = readRules.GetReadDD(4).ToString();
 
             //设置toolTip
             this.toolTip1.SetToolTip(label1, "爬取的小说的目录网址");
@@ -65,11 +76,31 @@ namespace ReptileUI
             var part3s = part3.Split('/','\\');
 
             textBox2.Text = texts.Take(texts.Length - 1).Join(".")+"."+part3s[0];
+
+            Program.iniFile.Write(
+                Program.uiSetting,
+                "webUrl",
+                textBox1.Text
+            );
+            Program.iniFile.Write(
+                Program.uiSetting,
+                "webUrlForEach",
+                textBox2.Text
+            );
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.textBox2.ReadOnly = !this.textBox2.ReadOnly;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            Program.iniFile.Write(
+                Program.uiSetting,
+                "webUrlForEach",
+                textBox2.Text
+            );
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -86,6 +117,11 @@ namespace ReptileUI
             var fileInfo = new FileInfo(outputFilePath);
             Item.ChoiceFolder(ref outputFilePath, "选择输出文件夹", fileInfo.DirectoryName);
             this.textBox4.Text = outputFilePath + "\\output.txt";
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

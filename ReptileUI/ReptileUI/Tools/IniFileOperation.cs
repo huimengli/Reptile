@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,9 +28,27 @@ namespace ReptileUI.Tools
 
         private string _path;
 
+        private FileInfo file;
+
+        public bool exist
+        {
+            get
+            {
+                return file.Exists;
+            }
+        }
+
+        public string Path{
+            get
+            {
+                return file.FullName;
+            }
+        }
+
         public IniFileOperation(string iniPath)
         {
             _path = iniPath;
+            file = new FileInfo(_path);
         }
 
         /// <summary>

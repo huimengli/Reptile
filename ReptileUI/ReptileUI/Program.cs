@@ -35,6 +35,11 @@ namespace ReptileUI
         public static readonly string uiSetting = "UISETTING";
 
         /// <summary>
+        /// 使用的Python工具名称
+        /// </summary>
+        public static readonly string TOOL_NAME = "main.exe";
+
+        /// <summary>
         /// ini配置文件操作模块
         /// </summary>
         public static IniFileOperation iniFile;

@@ -76,6 +76,22 @@ namespace ReptileUI.Rule
         }
 
         /// <summary>
+        /// 获取读取章节的正则
+        /// </summary>
+        /// <param name="index"></param>
+        public Regex GetReadDD(int index)
+        {
+            try
+            {
+                return readDDs[index];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 添加读取大段文章的正则表达式
         /// </summary>
         /// <param name="regex"></param>
@@ -88,9 +104,26 @@ namespace ReptileUI.Rule
                 regex.ToString()
             );
         }
+
+        /// <summary>
+        /// 获取读取大段文章的正则表达式
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Regex GetReadText(int index)
+        {
+            try
+            {
+                return readTexts[index];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
         
         /// <summary>
-        /// 读取多行文章的正则表达式
+        /// 添加读取多行文章的正则表达式
         /// </summary>
         /// <param name="regex"></param>
         public void AddReadLine(Regex regex)
@@ -104,10 +137,29 @@ namespace ReptileUI.Rule
         }
 
         /// <summary>
+        /// 获取读取多行文章的正则表达式
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Regex GetReadLine(int index)
+        {
+            try
+            {
+                return readLines[index];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         public ReadRules()
         {
+            var text = Program.iniFile.Read(Program.uiSetting, "file");
+
             var read = new Regex(@"readDD[\d]+");
             var dict = Program.iniFile.ReadSection(Program.readDD);
             readDDs = dict

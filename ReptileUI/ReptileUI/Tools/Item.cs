@@ -28,7 +28,7 @@ namespace ReptileUI.Tools
         /// <summary>
         /// 标定唯一临时结束后缀
         /// </summary>
-        private static readonly string TempEnd = "___END___";
+        public static readonly string TempEnd = "___END___";
         /// <summary>
         /// 读取标定唯一指示符
         /// </summary>
