@@ -49,6 +49,11 @@ namespace ReptileUI.Tools
         {
             _path = iniPath;
             file = new FileInfo(_path);
+
+            if (!file.Exists)
+            {
+                throw new FileNotFoundException($"The specified INI file was not found: {_path}");
+            }
         }
 
         /// <summary>

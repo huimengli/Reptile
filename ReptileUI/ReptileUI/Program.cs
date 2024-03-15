@@ -12,7 +12,7 @@ namespace ReptileUI
         /// <summary>
         /// ini文件
         /// </summary>
-        public static readonly string settingIni = "setting.ini";
+        public static readonly string settingIni = "Setting.ini";
 
         /// <summary>
         /// ini中存放读取章节名称的正则块
