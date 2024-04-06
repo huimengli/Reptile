@@ -5,8 +5,8 @@ import time
 import random
 import math
 
-webUrl = "https://www.kanshushi.com/shu/193127/";
-webUrlForEach = "https://www.kanshushi.com";
+webUrl = "https://www.nfxs.com/book/120882/";
+webUrlForEach = "https://www.nfxs.com";
 file = "output.txt";
 ini = "output.ini";
 start = 10 + 1                              #初始推荐章节数量
@@ -502,16 +502,17 @@ try:
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+            #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
+            #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
