@@ -5,10 +5,10 @@ import time
 import random
 import math
 
-webUrl = "https://www.zzxx.org/xs/26162/";
-webUrlForEach = "https://www.zzxx.org";
+webUrl = "https://www.xbiqugu.info/97/97675/";
+webUrlForEach = "https://www.xbiqugu.info";
 file = "output.txt";
-ini = "ouput.ini";
+ini = "output.ini";
 start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
@@ -16,7 +16,7 @@ needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
@@ -513,13 +513,14 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
-            text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
+            #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
         else:
             text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             #text = re.compile(r'<p>([^<>]*)<\/p>')
