@@ -5,17 +5,17 @@ import time
 import random
 import math
 
-webUrl = "https://www.xbiqugu.info/97/97675/";
-webUrlForEach = "https://www.xbiqugu.info";
+webUrl = "https://www.7qs.org/190727/";
+webUrlForEach = "https://www.7qs.org";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 0                              #初始推荐章节数量
+start = 10 + 21                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
+isLines = True;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
@@ -522,8 +522,8 @@ try:
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
             #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
         else:
-            text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-            #text = re.compile(r'<p>([^<>]*)<\/p>')
+            #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
+            text = re.compile(r'<p>([^<>]*)<\/p>')
         
         #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
