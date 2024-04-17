@@ -5,8 +5,7 @@ import time
 import random
 import math
 
-webUrl = "https://www.bequwx.org/188/188989/";
-webUrlForEach = "https://www.bequwx.org";
+webUrl = "https://www.kanshula4.com/27/27383/";
 file = "output.txt";
 ini = "output.ini";
 start = 10 + 13                              #初始推荐章节数量
@@ -22,6 +21,20 @@ maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 
 #----------------------------------------------------------#
+def getForEachUrl(url:str):
+    '''
+    获取前部拼接头
+    '''
+    ret = url.split(".");
+    end = ret[-1].split("/");
+
+    #print(ret);
+    r = ret[:-1];
+    r.append(end[0]);
+    print(r);
+    return ".".join(r);
+    
+webUrlForEach = getForEachUrl(webUrl);
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
