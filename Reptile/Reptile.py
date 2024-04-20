@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "https://www.nfxs.com/book/120882/";
-webUrlForEach = "https://www.nfxs.com";
+webUrl = "https://www.x23wxw6.com/html/3216/";
+webUrlForEach = "https://www.x23wxw6.com";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 20                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -502,14 +502,14 @@ try:
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
+            text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
