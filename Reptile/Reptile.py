@@ -5,7 +5,8 @@ import time
 import random
 import math
 
-webUrl = "http://www.cxbz958.org/jiutianjiantu/";
+webUrl = "https://www.xswang.vip/book/65942/";
+webUrlForEach = "https://www.x23wxw6.com";
 file = "output.txt";
 ini = "output.ini";
 start = 10 + 13                              #初始推荐章节数量
@@ -525,8 +526,11 @@ try:
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
+            #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+            text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
+            #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
