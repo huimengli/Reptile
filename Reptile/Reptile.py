@@ -5,10 +5,10 @@ import time
 import random
 import math
 
-webUrl = "https://www.kanshula4.com/27/27383/";
+webUrl = "http://www.cxbz958.org/jiutianjiantu/";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 19                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -521,7 +521,7 @@ try:
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
@@ -534,6 +534,7 @@ try:
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+            text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
             #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
             #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
