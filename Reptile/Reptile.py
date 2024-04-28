@@ -6,16 +6,15 @@ import random
 import math
 
 webUrl = "https://www.xswang.vip/book/65942/";
-webUrlForEach = "https://www.x23wxw6.com";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 13                              #初始推荐章节数量
+start = 10 + 14                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
+isLines = True;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [1,3];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
@@ -74,8 +73,10 @@ replacements = {
     "\t":"",
     "    ":" ",
     #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
+    "\r\n":"\n",
     "\n \n": "\n",
     "\n    \n": "\n",
+    "\r\n":"\n",
     "</div>": "\n",
     "&ldquo;": "\"",
     "&lsquo;": "'",
@@ -386,6 +387,14 @@ try:
 
     #data.replace("\<!\>","")              #删除特殊注释
     allDD = readDD.findall(data);
+    allDD2 = [];
+    for x in allDD:
+        t = [];
+        for y in x:
+            t.append(y.strip());
+        allDD2.append(t);
+    allDD = allDD2;
+    
     allDD = allDD[start:]              #消除初始推荐章节
     
     urladds = [];
@@ -543,8 +552,8 @@ try:
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
             #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
         else:
-            #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-            text = re.compile(r'<p>([^<>]*)<\/p>')
+            text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
+            #text = re.compile(r'<p>([^<>]*)<\/p>')
         
         #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
@@ -592,6 +601,8 @@ try:
             # 使用循环进行替换
             for old, new in replacements.items():
                 allText = allText.replace(old, new)
+                # 处理字符串前后的空白字符串
+                allText = allText.strip();
             if removeHTML:
                 re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
 
@@ -611,6 +622,8 @@ try:
                 for j in range(0,len(allText)):
                     for old, new in replacements.items():
                         allText[j] = allText[j].replace(old,new);
+                    #去掉行前后的空白字符串
+                    allText[j] = allText[j].strip();
                 errorTimes = 0;        
 
         openWriteAdd("\n\n");
