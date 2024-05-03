@@ -5,7 +5,7 @@ import time
 import random
 import math
 
-webUrl = "https://www.bqgbi.cc/book/1466/";
+webUrl = "https://www.bqgl.cc/look/154646/";
 file = "output.txt";
 ini = "output.ini";
 start = 10 + -1                              #初始推荐章节数量
@@ -71,6 +71,7 @@ replacements = {
     "<p>": "",
     "</p>": "\n",
     "\t":"",
+    "\u3000":" ",
     "    ":" ",
     #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
     "\n \n": "\n",
