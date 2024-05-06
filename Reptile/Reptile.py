@@ -5,18 +5,18 @@ import time
 import random
 import math
 
-webUrl = "https://www.bqgl.cc/look/154646/";
+webUrl = "https://www.82zg.com/book/79048/";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + -1                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
-needVerify = True;                         #是否需要网页ssl证书验证
+needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
-timeWait = [1,3];                           #等待时间([最小值,最大值])
+timeWait = [7,10];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 
@@ -36,6 +36,10 @@ def getForEachUrl(url:str):
     
 webUrlForEach = getForEachUrl(webUrl);
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
+headers = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+    'Cookie':'Hm_lvt_4a91b5b58ea34940313795aaa14f9fd9=1714749322; Hm_lpvt_4a91b5b58ea34940313795aaa14f9fd9=1714750022'
+}
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
@@ -73,9 +77,11 @@ replacements = {
     "\t":"",
     "\u3000":" ",
     "    ":" ",
+    "\r\n":"\n",
     #"\n\n": "\n",  # 可能需要额外的逻辑来处理连续的换行
     "\n \n": "\n",
     "\n    \n": "\n",
+    "\n\n\n":"\n",
     "</div>": "\n",
     "&ldquo;": "\"",
     "&lsquo;": "'",
@@ -527,13 +533,13 @@ try:
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
             #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
+            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
@@ -541,7 +547,7 @@ try:
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
             #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
-            text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)请收藏本站：http')
+            #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)请收藏本站：http')
             #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
         else:
             #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
