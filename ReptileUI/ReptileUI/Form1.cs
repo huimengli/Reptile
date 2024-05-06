@@ -34,8 +34,10 @@ namespace ReptileUI
             //设置图标
             this.Icon = (Icon)resource.GetObject("favicon");
 
+            //初始化INI读取模块
+            Program.iniFile = new IniFileOperation2(Program.settingIni);
+
             //读取INI
-            Program.iniFile = new IniFileOperation(Program.settingIni);
             this.textBox1.Text = Program.iniFile.Read(Program.uiSetting, "webUrl");
             this.textBox2.Text = Program.iniFile.Read(Program.uiSetting, "webUrlForEach");
 
@@ -48,11 +50,20 @@ namespace ReptileUI
             //设置默认使用的正则表达式
             this.readRules = new ReadRules();
             this.comboBox1.DataSource = readRules.ReadDDs;
-            this.comboBox1.Text = readRules.GetReadDD(4).ToString();
+            this.comboBox1.Text = readRules.GetReadDD(4) != null ? readRules.GetReadDD(4).ToString() : "";
 
             //设置toolTip
             this.toolTip1.SetToolTip(label1, "爬取的小说的目录网址");
             this.toolTip1.SetToolTip(label2, "因为通常爬取获得的章节URL不包含http://www.xxx.com/的头\n因此通过爬取的小说的目录网址截断获取,也可以自己编辑");
+            this.toolTip1.SetToolTip(label3, "输出配置文件,用于保存爬虫进度");
+            this.toolTip1.SetToolTip(label4, "输出文件,用于保存爬取内容");
+
+            this.toolTip1.SetToolTip(groupBox2, "爬取页面内容使用的正则表达式");
+            this.toolTip1.SetToolTip(groupBox1, "爬取过程中需要的设置");
+            this.toolTip1.SetToolTip(groupBox3, "使用的爬虫模块");
+
+            this.toolTip1.SetToolTip(radioButton1, "使用Python的Urllib3模块爬取页面内容");
+            this.toolTip1.SetToolTip(radioButton2, "使用ChromeDriver来爬取页面内容(尚未完成)");
 
             this.toolTip1.SetToolTip(this.textBox1, textBox1.Text);
             this.toolTip1.SetToolTip(this.textBox2, textBox2.Text);

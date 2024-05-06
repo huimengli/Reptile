@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Rule\ReadRules.cs" />
     <Compile Include="Tools\Base64.cs" />
+    <Compile Include="Tools\MyString.cs" />
     <Compile Include="Tools\IniFileOperation.cs" />
     <Compile Include="Tools\IniFileOperation2.cs" />
     <Compile Include="Tools\Item.cs" />

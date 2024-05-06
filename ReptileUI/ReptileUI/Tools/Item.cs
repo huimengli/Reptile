@@ -419,7 +419,6 @@ namespace ReptileUI.Tools
             var assembly = System.Reflection.Assembly.Load(assemblyName);
             return assembly.Location;
         }
-
     }
 
     /// <summary>
@@ -651,6 +650,5 @@ namespace ReptileUI.Tools
 
             return ret;
         }
-
     }
 }
