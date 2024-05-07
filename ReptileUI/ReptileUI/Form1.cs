@@ -57,6 +57,7 @@ namespace ReptileUI
             this.toolTip1.SetToolTip(label2, "因为通常爬取获得的章节URL不包含http://www.xxx.com/的头\n因此通过爬取的小说的目录网址截断获取,也可以自己编辑");
             this.toolTip1.SetToolTip(label3, "输出配置文件,用于保存爬虫进度");
             this.toolTip1.SetToolTip(label4, "输出文件,用于保存爬取内容");
+            this.toolTip1.SetToolTip(label6, $"用于读取章节路径的正则表达式,\n当前正则:{comboBox1.Text}");
 
             this.toolTip1.SetToolTip(groupBox2, "爬取页面内容使用的正则表达式");
             this.toolTip1.SetToolTip(groupBox1, "爬取过程中需要的设置");
@@ -65,9 +66,11 @@ namespace ReptileUI
             this.toolTip1.SetToolTip(radioButton1, "使用Python的Urllib3模块爬取页面内容");
             this.toolTip1.SetToolTip(radioButton2, "使用ChromeDriver来爬取页面内容(尚未完成)");
 
-            this.toolTip1.SetToolTip(this.textBox1, textBox1.Text);
-            this.toolTip1.SetToolTip(this.textBox2, textBox2.Text);
-            this.toolTip1.SetToolTip(this.textBox3, textBox3.Text);
+            this.toolTip1.SetToolTip(textBox1, textBox1.Text);
+            this.toolTip1.SetToolTip(textBox2, textBox2.Text);
+            this.toolTip1.SetToolTip(textBox3, textBox3.Text);
+
+            this.toolTip1.SetToolTip(comboBox1, $"当前正则:{comboBox1.Text}");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -132,7 +135,7 @@ namespace ReptileUI
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            this.toolTip1.SetToolTip(label6, $"用于读取章节路径的正则表达式,\n当前正则:{comboBox1.Text}");
         }
     }
 }

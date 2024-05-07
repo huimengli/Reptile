@@ -102,7 +102,7 @@ namespace ReptileUI.Tools
         private void ReadAll()
         {
             string line;
-            string section = "UNKNOWN";
+            string section = "";
             Regex readSection = new Regex(@"^\[([^\]]+)\]$");
             // 更新正则表达式，允许在值后面跟随注释
             Regex readKeyValue = new Regex(@"^([^=]+)=([^\;#]*)");
@@ -127,7 +127,7 @@ namespace ReptileUI.Tools
                     if (!_value.ContainsKey(section))
                     {
                         _section = new DictionaryEX<string, string>();
-                        _value[section] = _section;
+                        _value.Add(section, _section);
                         _sectionIndex.Add(section, index);
                     }
                 }
@@ -164,7 +164,7 @@ namespace ReptileUI.Tools
 
                         if (!_section.ContainsKey(key))
                         {
-                            _section[key] = value;
+                            _section.Add(key, value);
                         }
                         else
                         {
@@ -191,7 +191,7 @@ namespace ReptileUI.Tools
                 _section = new DictionaryEX<string, string>();
                 _value.Add(section, _section);
             }
-            var oldVal = _section[value];
+            var oldVal = _section[key];
             if (oldVal==null)
             {
                 _section.Add(key, value);
@@ -213,7 +213,7 @@ namespace ReptileUI.Tools
                 _value.Add(section, _section);
 
             }
-            var oldVal = _section[value];
+            var oldVal = _section[key];
             if (oldVal == null)
             {
                 _section.Add(key, value);
