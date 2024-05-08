@@ -419,6 +419,25 @@ namespace ReptileUI.Tools
             var assembly = System.Reflection.Assembly.Load(assemblyName);
             return assembly.Location;
         }
+
+        /// <summary>
+        /// 打开网站|其他东西
+        /// </summary>
+        /// <param name="web">网址|地址</param>
+        public static void OpenOnWindows(string web)
+        {
+            System.Diagnostics.Process.Start(web);
+        }
+
+        /// <summary>
+        /// 打开文件
+        /// </summary>
+        /// <param name="path"></param>
+        public static void OpenFile(string path)
+        {
+            var command = string.Format("explorer /select,{0}", path);
+            UseCmd(command);
+        }
     }
 
     /// <summary>

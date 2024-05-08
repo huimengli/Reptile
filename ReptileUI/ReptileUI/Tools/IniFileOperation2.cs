@@ -78,10 +78,12 @@ namespace ReptileUI.Tools
             }
 
             //读取整个ini配置文件
-            using (_sr = new StreamReader(_file.OpenRead()))
+            using (_sr = new StreamReader(_file.OpenRead(),Encoding.UTF8))
             {
                 ReadAll();
             }
+
+            _sw = new StreamWriter(_file.OpenWrite(), Encoding.UTF8);
         }
 
         #region 内部使用函数
@@ -94,7 +96,7 @@ namespace ReptileUI.Tools
         /// <summary>
         /// 内部使用:写入用
         /// </summary>
-        StringWriter _sw;
+        StreamWriter _sw;
 
         /// <summary>
         /// 内部使用:读取整个文件
