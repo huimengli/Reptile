@@ -14,7 +14,7 @@ namespace ReptileUI.Tools
     /// </summary>
     /// <example>
     /// // 使用示例
-    /// var iniFile = new IniFile("path_to_your_ini_file.ini");
+    /// var iniFile = new IniFileOperation2("path_to_your_ini_file.ini");
     /// iniFile.Write("SectionName", "KeyName", "Value");
     /// string value = iniFile.Read("SectionName", "KeyName");
     /// Console.WriteLine(value);
@@ -30,6 +30,16 @@ namespace ReptileUI.Tools
         /// ini文件
         /// </summary>
         private FileInfo _file;
+
+        /// <summary>
+        /// 内部使用:读取用
+        /// </summary>
+        private StreamReader _sr;
+
+        /// <summary>
+        /// 内部使用:写入用
+        /// </summary>
+        private StreamWriter _sw;
 
         /// <summary>
         /// ini配置文件内容
@@ -78,25 +88,15 @@ namespace ReptileUI.Tools
             }
 
             //读取整个ini配置文件
-            using (_sr = new StreamReader(_file.OpenRead(),Encoding.UTF8))
+            using (_sr = new StreamReader(_file.OpenRead(),new UTF8Encoding(false)))
             {
                 ReadAll();
             }
 
-            _sw = new StreamWriter(_file.OpenWrite(), Encoding.UTF8);
+            //_sw = new StreamWriter(_file.OpenWrite(), Encoding.UTF8);
         }
 
         #region 内部使用函数
-
-        /// <summary>
-        /// 内部使用:读取用
-        /// </summary>
-        StreamReader _sr;
-
-        /// <summary>
-        /// 内部使用:写入用
-        /// </summary>
-        StreamWriter _sw;
 
         /// <summary>
         /// 内部使用:读取整个文件
