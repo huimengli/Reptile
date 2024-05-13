@@ -5,10 +5,10 @@ import time
 import random
 import math
 
-webUrl = "https://www.szslkb.com/xa/82263/";
+webUrl = "https://www.biqusa.com/52_169234/";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -513,7 +513,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
             #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
             #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
@@ -549,6 +549,7 @@ try:
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
             #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)请收藏本站：http')
             #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
+            text = re.compile(r'<div id="conter_tip">([\s\S]*)<div id="conter_tip">')
         else:
             #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             text = re.compile(r'<p>([^<>]*)<\/p>')
