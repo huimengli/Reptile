@@ -438,6 +438,40 @@ namespace ReptileUI.Tools
             var command = string.Format("explorer /select,{0}", path);
             UseCmd(command);
         }
+
+        /// <summary>
+        /// 根据INI内容创建regex对象
+        /// </summary>
+        /// <param name="iniValue"></param>
+        /// <returns></returns>
+        public static Regex CreateRegex(string iniValue)
+        {
+            var read = new Regex("^[\"']?([^\r\n]+)[\"']$");
+            var value = read.Match(iniValue);
+            if (value.Success)
+            {
+                var regex = new Regex(value.Groups[1].ToString());
+                return regex;
+            }
+            else
+            {
+                return new Regex(iniValue);
+            }
+        }
+
+        /// <summary>
+        /// 将regex对象转为ini内容
+        /// </summary>
+        /// <param name="regex"></param>
+        /// <returns></returns>
+        public static string RegexToIni(Regex regex)
+        {
+            var sb = new StringBuilder();
+            sb.Append('"');
+            sb.Append(regex.ToString());
+            sb.Append('"');
+            return sb.ToString();
+        }
     }
 
     /// <summary>

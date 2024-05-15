@@ -232,5 +232,11 @@ namespace ReptileUI
             this.comboBox3.Enabled = true;
             this.button8.Enabled = true;
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            RegexTest regexTest = new RegexTest(comboBox1.Text);
+            regexTest.Show();
+        }
     }
 }
