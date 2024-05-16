@@ -420,6 +420,62 @@ namespace ReptileUI.Tools
             return assembly.Location;
         }
 
+        /// <summary>
+        /// 打开网站|其他东西
+        /// </summary>
+        /// <param name="web">网址|地址</param>
+        public static void OpenOnWindows(string web)
+        {
+            System.Diagnostics.Process.Start(web);
+        }
+
+        /// <summary>
+        /// 打开文件
+        /// </summary>
+        /// <param name="path"></param>
+        public static void OpenFile(string path)
+        {
+            var command = string.Format("explorer /select,{0}", path);
+            UseCmd(command);
+        }
+
+        /// <summary>
+        /// 根据INI内容创建regex对象
+        /// </summary>
+        /// <param name="iniValue"></param>
+        /// <returns></returns>
+        public static Regex CreateRegex(string iniValue)
+        {
+            if (iniValue==null)
+            {
+                return new Regex("");
+            }
+            var read = new Regex("^[\"']?([^\r\n]+)[\"']$");
+            var value = read.Match(iniValue);
+            if (value.Success)
+            {
+                var regex = new Regex(value.Groups[1].ToString());
+                return regex;
+            }
+            else
+            {
+                return new Regex(iniValue);
+            }
+        }
+
+        /// <summary>
+        /// 将regex对象转为ini内容
+        /// </summary>
+        /// <param name="regex"></param>
+        /// <returns></returns>
+        public static string RegexToIni(Regex regex)
+        {
+            var sb = new StringBuilder();
+            sb.Append('"');
+            sb.Append(regex.ToString());
+            sb.Append('"');
+            return sb.ToString();
+        }
     }
 
     /// <summary>
@@ -651,6 +707,5 @@ namespace ReptileUI.Tools
 
             return ret;
         }
-
     }
 }

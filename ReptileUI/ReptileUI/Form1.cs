@@ -34,8 +34,10 @@ namespace ReptileUI
             //设置图标
             this.Icon = (Icon)resource.GetObject("favicon");
 
+            //初始化INI读取模块
+            Program.iniFile = new IniFileOperation2(Program.settingIni);
+
             //读取INI
-            Program.iniFile = new IniFileOperation(Program.settingIni);
             this.textBox1.Text = Program.iniFile.Read(Program.uiSetting, "webUrl");
             this.textBox2.Text = Program.iniFile.Read(Program.uiSetting, "webUrlForEach");
 
@@ -48,15 +50,66 @@ namespace ReptileUI
             //设置默认使用的正则表达式
             this.readRules = new ReadRules();
             this.comboBox1.DataSource = readRules.ReadDDs;
-            this.comboBox1.Text = readRules.GetReadDD(4).ToString();
+            try
+            {
+                this.comboBox1.SelectedIndex = 4;
+            }
+            catch (Exception)
+            {
+                //跳过
+            }
+
+            this.comboBox2.DataSource = readRules.ReadTexts;
+            try
+            {
+                this.comboBox2.SelectedIndex = 6;
+            }
+            catch (Exception)
+            {
+                //跳过
+            }
+
+            this.comboBox3.DataSource = readRules.ReadLines;
+            try
+            {
+                this.comboBox3.SelectedIndex = 1;
+            }
+            catch (Exception)
+            {
+                //跳过
+            }
+
+            //设置多行选择
+            this.label8.Enabled = false;
+            this.comboBox3.Enabled = false;
+            this.button8.Enabled = false;
 
             //设置toolTip
             this.toolTip1.SetToolTip(label1, "爬取的小说的目录网址");
-            this.toolTip1.SetToolTip(label2, "因为通常爬取获得的章节URL不包含http://www.xxx.com/的头\n因此通过爬取的小说的目录网址截断获取,也可以自己编辑");
+            this.toolTip1.SetToolTip(label2, "因为通常爬取获得的章节URL不包含http://www.xxx.com的头\n因此通过爬取的小说的目录网址截断获取,也可以自己编辑");
+            this.toolTip1.SetToolTip(label3, "输出配置文件,用于保存爬虫进度");
+            this.toolTip1.SetToolTip(label4, "输出文件,用于保存爬取内容");
+            this.toolTip1.SetToolTip(label6, $"用于读取章节路径的正则表达式,\n当前正则:{comboBox1.Text}");
+            this.toolTip1.SetToolTip(label7, $"用于读取整个章节的正则表达式,\n当前正则:{comboBox2.Text}");
+            this.toolTip1.SetToolTip(label8, $"用于读取多行章节的正则表达式,\n当前正则:{comboBox3.Text}");
 
-            this.toolTip1.SetToolTip(this.textBox1, textBox1.Text);
-            this.toolTip1.SetToolTip(this.textBox2, textBox2.Text);
-            this.toolTip1.SetToolTip(this.textBox3, textBox3.Text);
+            this.toolTip1.SetToolTip(groupBox2, "爬取页面内容使用的正则表达式");
+            this.toolTip1.SetToolTip(groupBox1, "爬取过程中需要的设置");
+            this.toolTip1.SetToolTip(groupBox3, "使用的爬虫模块");
+
+            this.toolTip1.SetToolTip(radioButton1, "使用Python的Urllib3模块爬取页面内容");
+            this.toolTip1.SetToolTip(radioButton2, "使用ChromeDriver来爬取页面内容(尚未完成)");
+            this.toolTip1.SetToolTip(radioButton3, "章节内容多以<div>标签包裹,换行通常使用<br/>");
+            this.toolTip1.SetToolTip(radioButton4, "章节内容多以<p>标签包裹,每个段落前后都有<p>和</p>");
+
+            this.toolTip1.SetToolTip(textBox1, $"{textBox1.Text}\n双击打开网站");
+            this.toolTip1.SetToolTip(textBox2, textBox2.Text);
+            this.toolTip1.SetToolTip(textBox3, textBox3.Text);
+            this.toolTip1.SetToolTip(textBox4, textBox4.Text);
+
+            this.toolTip1.SetToolTip(comboBox1, $"当前正则:{comboBox1.Text}");
+            this.toolTip1.SetToolTip(comboBox2, $"当前正则:{comboBox2.Text}");
+            this.toolTip1.SetToolTip(comboBox3, $"当前正则:{comboBox3.Text}");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -87,6 +140,13 @@ namespace ReptileUI
                 "webUrlForEach",
                 textBox2.Text
             );
+
+            this.toolTip1.SetToolTip(textBox1, $"{textBox1.Text}\n双击打开网站");
+        }
+
+        private void textBox1_DoubleClick(object sender,EventArgs e)
+        {
+            Item.OpenOnWindows(textBox1.Text);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -101,6 +161,8 @@ namespace ReptileUI
                 "webUrlForEach",
                 textBox2.Text
             );
+
+            this.toolTip1.SetToolTip(textBox2, textBox2.Text);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -108,7 +170,7 @@ namespace ReptileUI
             string outputFilePath = this.textBox3.Text;
             var fileInfo = new FileInfo(outputFilePath);
             Item.ChoiceFolder(ref outputFilePath, "选择输出文件夹",fileInfo.DirectoryName);
-            this.textBox3.Text = outputFilePath+"\\output.txt";
+            this.textBox3.Text = outputFilePath+"\\output.ini";
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -121,7 +183,60 @@ namespace ReptileUI
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.toolTip1.SetToolTip(label6, $"用于读取章节路径的正则表达式,\n当前正则:{comboBox1.Text}");
+            this.toolTip1.SetToolTip(comboBox1, $"当前正则:{comboBox1.Text}");
+        }
 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.toolTip1.SetToolTip(label7, $"用于读取整个章节的正则表达式,\n当前正则:{comboBox2.Text}");
+            this.toolTip1.SetToolTip(comboBox2, $"当前正则:{comboBox2.Text}");
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            this.toolTip1.SetToolTip(textBox3, textBox3.Text);
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            this.toolTip1.SetToolTip(textBox4, textBox4.Text);
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.toolTip1.SetToolTip(label8, $"用于读取多行章节的正则表达式,\n当前正则:{comboBox3.Text}");
+            this.toolTip1.SetToolTip(comboBox3, $"当前正则:{comboBox3.Text}");
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+
+            this.label7.Enabled = true;
+            this.comboBox2.Enabled = true;
+            this.button7.Enabled = true;
+
+            this.label8.Enabled = false;
+            this.comboBox3.Enabled = false;
+            this.button8.Enabled = false;
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+
+            this.label7.Enabled = false;
+            this.comboBox2.Enabled = false;
+            this.button7.Enabled = false;
+
+            this.label8.Enabled = true;
+            this.comboBox3.Enabled = true;
+            this.button8.Enabled = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            RegexTest regexTest = new RegexTest(comboBox1.Text);
+            regexTest.Show();
         }
     }
 }

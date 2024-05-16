@@ -42,7 +42,7 @@ namespace ReptileUI
         /// <summary>
         /// ini配置文件操作模块
         /// </summary>
-        public static IniFileOperation iniFile;
+        public static IniFileOperation2 iniFile;
 
         /// <summary>
         /// 应用程序的主入口点。

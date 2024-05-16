@@ -14,7 +14,7 @@ namespace ReptileUI.Tools
     /// </summary>
     /// <example>
     /// // 使用示例
-    /// var iniFile = new IniFile("path_to_your_ini_file.ini");
+    /// var iniFile = new IniFileOperation2("path_to_your_ini_file.ini");
     /// iniFile.Write("SectionName", "KeyName", "Value");
     /// string value = iniFile.Read("SectionName", "KeyName");
     /// Console.WriteLine(value);
@@ -30,6 +30,16 @@ namespace ReptileUI.Tools
         /// ini文件
         /// </summary>
         private FileInfo _file;
+
+        /// <summary>
+        /// 内部使用:读取用
+        /// </summary>
+        private StreamReader _sr;
+
+        /// <summary>
+        /// 内部使用:写入用
+        /// </summary>
+        private StreamWriter _sw;
 
         /// <summary>
         /// ini配置文件内容
@@ -78,18 +88,15 @@ namespace ReptileUI.Tools
             }
 
             //读取整个ini配置文件
-            using (_sr = new StreamReader(_file.OpenRead()))
+            using (_sr = new StreamReader(_file.OpenRead(),new UTF8Encoding(false)))
             {
                 ReadAll();
             }
+
+            //_sw = new StreamWriter(_file.OpenWrite(), Encoding.UTF8);
         }
 
         #region 内部使用函数
-
-        /// <summary>
-        /// 内部使用:读取用
-        /// </summary>
-        StreamReader _sr;
 
         /// <summary>
         /// 内部使用:读取整个文件
@@ -97,17 +104,19 @@ namespace ReptileUI.Tools
         private void ReadAll()
         {
             string line;
-            string section = "UNKNOWN";
+            string section = "";
             Regex readSection = new Regex(@"^\[([^\]]+)\]$");
             // 更新正则表达式，允许在值后面跟随注释
             Regex readKeyValue = new Regex(@"^([^=]+)=([^\;#]*)");
             _value = new DictionaryEX<string, DictionaryEX<string, string>>();
+            DictionaryEX<string, string> _section = null;
             _sectionIndex = new DictionaryEX<string, int>();
+            int index = 0;
 
             while ((line = _sr.ReadLine()) != null)
             {
                 line = line.Trim();
-
+                index++;
                 if (line.StartsWith(";") || line.StartsWith("#") || string.IsNullOrWhiteSpace(line))
                 {
                     continue; // 跳过注释和空行
@@ -119,7 +128,9 @@ namespace ReptileUI.Tools
                     section = match.Groups[1].Value;
                     if (!_value.ContainsKey(section))
                     {
-                        _value[section] = new DictionaryEX<string, string>();
+                        _section = new DictionaryEX<string, string>();
+                        _value.Add(section, _section);
+                        _sectionIndex.Add(section, index);
                     }
                 }
                 else
@@ -141,13 +152,25 @@ namespace ReptileUI.Tools
                             value = value.Substring(0, commentIndex).Trim();
                         }
 
-                        if (!_value[section].ContainsKey(key))
+                        if (_section==null)
                         {
-                            _value[section][key] = value;
+                            if (_value[""]==null)
+                            {
+                                _section = new DictionaryEX<string, string>();
+                            }
+                            else
+                            {
+                                _section = _value[""];
+                            }
+                        }
+
+                        if (!_section.ContainsKey(key))
+                        {
+                            _section.Add(key, value);
                         }
                         else
                         {
-                            _value[section][key] = value; // 更新已存在的键
+                            _section[key] = value; // 更新已存在的键
                         }
                     }
                 }
@@ -164,7 +187,17 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void Write(string section,string key,string value)
         {
-            
+            var _section = _value[section];
+            if (_section==null)
+            {
+                _section = new DictionaryEX<string, string>();
+                _value.Add(section, _section);
+            }
+            var oldVal = _section[key];
+            if (oldVal==null)
+            {
+                _section.Add(key, value);
+            }
         }
 
         /// <summary>
@@ -175,7 +208,68 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void WriteNow(string section,string key,string value)
         {
+            var _section = _value[section];
+            if (_section == null)
+            {
+                _section = new DictionaryEX<string, string>();
+                _value.Add(section, _section);
 
+            }
+            var oldVal = _section[key];
+            if (oldVal == null)
+            {
+                _section.Add(key, value);
+            }
+        }
+
+        /// <summary>
+        /// 从ini文件读取值
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string Read(string section,string key)
+        {
+            var _section = _value[section];
+            if (_section==null)
+            {
+                return null;
+            }
+            else
+            {
+                return _section[key];
+            }
+        }
+
+        /// <summary>
+        /// 从ini文件中读取值
+        /// 如果ini中没有内容则返回<code>defaultValue</code>
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public string Read(string section,string key,string defaultValue)
+        {
+            var _section = _value[section];
+            if (_section==null)
+            {
+                return defaultValue;
+            }
+            else
+            {
+                return _section[key] ?? defaultValue;
+            }
+        }
+
+        /// <summary>
+        /// 读取ini整个节
+        /// </summary>
+        /// <param name="section"></param>
+        /// <returns></returns>
+        public DictionaryEX<string,string> ReadSection(string section)
+        {
+            return _value[section]??new DictionaryEX<string, string>();
         }
     }
 }

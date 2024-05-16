@@ -89,6 +89,10 @@ namespace ReptileUI.Rule
             {
                 return null;
             }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
