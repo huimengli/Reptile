@@ -60,10 +60,10 @@ namespace ReptileUI
             {
                 return baseValue;
             }
-            set
-            {
-                this.baseValue = value;
-            }
+            //set
+            //{
+            //    this.baseValue = value;
+            //}
         }
 
         /// <summary>
@@ -72,13 +72,50 @@ namespace ReptileUI
         public string regexValue;
 
         /// <summary>
+        /// 正则基础内容
+        /// </summary>
+        private string baseRegex;
+
+        /// <summary>
+        /// 正则内容,备份用
+        /// </summary>
+        public string BaseRegex
+        {
+            get
+            {
+                return baseRegex;
+            }
+        }
+
+        /// <summary>
         /// 读取用的正则
         /// </summary>
         private Regex regex;
 
+        /// <summary>
+        /// 颜色列表
+        /// </summary>
+        private List<Color> colors = new List<Color>
+        {
+            Color.Red,
+            Color.Orange,
+            Color.Yellow,
+            Color.Green,
+            Color.Blue,
+            Color.Indigo,
+            Color.Purple,
+            Color.Gray,
+            Color.DarkRed,
+            Color.DarkOrange,
+            Color.DarkGoldenrod,
+            Color.DarkGreen,
+            Color.DarkBlue,
+        };
+
         public RegexTest(string regexValue) : this()
         {
             this.regexValue = regexValue;
+            this.baseRegex = regexValue;
         }
 
         public RegexTest(string regexValue, string textValue) : this(regexValue)
@@ -704,20 +741,36 @@ var _hmt = _hmt || [];
 
         private void button1_Click(object sender, EventArgs e)
         {
+            try
+            {
+                this.regex = Item.CreateRegex(this.regexValue);
+            }
+            catch (Exception err)
+            {
+                this.regex = null;
+                MessageBox.Show($"正则表达式错误!\n{err.Message}", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             if (regex==null)
             {
                 this.richTextBox1.Text = this.TextValue;
             }
             else
             {
-                var matchs = regex.Matches(this.BaseValue);
+                var matchs = regex.Matches(this.TextValue);
+                this.richTextBox1.Focus();
                 //Console.WriteLine(matchs.Count);
                 if (matchs.Count>0)
                 {
-                    this.richTextBox1.Text = "";
-                    foreach (var match in matchs)
+                    this.richTextBox1.Text = this.TextValue;
+                    for (int i = 0; i < matchs.Count; i++)
                     {
-                        // TODO:[2024年5月15日] 写到这里
+                        var match = matchs[i];
+                        for (int j = 0; j < Math.Min(match.Groups.Count,colors.Count); j++)
+                        {
+                            var group = match.Groups[j];
+                            this.richTextBox1.Select(group.Index, group.Length);
+                            this.richTextBox1.SelectionColor = colors[j];
+                        }
                     }
                 }
             }
@@ -726,8 +779,57 @@ var _hmt = _hmt || [];
         private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
             this.regexValue = this.richTextBox2.Text;
-            //this.regex = new Regex(this.regexValue);
+            ////this.regex = new Regex(this.regexValue);
+            //this.regex = Item.CreateRegex(this.regexValue);
+        }
+
+        private void 清空内容ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.richTextBox1.Text = "";
+        }
+
+        private void 清空正则ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.richTextBox2.Text = "";
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            this.richTextBox1.Text = "";
+            this.richTextBox2.Text = "";
+        }
+
+        private void 重置文本ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.TextValue = this.BaseValue;
+            this.richTextBox1.Text = this.TextValue;
+        }
+
+        private void 重置正则ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.regexValue = this.BaseRegex;
             this.regex = Item.CreateRegex(this.regexValue);
+            this.richTextBox2.Text = this.regexValue;
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            this.TextValue = this.BaseValue;
+            this.richTextBox1.Text = this.TextValue;
+
+            this.regexValue = this.BaseRegex;
+            this.regex = Item.CreateRegex(this.regexValue);
+            this.richTextBox2.Text = this.regexValue;
+        }
+
+        private void 测试正则ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button1_Click(sender, e);
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -35,14 +35,31 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清空内容ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清空正则ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.测试正则ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重置文本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重置正则ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.撤销ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重做ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(13, 13);
+            this.richTextBox1.Location = new System.Drawing.Point(13, 27);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(775, 435);
+            this.richTextBox1.Size = new System.Drawing.Size(775, 421);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -89,6 +106,125 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.操作ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(800, 25);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 操作ToolStripMenuItem
+            // 
+            this.操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.清空内容ToolStripMenuItem,
+            this.清空正则ToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.toolStripSeparator1,
+            this.重置文本ToolStripMenuItem,
+            this.重置正则ToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.toolStripSeparator3,
+            this.测试正则ToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.撤销ToolStripMenuItem,
+            this.重做ToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.退出ToolStripMenuItem});
+            this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
+            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.操作ToolStripMenuItem.Text = "操作";
+            // 
+            // 清空内容ToolStripMenuItem
+            // 
+            this.清空内容ToolStripMenuItem.Name = "清空内容ToolStripMenuItem";
+            this.清空内容ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.清空内容ToolStripMenuItem.Text = "清空内容";
+            this.清空内容ToolStripMenuItem.Click += new System.EventHandler(this.清空内容ToolStripMenuItem_Click);
+            // 
+            // 清空正则ToolStripMenuItem
+            // 
+            this.清空正则ToolStripMenuItem.Name = "清空正则ToolStripMenuItem";
+            this.清空正则ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.清空正则ToolStripMenuItem.Text = "清空正则";
+            this.清空正则ToolStripMenuItem.Click += new System.EventHandler(this.清空正则ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(189, 6);
+            // 
+            // 测试正则ToolStripMenuItem
+            // 
+            this.测试正则ToolStripMenuItem.Name = "测试正则ToolStripMenuItem";
+            this.测试正则ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.测试正则ToolStripMenuItem.Text = "测试正则";
+            this.测试正则ToolStripMenuItem.Click += new System.EventHandler(this.测试正则ToolStripMenuItem_Click);
+            // 
+            // 重置文本ToolStripMenuItem
+            // 
+            this.重置文本ToolStripMenuItem.Name = "重置文本ToolStripMenuItem";
+            this.重置文本ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重置文本ToolStripMenuItem.Text = "重置文本";
+            this.重置文本ToolStripMenuItem.Click += new System.EventHandler(this.重置文本ToolStripMenuItem_Click);
+            // 
+            // 重置正则ToolStripMenuItem
+            // 
+            this.重置正则ToolStripMenuItem.Name = "重置正则ToolStripMenuItem";
+            this.重置正则ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重置正则ToolStripMenuItem.Text = "重置正则";
+            this.重置正则ToolStripMenuItem.Click += new System.EventHandler(this.重置正则ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(189, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "全部清空";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "全部重置";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // 撤销ToolStripMenuItem
+            // 
+            this.撤销ToolStripMenuItem.Name = "撤销ToolStripMenuItem";
+            this.撤销ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.撤销ToolStripMenuItem.Text = "撤销";
+            // 
+            // 重做ToolStripMenuItem
+            // 
+            this.重做ToolStripMenuItem.Name = "重做ToolStripMenuItem";
+            this.重做ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.重做ToolStripMenuItem.Text = "重做";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.退出ToolStripMenuItem.Text = "退出";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
+            // 
             // RegexTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -96,11 +232,16 @@
             this.ClientSize = new System.Drawing.Size(800, 549);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "RegexTest";
             this.Text = "正则测试页面";
             this.Load += new System.EventHandler(this.RegexTest_Load);
             this.groupBox1.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -112,5 +253,21 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 操作ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 清空内容ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 清空正则ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem 测试正则ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 重置文本ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 重置正则ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem 撤销ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 重做ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
     }
 }

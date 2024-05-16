@@ -446,6 +446,10 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public static Regex CreateRegex(string iniValue)
         {
+            if (iniValue==null)
+            {
+                return new Regex("");
+            }
             var read = new Regex("^[\"']?([^\r\n]+)[\"']$");
             var value = read.Match(iniValue);
             if (value.Success)
