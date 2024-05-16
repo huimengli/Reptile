@@ -5,10 +5,10 @@ import time
 import random
 import math
 
-webUrl = "http://www.bqwu.cc/biquge/88_88155/";
+webUrl = "https://www.biqubao10.com/book/112844/";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 0                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -519,7 +519,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
-            #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
+            text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />.https:')
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
@@ -543,7 +543,7 @@ try:
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
+            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
             #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
