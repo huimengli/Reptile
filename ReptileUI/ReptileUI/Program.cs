@@ -40,9 +40,19 @@ namespace ReptileUI
         public static readonly string TOOL_NAME = "main.exe";
 
         /// <summary>
+        /// CMD命令结尾字符串(不使用)
+        /// </summary>
+        public static readonly string ENT_TEXT = "###END###";
+
+        /// <summary>
         /// ini配置文件操作模块
         /// </summary>
         public static IniFileOperation2 iniFile;
+
+        /// <summary>
+        /// Python的Urllib3爬虫工具
+        /// </summary>
+        public static Python pythonGet;
 
         /// <summary>
         /// 应用程序的主入口点。

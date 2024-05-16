@@ -1,4 +1,4 @@
-﻿#define TEST_VALUE
+﻿//#define TEST_VALUE
 
 using ReptileUI.Properties;
 using System;
@@ -227,6 +227,10 @@ namespace ReptileUI
                     richTextBox1.Focus();
                     var g = Matches[0].Groups[0];
                     richTextBox1.Select(g.Index, g.Length);
+                }
+                else
+                {
+                    MessageBox.Show($"正则表达式错误\n无法匹配任何值!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

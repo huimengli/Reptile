@@ -206,5 +206,18 @@ namespace ReptileUI.Tools
             Console.WriteLine(html);
             return readDD.Matches(html);
         }
+
+        /// <summary>
+        /// 爬取指定网页内容
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public string Get(string url)
+        {
+            this.SetUrl(url);
+            Item.Log(ToString());
+            var html = Item.UseCMD2(ToString());
+            return html;
+        }
     }
 }

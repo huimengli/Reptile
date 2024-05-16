@@ -476,6 +476,47 @@ namespace ReptileUI.Tools
             sb.Append('"');
             return sb.ToString();
         }
+
+        /// <summary>
+        /// 使用命令并获取返回值
+        /// </summary>
+        /// <param name="cmdCode"></param>
+        /// <returns></returns>
+        public static string UseCMD2(string cmdCode)
+        {
+            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + cmdCode)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using (var process = new Process())
+            {
+                process.StartInfo = processInfo;
+                var output = new StringBuilder();
+                var error = new StringBuilder();
+
+                process.OutputDataReceived += (sender, args) => output.AppendLine(args.Data);
+                process.ErrorDataReceived += (sender, args) => error.AppendLine(args.Data);
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                process.WaitForExit();
+
+                if (process.ExitCode == 0)
+                {
+                    return output.ToString();
+                }
+                else
+                {
+                    return error.ToString();
+                }
+            }
+        }
     }
 
     /// <summary>

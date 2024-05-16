@@ -36,6 +36,9 @@ namespace ReptileUI
 
             //初始化INI读取模块
             Program.iniFile = new IniFileOperation2(Program.settingIni);
+            //初始化python爬虫工具
+            Program.pythonGet = new Python();
+            //Program.pythonGet.SetEndText(Item.TempEnd);
 
             //读取INI
             this.textBox1.Text = Program.iniFile.Read(Program.uiSetting, "webUrl");
@@ -235,7 +238,24 @@ namespace ReptileUI
 
         private void button5_Click(object sender, EventArgs e)
         {
-            RegexTest regexTest = new RegexTest(comboBox1.Text);
+            var htmlValue = "";
+            if (radioButton1.Checked)
+            {
+                try
+                {
+                    htmlValue = Program.pythonGet.Get(textBox1.Text);
+                    Item.Log(htmlValue);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message,"错误!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                }
+            }
+            else if (radioButton2.Checked)
+            {
+                // 尚不支持ChromeDriver
+            }
+            RegexTest regexTest = new RegexTest(comboBox1.Text,htmlValue);
             regexTest.Show();
         }
     }
