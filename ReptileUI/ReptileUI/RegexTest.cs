@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ReptileUI.Tools;
+using ReptileUI.TestValue;
 
 namespace ReptileUI
 {
@@ -36,10 +37,11 @@ namespace ReptileUI
         /// <summary>
         /// 文章内容
         /// </summary>
-        public string TextValue {
+        public string TextValue
+        {
             get
             {
-                return textValue;
+                return VisualizeInvisibles(textValue);
             }
             set
             {
@@ -93,13 +95,39 @@ namespace ReptileUI
         private Regex regex;
 
         /// <summary>
+        /// 正则读取结果
+        /// </summary>
+        private MatchCollection matches;
+
+        /// <summary>
+        /// 正则读取的结果
+        /// </summary>
+        public MatchCollection Matches
+        {
+            get
+            {
+                return matches;
+            }
+            set
+            {
+                this.matches = value;
+                this.matchesIndex = 0;
+            }
+        }
+
+        /// <summary>
+        /// 正则读取指针
+        /// </summary>
+        private int matchesIndex = 0;
+
+        /// <summary>
         /// 颜色列表
         /// </summary>
         private List<Color> colors = new List<Color>
         {
             Color.Red,
             Color.Orange,
-            Color.Yellow,
+            //Color.Yellow, //这颜色太亮了
             Color.Green,
             Color.Blue,
             Color.Indigo,
@@ -132,599 +160,8 @@ namespace ReptileUI
             this.regexValue = "";
 
 #if TEST_VALUE
-            this.TextValue = @"
-<!DOCTYPE html>
-<html>
-<head>
-<title>斗罗v：开局截胡小舞，我气死唐三(鱼不划水)最新章节_斗罗v：开局截胡小舞，我气死唐三全文阅读 - 笔趣鸽</title>
-<meta name=""keywords"" content=""斗罗v：开局截胡小舞，我气死唐三(鱼不划水)最新章节,斗罗v：开局截胡小舞，我气死唐三全文阅读"" />
-<meta name=""description"" content=""斗罗v：开局截胡小舞，我气死唐三最新章节由网友提供，《斗罗v：开局截胡小舞，我气死唐三》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的网游小说，笔趣鸽免费提供斗罗v：开局截胡小舞，我气死唐三最新清爽干净的文字章节在线阅读。"" />
-<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
-<meta http-equiv=""mobile-agent"" content=""format=html5; url=https://m.ahfgb.com/127/127595/"" />
-<meta http-equiv=""mobile-agent"" content=""format=xhtml; url=https://m.ahfgb.com/127/127595/"" />
-<link rel=""alternate"" media=""only screen and(max-width:640px)"" href=""https://m.ahfgb.com/127/127595/"">
-<meta property=""og:type"" content=""novel"" />
-<meta property=""og:title"" content=""斗罗v：开局截胡小舞，我气死唐三"" />
-<meta property=""og:description"" content=""【曹贼+玩梗++暧昧+搞笑+虐唐三团】
-孟德穿越斗罗世界，觉醒签到系统。
-孟德身为比比东义子，跟随原剧情，开启截胡之路！
-开局截胡小舞，气晕唐三！
-截胡宁荣荣，奥斯卡羡慕！
-截胡朱竹清，戴沐白急眼！
-截胡柳二龙，大师戴绿帽！
-复活阿银再截胡，让唐三喊我爸！
-截胡比比东女皇，我的孝心变质了！
-·······
-多年以后。
-武魂帝国之主·神界执掌者·世间第一人·孟德回首道。
-“本曹贼，不过想把魏武遗风发扬光大罢了。”
-“没想到，转眼就成人间神界的主人了。”"" />
-<meta property=""og:image"" content=""https://www.ahfgb.com/img/127/127595.jpg"" />
-<meta property=""og:novel:category"" content=""网游小说"" />
-<meta property=""og:novel:author"" content=""鱼不划水"" />
-<meta property=""og:novel:book_name"" content=""斗罗v：开局截胡小舞，我气死唐三"" />
-<meta property=""og:novel:read_url"" content=""https://www.ahfgb.com/127_127595/"" />
-<meta property=""og:url"" content=""https://www.ahfgb.com/127_127595/"" />
-<meta property=""og:novel:status"" content=""连载"" />
-<meta property=""og:novel:update_time"" content=""2023-12-16 14:56:28"" />
-<meta property=""og:novel:latest_chapter_name"" content=""369、有孟德，这波稳了"" />
-<meta property=""og:novel:latest_chapter_url"" content=""https://www.ahfgb.com/127_127595/65925.html"" />
-<script>
-(function(){
-var el = document.createElement(""script"");
-el.src = ""https://lf1-cdn-tos.bytegoofy.com/goofy/ttzz/push.js?eca1c3e9c4dfff9a4b4692dc02a0e16c22fd1507f5e2ced65b4b562a7ef5b7cffd9a9dcb5ced4d7780eb6f3bbd089073c2a6d54440560d63862bbf4ec01bba3a"";
-el.id = ""ttzz"";
-var s = document.getElementsByTagName(""script"")[0];
-s.parentNode.insertBefore(el, s);
-})(window)
-</script> <link rel=""stylesheet"" type=""text/css"" href=""/css/style.css"" />
-<script type=""text/javascript"" src=""/js/jquery.min.js""></script>
-<script type=""text/javascript"" src=""/js/index.js""></script>
-<script type=""text/javascript"">//toutiao111</script> <script>
-        if (isMobile()){
-            location.href = ""https://m.ahfgb.com/127/127595/"";
-        }
-    </script>
-</head>
-<body>
-<div id=""wrapper"">
-<div class=""ywtop"">
-<div class=""ywtop_con"">
-<div class=""ywtop_sethome"">
-<a href=""javascript:void(0);"">将本站设为首页</a>|<a href=""https://www.ahfgb.com"">收藏笔趣鸽</a> </div>
-<div class=""nri"" id=""login"">
-<script>login()</script>
-</div>
-</div>
-</div>
-<div class=""header"">
-<div class=""header_logo"">
-<a href=""/"">笔趣鸽</a>
-</div>
-<script>panel();</script>
-</div>
-<div class=""clear""></div>
-<div class=""nav"">
-<ul>
-<li><a href=""/"">首页</a></li>
-<li><a href=""/xuanhuan/"">玄幻小说</a></li>
-<li><a href=""/xiuzhen/"">修真小说</a></li>
-<li><a href=""/dushi/"">都市小说</a></li>
-<li><a href=""/chuanyue/"">穿越小说</a></li>
-<li><a href=""/wangyou/"">网游小说</a></li>
-<li><a href=""/kehuan/"">科幻小说</a></li>
-<li><a href=""/qita/"">其他小说</a></li>
-<li><a href=""/paihangbang/"">排行榜单</a></li>
-<li><a href=""/quanben/"">完本小说</a></li>
-<li><a href=""/shujia.html"">临时书架</a></li>
-</ul>
-</div> <div class=""box_con"">
-<div class=""con_top"">
-<a href=""/"">笔趣鸽</a> &gt; <a href=""/wangyou/"">网游小说</a> &gt; 斗罗v：开局截胡小舞，我气死唐三最新章节列表 </div>
-<div id=""maininfo"">
-<div id=""info"">
-<h1>斗罗v：开局截胡小舞，我气死唐三</h1>
-<p>作&nbsp;&nbsp;&nbsp;&nbsp;者：鱼不划水</p>
-<p>状&nbsp;&nbsp;&nbsp;&nbsp;态：
-连载中,
-<a rel=""nofollow"" href=""javascript:"" onclick=""addBookCase('127595');"">加入书架</a>,
-<a href=""#footer"">直达底部</a>
-</p>
-<p>最后更新：2023-12-16 14:56:28</p>
-<p>最新章节：
-<a href=""/127_127595/65925.html"" target=""_blank"">369、有孟德，这波稳了</a>
-</p>
-</div>
-<div id=""intro"">
-<p>
-【曹贼+玩梗++暧昧+搞笑+虐唐三团】
-孟德穿越斗罗世界，觉醒签到系统。
-孟德身为比比东义子，跟随原剧情，开启截胡之路！
-开局截胡小舞，气晕唐三！
-截胡宁荣荣，奥斯卡羡慕！
-截胡朱竹清，戴沐白急眼！
-截胡柳二龙，大师戴绿帽！
-复活阿银再截胡，让唐三喊我爸！
-截胡比比东女皇，我的孝心变质了！
-·······
-多年以后。
-武魂帝国之主·神界执掌者·世间第一人·孟德回首道。
-“本曹贼，不过想把魏武遗风发扬光大罢了。”
-“没想到，转眼就成人间神界的主人了。”
-</p>
-<p>各位书友要是觉得《斗罗v：开局截胡小舞，我气死唐三》还不错的话请不要忘记向您QQ群和微博里的朋友推荐哦！</p>
-</div>
-</div>
-<div id=""sidebar"">
-<div id=""fmimg"">
-<img alt=""斗罗v：开局截胡小舞，我气死唐三"" src=""/img/127/127595.jpg"" width=""120"" height=""150"" onerror=""this.src='/images/nocover.jpg';this.onerror=null;"" />
-<span class=""b""></span>
-</div>
-</div>
-<div id=""listtj"">推荐阅读：
-<a href=""/31_31895/"" target=""_blank"">赘婿当道（岳风柳萱）</a><a href=""/70_70892/"" target=""_blank"">张元清江玉饵小说</a><a href=""/64_64046/"" target=""_blank"">灵境行者</a><a href=""/47_47243/"" target=""_blank"">深空彼岸</a><a href=""/70_70616/"" target=""_blank"">影视从四合院阎解成开始阎解成</a><a href=""/25_25741/"" target=""_blank"">一剑独尊</a><a href=""/35_35154/"" target=""_blank"">剑道第一仙</a><a href=""/68_68945/"" target=""_blank"">权宠卦妃：摄政王的心上娇</a><a href=""/58_58684/"" target=""_blank"">天命为凰</a><a href=""/24_24183/"" target=""_blank"">剑主八荒</a><a href=""/51_51195/"" target=""_blank"">盖世神医</a><a href=""/30_30952/"" target=""_blank"">混沌丹神</a><a href=""/37_37667/"" target=""_blank"">皇后是朕的黑月光</a><a href=""/31_31978/"" target=""_blank"">富婿奶爸</a><a href=""/74_74791/"" target=""_blank"">颜千意穆允冽小说</a><a href=""/10_10008/"" target=""_blank"">无上神帝</a><a href=""/30_30133/"" target=""_blank"">凌天剑尊</a><a href=""/6_6873/"" target=""_blank"">百炼飞升录</a><a href=""/45_45243/"" target=""_blank"">上门女婿叶辰（又名霸婿崛起，上门龙婿）</a> <!-- --> </div>
-<div id=""listtj"">相关书籍：
-<a href=""/127_127554/"" target=""_blank"">叶辰郭雪怡整本免费</a>
-<a href=""/127_127567/"" target=""_blank"">虞青枝贺连钧在线阅读</a>
-<a href=""/127_127547/"" target=""_blank"">叶辰郭雪怡小说免费阅读</a>
-<a href=""/127_127550/"" target=""_blank"">虞青枝贺连钧TXT下载</a>
-<a href=""/127_127563/"" target=""_blank"">叶辰郭雪怡在线阅读</a>
-<a href=""/127_127600/"" target=""_blank"">天灾降临：囤百亿物资玩转末世</a>
-<a href=""/127_127551/"" target=""_blank"">叶辰郭雪怡小说</a>
-<a href=""/127_127617/"" target=""_blank"">重回1996开局迎娶前妻闺蜜无广告弹窗</a>
-<a href=""/127_127594/"" target=""_blank"">雪中：我黄蛮儿，开局和青鸟红薯沐浴</a>
-<a href=""/127_127644/"" target=""_blank"">重回1996开局迎娶前妻闺蜜免费阅读全文小说</a>
-<a href=""/127_127603/"" target=""_blank"">重回1996开局迎娶前妻闺蜜小说免费阅读</a>
-<a href=""/127_127585/"" target=""_blank"">山河美人谋</a>
-<a href=""/127_127568/"" target=""_blank"">叶辰郭雪怡大结局</a>
-<a href=""/127_127643/"" target=""_blank"">神启人生无广告弹窗</a>
-<a href=""/127_127618/"" target=""_blank"">法力无边高大仙免费阅读</a>
-<a href=""/127_127559/"" target=""_blank"">虞青枝贺连钧无删减完整版</a>
-<a href=""/127_127632/"" target=""_blank"">重回1996开局迎娶前妻闺蜜大结局</a>
-<a href=""/127_127615/"" target=""_blank"">重生可以撤回吗TXT下载</a>
-<a href=""/127_127548/"" target=""_blank"">虞青枝贺连钧小说免费阅读</a>
-<a href=""/127_127620/"" target=""_blank"">重回1996开局迎娶前妻闺蜜无弹窗免费看</a>
-</div>
-</div>
-<div class=""box_con"">
-<script>listAdFirst('斗罗v：开局截胡小舞，我气死唐三')</script>
-<script>info_middle('960026077',0,'127595')</script> <div id=""list"">
-<dl>
-<dt>《斗罗v：开局截胡小舞，我气死唐三》正文</dt>
-<dd><a href=""/127_127595/9454.html"">1、开局截胡小舞，曹贼之魂燃烧</a></dd>
-<dd><a href=""/127_127595/9470.html"">2、小舞被玩坏，孟德成为宿舍老大</a></dd>
-<dd><a href=""/127_127595/9477.html"">3、带小舞吃饭，有钱到让萧老大震惊</a></dd>
-<dd><a href=""/127_127595/9487.html"">4、小舞没带被褥，孟德的机会来了！</a></dd>
-<dd><a href=""/127_127595/9496.html"">5、快睡吧，狼人就要睁眼了.......</a></dd>
-<dd><a href=""/127_127595/9506.html"">6、同床共枕，在床上和小舞打架</a></dd>
-<dd><a href=""/127_127595/9518.html"">7、唐三是我好兄弟，他愿意替我扫</a></dd>
-<dd><a href=""/127_127595/9534.html"">8、万年魂环，吓得大师崩溃了</a></dd>
-<dd><a href=""/127_127595/9550.html"">9、带小舞回森林，路上趁火打劫</a></dd>
-<dd><a href=""/127_127595/9574.html"">10、顶级武魂令如教皇亲临，小舞震惊</a></dd>
-<dd><a href=""/127_127595/9599.html"">11、坑哭唐三玉小刚，两个大冤种</a></dd>
-<dd><a href=""/127_127595/9609.html"">12、抢唐三魂环，我们是好兄弟</a></dd>
-<dd><a href=""/127_127595/9620.html"">13、小舞和孟德早恋？萧老大挑衅</a></dd>
-<dd><a href=""/127_127595/9627.html"">14、唐三，你比孟德差远了！！！</a></dd>
-<dd><a href=""/127_127595/9635.html"">15、六翼天使初显神威，震惊全场！</a></dd>
-<dd><a href=""/127_127595/9652.html"">16、威胁玉小刚，小心我把柳二龙给...</a></dd>
-<dd><a href=""/127_127595/9669.html"">17、小舞心动，捅破窗户纸？</a></dd>
-<dd><a href=""/127_127595/9678.html"">18、史莱克学院，新的温柔乡！</a></dd>
-<dd><a href=""/127_127595/9705.html"">19、带小舞开房，戴沐白挑衅，欠打！</a></dd>
-<dd><a href=""/127_127595/9720.html"">20、暴打戴沐白，美女姐妹花归我了！</a></dd>
-<dd><a href=""/127_127595/9747.html"">21、玫瑰情侣房，小舞心脏怦怦跳</a></dd>
-<dd><a href=""/127_127595/9763.html"">22、史莱克学院报名，孟德打抱不平</a></dd>
-<dd><a href=""/127_127595/9767.html"">23、七宝琉璃宗小公主，宁荣荣</a></dd>
-<dd><a href=""/127_127595/9794.html"">24、13岁魂宗！震惊全场赵无极好奇</a></dd>
-<dd><a href=""/127_127595/9802.html"">25、戏耍赵无极，唐三又成大怨种</a></dd>
-<dd><a href=""/127_127595/9813.html"">26、戴沐白唐三躺着也受伤，奥斯卡震惊</a></dd>
-<dd><a href=""/127_127595/9825.html"">27、小舞宣布主权，宁荣荣朱竹清有小心思</a></dd>
-<dd><a href=""/127_127595/9832.html"">28、单手镇压马红俊，六翼天使恐怖如斯</a></dd>
-<dd><a href=""/127_127595/9847.html"">29、朱竹清好大啊，小舞羡慕极了</a></dd>
-<dd><a href=""/127_127595/9857.html"">30、小舞撒娇让孟德背，宁荣荣争风吃醋</a></dd>
-<dd><a href=""/127_127595/9863.html"">31、宁荣荣被刁难，孟德出面维护得芳心</a></dd>
-<dd><a href=""/127_127595/9877.html"">32、宁荣荣晕倒，孟德公主抱她去医务室</a></dd>
-<dd><a href=""/127_127595/9887.html"">33、宁荣荣想让孟德当牛做马，给不给草？</a></dd>
-<dd><a href=""/127_127595/9902.html"">34、孟德和朱竹清，吃豆腐的机会来了！</a></dd>
-<dd><a href=""/127_127595/9905.html"">35、朱竹清低头不见足尖，人间绝色</a></dd>
-<dd><a href=""/127_127595/9908.html"">36、曹舞组合，被美女猫儿挑衅</a></dd>
-<dd><a href=""/127_127595/9922.html"">37、大显神威，小舞吃醋危机感上来了</a></dd>
-<dd><a href=""/127_127595/9934.html"">38、戴沐白想出风头，宁荣荣维护孟德</a></dd>
-<dd><a href=""/127_127595/9946.html"">39、戴沐白身份暴露，武魂殿动杀心</a></dd>
-<dd><a href=""/127_127595/9954.html"">40、前往星斗大森林，小舞和宁荣荣争宠</a></dd>
-<dd><a href=""/127_127595/9961.html"">41、苍晖学院挑衅，小舞荣荣竹清求助孟德</a></dd>
-<dd><a href=""/127_127595/9972.html"">42、暴打苍晖学院，老师懵了</a></dd>
-<dd><a href=""/127_127595/9985.html"">43、武魂殿执法队，鸡冠凤尾蛇出现</a></dd>
-<dd><a href=""/127_127595/10007.html"">44、性感蛇女孟依然，被孟德整脸红了</a></dd>
-<dd><a href=""/127_127595/10022.html"">45、孟德最大了，泰坦巨猿出现！</a></dd>
-<dd><a href=""/127_127595/10046.html"">46、宁荣荣和朱竹清心动，孟德杀蛛取骨</a></dd>
-<dd><a href=""/127_127595/10062.html"">47、孟德二次截胡，孟依然破涕为笑心动了</a></dd>
-<dd><a href=""/127_127595/10074.html"">48、龙公蛇婆的刁难，孟德爆发六翼天使！</a></dd>
-<dd><a href=""/127_127595/10081.html"">49、孟依然被送给孟德，获得外附魂骨！</a></dd>
-<dd><a href=""/127_127595/10098.html"">50、小舞回归，你先让哥把衣服穿上</a></dd>
-<dd><a href=""/127_127595/10109.html"">51、宁荣荣被占便宜，要孟德为她负责</a></dd>
-<dd><a href=""/127_127595/10120.html"">52、食不食油饼？我想食你.......</a></dd>
-<dd><a href=""/127_127595/10132.html"">53、孟德一打七，你们可别哭着求饶</a></dd>
-<dd><a href=""/127_127595/10145.html"">54、孟德暴打史莱克，特训开始负重长跑</a></dd>
-<dd><a href=""/127_127595/10149.html"">55、孟德公主抱荣荣，小魔女是装昏迷！</a></dd>
-<dd><a href=""/127_127595/10167.html"">56、如何当渣男，一碗水端平</a></dd>
-<dd><a href=""/127_127595/10177.html"">57、朱竹清心脏停跳，孟德按压急救</a></dd>
-<dd><a href=""/127_127595/10194.html"">58、朱竹清心动，马红俊勾栏被打</a></dd>
-<dd><a href=""/127_127595/10204.html"">59、小舞色诱，猥琐大叔不乐激动了</a></dd>
-<dd><a href=""/127_127595/10213.html"">60、抱大腿？朱竹清的黑丝长腿</a></dd>
-<dd><a href=""/127_127595/10218.html"">61、等我把你哥睡了，再和你显摆</a></dd>
-<dd><a href=""/127_127595/10234.html"">62、朱竹清：我喜欢你，孟德</a></dd>
-<dd><a href=""/127_127595/10243.html"">63、朱竹清被骚扰，孟德直接一个巴掌上去</a></dd>
-<dd><a href=""/127_127595/10258.html"">64、我还要赶着去美艳阿姨的房间玩呢</a></dd>
-<dd><a href=""/127_127595/10267.html"">65、妖精！吃俺老曹一棒！</a></dd>
-<dd><a href=""/127_127595/10275.html"">67、蜘蛛女被玩坏，美妇人的再次邀请</a></dd>
-<dd><a href=""/127_127595/10291.html"">67、圣子大人弄哭美妇，天斗皇家战队踢馆</a></dd>
-<dd><a href=""/127_127595/10295.html"">68、美少妇：开好房间了，请随我来</a></dd>
-<dd><a href=""/127_127595/10310.html"">69、打不打得过皇家二队，全靠孟德啊！</a></dd>
-<dd><a href=""/127_127595/10316.html"">70、史莱克团结一心，天都皇家二队震惊！</a></dd>
-<dd><a href=""/127_127595/10332.html"">71、孟德吓呆天斗战队，迎战之日到！</a></dd>
-<dd><a href=""/127_127595/10347.html"">72、雪清河太子驾到？千仞雪来了！</a></dd>
-<dd><a href=""/127_127595/10359.html"">73、千仞雪多大了？要不你亲自感受一下？</a></dd>
-<dd><a href=""/127_127595/10368.html"">74、千仞雪：弟弟，你好棒.......</a></dd>
-<dd><a href=""/127_127595/10377.html"">75、孟德力挽狂澜，千仞雪加入史莱克</a></dd>
-<dd><a href=""/127_127595/10392.html"">76、千仞雪和孟德亲热，你跟姐姐走吧</a></dd>
-<dd><a href=""/127_127595/10408.html"">76、千仞雪的柔软，启程前往天斗帝国</a></dd>
-<dd><a href=""/127_127595/10420.html"">77、雪崩皇子阻扰，雪清河为孟德出头！</a></dd>
-<dd><a href=""/127_127595/10432.html"">79、老怪物的测试，孟德面不改色强大至极</a></dd>
-<dd><a href=""/127_127595/10440.html"">80、天斗帝国想要杀孟德，独孤博出现！</a></dd>
-<dd><a href=""/127_127595/10456.html"">81、镇压独孤博，前往柳二龙的蓝霸学院</a></dd>
-<dd><a href=""/127_127595/10468.html"">82、柳二龙够美够大，曹贼孟德准备截胡！</a></dd>
-<dd><a href=""/127_127595/10479.html"">83、柳二龙青睐孟德，独孤博杀出！！！</a></dd>
-<dd><a href=""/127_127595/10483.html"">84、冰火两仪眼？截胡！必须截胡！</a></dd>
-<dd><a href=""/127_127595/10495.html"">第85章 鬼子进村，孟德扫荡冰火两仪眼！</a></dd>
-<dd><a href=""/127_127595/10503.html"">第86章 独孤博被偷家，气疯了！</a></dd>
-<dd><a href=""/127_127595/10513.html"">武魂殿众将齐聚，拜见圣子大人！！！</a></dd>
-<dd><a href=""/127_127595/10519.html"">88、把你孙女独孤雁给我当小妾，如何？</a></dd>
-<dd><a href=""/127_127595/10530.html"">89、收服独孤雁，柳二龙老师你不对劲！</a></dd>
-<dd><a href=""/127_127595/10535.html"">90、孟德回归，引发轰动，胡列娜都来了！</a></dd>
-<dd><a href=""/127_127595/10547.html"">91、千仞雪和胡列娜撕逼，孟德给她们礼物</a></dd>
-<dd><a href=""/127_127595/10552.html"">92、胡列娜向孟德撒娇，小舞吃醋了</a></dd>
-<dd><a href=""/127_127595/10557.html"">93、孟德的大宝贝，女孩们都想要！</a></dd>
-<dd><a href=""/127_127595/10561.html"">94、给柳老师的礼物：又粗又长的大蘑菇</a></dd>
-<dd><a href=""/127_127595/10565.html"">95、师生恋！小舞对孟德的绵绵爱意</a></dd>
-<dd><a href=""/127_127595/10569.html"">96、九宝琉璃塔！宁荣荣性奋的缠上孟德！</a></dd>
-<dd><a href=""/127_127595/10575.html"">97、宁荣荣献吻，竹清长大，为柳老师治病</a></dd>
-<dd><a href=""/127_127595/10582.html"">98、柳老师发烧了，孟德用进口药治病！</a></dd>
-<dd><a href=""/127_127595/10585.html"">99、独孤雁：孟德就是个登徒子，占我便宜</a></dd>
-<dd><a href=""/127_127595/10589.html"">100、凭什么柳老师让他进来？小舞粘着他</a></dd>
-<dd><a href=""/127_127595/10592.html"">101、朱竹清：我胸口痛，你能帮我揉揉嘛</a></dd>
-<dd><a href=""/127_127595/10597.html"">102、拍卖场的小姐姐们，真性感啊！</a></dd>
-<dd><a href=""/127_127595/10602.html"">103、宁风致震惊，拍卖性感猫女狼！</a></dd>
-<dd><a href=""/127_127595/10607.html"">104、买下性感猫娘，宁风致震惊！！！</a></dd>
-<dd><a href=""/127_127595/10611.html"">105、宁荣荣搂着孟德哥，这是要见岳父？</a></dd>
-<dd><a href=""/127_127595/10616.html"">106、暴打泰隆父子俩，侮辱小舞的下场！</a></dd>
-<dd><a href=""/127_127595/10619.html"">107、美女们的香吻，小魔女回家震惊全场</a></dd>
-<dd><a href=""/127_127595/10626.html"">108、九宝琉璃塔！宁荣荣成为少宗主</a></dd>
-<dd><a href=""/127_127595/10629.html"">109、小舞竹清给孟德检查身体，压不住枪</a></dd>
-<dd><a href=""/127_127595/10635.html"">110、宁荣荣朱竹清着急，孟德暴打泰坦！</a></dd>
-<dd><a href=""/127_127595/10637.html"">111、左拥右抱，三大美人儿都在我怀中！</a></dd>
-<dd><a href=""/127_127595/10643.html"">112、七宝琉璃宗请求联姻，宁荣荣的算盘</a></dd>
-<dd><a href=""/127_127595/10647.html"">113、柳老师的性感好身材，真舒服啊！</a></dd>
-<dd><a href=""/127_127595/10649.html"">114、帐篷野战，宁荣荣本性藏不住了！</a></dd>
-<dd><a href=""/127_127595/10654.html"">115、蝎子坏了宁荣荣好事儿，小舞动手了</a></dd>
-<dd><a href=""/127_127595/10656.html"">116、再杀魂兽，你怎么还有仙品草药？！</a></dd>
-<dd><a href=""/127_127595/10660.html"">117、边打怪边吃豆腐，美滋滋！</a></dd>
-<dd><a href=""/127_127595/10663.html"">118、朱竹清爆衣，好身材展现给孟德看</a></dd>
-<dd><a href=""/127_127595/10665.html"">119、替补学姐，大美人儿绛珠</a></dd>
-<dd><a href=""/127_127595/10666.html"">120、大赛开始，千仞雪重逢孟德弟弟！</a></dd>
-<dd><a href=""/127_127595/10667.html"">121、万众瞩目的天才孟德，六个万年魂环</a></dd>
-<dd><a href=""/127_127595/10668.html"">122、重聚第一夜，和千仞雪姐姐一起睡！</a></dd>
-<dd><a href=""/127_127595/10669.html"">123、杀苍辉学院老师夺魂骨，小舞担心啊</a></dd>
-<dd><a href=""/127_127595/10670.html"">124、天水学院都是美女，水冰儿真润啊！</a></dd>
-<dd><a href=""/127_127595/10671.html"">125、孟德获胜后，小舞狠狠的给他奖励！</a></dd>
-<dd><a href=""/127_127595/10672.html"">126、孟德和柳老师打架，深入浅出的交流</a></dd>
-<dd><a href=""/127_127595/10673.html"">127、性感美人火舞登场，众女争夺孟德哥</a></dd>
-<dd><a href=""/127_127595/10674.html"">128、谁敢招惹小舞，孟德杀无赦！</a></dd>
-<dd><a href=""/127_127595/10764.html"">129、交手炽火学院，火舞门户大开迎战！</a></dd>
-<dd><a href=""/127_127595/10800.html"">130、火舞的终极大招，孟德以身守护！</a></dd>
-<dd><a href=""/127_127595/18918.html"">131、让竹清休息，孟德一人敌雷霆学院！</a></dd>
-<dd><a href=""/127_127595/18921.html"">132、战胜雷霆学院，火舞主动献上香吻！</a></dd>
-<dd><a href=""/127_127595/18926.html"">133、以一敌六，孟德对战神风学院！</a></dd>
-<dd><a href=""/127_127595/18932.html"">134、孟德一挑六，史莱克学院是冠军！</a></dd>
-<dd><a href=""/127_127595/19465.html"">135、性感尤物比比东，女帝大人我爱你</a></dd>
-<dd><a href=""/127_127595/20807.html"">136、调戏火舞，顺便享用狐狸胡列娜</a></dd>
-<dd><a href=""/127_127595/20808.html"">137、比比东：把小舞给我拿下来！！！</a></dd>
-<dd><a href=""/127_127595/21050.html"">138、孟德为小舞挺身而出，力战武魂殿！</a></dd>
-<dd><a href=""/127_127595/21543.html"">139、想抓小舞，就先从我的尸体上踏过去</a></dd>
-<dd><a href=""/127_127595/21837.html"">140、仙女和魅魔，孟德很爽</a></dd>
-<dd><a href=""/127_127595/22045.html"">141、比比东温暖的胸怀，爱了爱了</a></dd>
-<dd><a href=""/127_127595/23118.html"">142、武魂殿追杀小舞，小舞误会了！</a></dd>
-<dd><a href=""/127_127595/23345.html"">143、义母大人真润啊！孟德带比比东喝酒</a></dd>
-<dd><a href=""/127_127595/24128.html"">144、母后大人，带我前往杀戮之都</a></dd>
-<dd><a href=""/127_127595/24129.html"">145、进入杀戮之都，母后大人请相信我！</a></dd>
-<dd><a href=""/127_127595/24225.html"">146、小舞被人追杀？唐昊也进入杀戮之都</a></dd>
-<dd><a href=""/127_127595/24827.html"">146、玉小刚师德败坏，母后您少跟他接触</a></dd>
-<dd><a href=""/127_127595/25003.html"">147、死亡女神胡列娜，在孟德面前像只猫</a></dd>
-<dd><a href=""/127_127595/25401.html"">148、娜娜，你咬的轻一点</a></dd>
-<dd><a href=""/127_127595/25845.html"">150、唐三戴沐白被暴打，求救孟德哥！</a></dd>
-<dd><a href=""/127_127595/26560.html"">151、修罗王孟德，唐三得救高兴哭了</a></dd>
-<dd><a href=""/127_127595/27042.html"">152、孟德连胜将军，戴沐白自作多情</a></dd>
-<dd><a href=""/127_127595/27133.html"">153、杀戮之都的王，盯上孟德了！</a></dd>
-<dd><a href=""/127_127595/27448.html"">154、柳下惠果然不是这么好当的！</a></dd>
-<dd><a href=""/127_127595/28023.html"">155、百场胜利，孟德决定成为真正杀神！</a></dd>
-<dd><a href=""/127_127595/28616.html"">156、闯杀神试炼，孟德携手胡列娜同行</a></dd>
-<dd><a href=""/127_127595/28937.html"">157、小舞有危险，孟德勇闯地狱路！</a></dd>
-<dd><a href=""/127_127595/29467.html"">158、薄纱蝙蝠王，胡列娜紧张了！！！</a></dd>
-<dd><a href=""/127_127595/29918.html"">158、十首烈阳蛇，拿来把你！</a></dd>
-<dd><a href=""/127_127595/30101.html"">160、胡列娜意乱情迷，孟德压不住了</a></dd>
-<dd><a href=""/127_127595/30294.html"">161、唐月华，那可是个大美人儿啊！</a></dd>
-<dd><a href=""/127_127595/30415.html"">162、美艳唐月华，错认孟德成侄子了！</a></dd>
-<dd><a href=""/127_127595/30468.html"">163、唐三，你怎么对孟德这么没有礼貌！</a></dd>
-<dd><a href=""/127_127595/30638.html"">164、唐月华的客人，公主殿下雪珂驾到！</a></dd>
-<dd><a href=""/127_127595/30918.html"">165、胡列娜震惊，千道流要杀小舞？！！</a></dd>
-<dd><a href=""/127_127595/31526.html"">166、你看上哪家的公子？孟德？！！</a></dd>
-<dd><a href=""/127_127595/32472.html"">167、唐月华姑姑，已经被孟德折服了！</a></dd>
-<dd><a href=""/127_127595/32554.html"">168、雪珂和“雪清河”，修罗场来了！</a></dd>
-<dd><a href=""/127_127595/33770.html"">169、区别对待，孟德性福，唐三好惨啊！</a></dd>
-<dd><a href=""/127_127595/34376.html"">170、关押小舞的地牢？千道流的阴谋曝光</a></dd>
-<dd><a href=""/127_127595/34720.html"">171、圣子大人驾到！</a></dd>
-<dd><a href=""/127_127595/34881.html"">172、唐月华嫉妒四美，想和孟德贴贴</a></dd>
-<dd><a href=""/127_127595/35406.html"">173、唐月华紧跟孟德（高考结束咯）</a></dd>
-<dd><a href=""/127_127595/35407.html"">174、碰我小妾？找死！</a></dd>
-<dd><a href=""/127_127595/35884.html"">175、李少阳提上铁板，孟德你敢惹？</a></dd>
-<dd><a href=""/127_127595/36135.html"">176、带美女们逛武魂城</a></dd>
-<dd><a href=""/127_127595/36556.html"">177、少阳被暴打，李家哭惨了！</a></dd>
-<dd><a href=""/127_127595/36843.html"">178、孟德发现，小舞是被人抓走了！</a></dd>
-<dd><a href=""/127_127595/37146.html"">179、弟弟，心急吃不了热豆腐！</a></dd>
-<dd><a href=""/127_127595/37433.html"">180、圣子大人的事儿，也是你能打听的？</a></dd>
-<dd><a href=""/127_127595/37768.html"">181、你这个外乡人，怎么在这里？</a></dd>
-<dd><a href=""/127_127595/38291.html"">182、李少阳懵圈了，被孟德狠狠整治！</a></dd>
-<dd><a href=""/127_127595/38338.html"">183、听说母后把小舞抓了？</a></dd>
-<dd><a href=""/127_127595/38682.html"">184、找到凶手，千道流</a></dd>
-<dd><a href=""/127_127595/38949.html"">185、重逢小舞，她受尽了委屈和苦楚！！</a></dd>
-<dd><a href=""/127_127595/39249.html"">186、哥，我想你</a></dd>
-<dd><a href=""/127_127595/39402.html"">187、孟德进步，胡列那花痴了</a></dd>
-<dd><a href=""/127_127595/39727.html"">188、比比东勃然大怒，真当本座不存在吗</a></dd>
-<dd><a href=""/127_127595/40046.html"">189、刹那红光，小舞献祭</a></dd>
-<dd><a href=""/127_127595/40346.html"">190、小舞化作小白兔，孟德要复活爱人！</a></dd>
-<dd><a href=""/127_127595/40734.html"">191、千道流，你已有取死之道！！！</a></dd>
-<dd><a href=""/127_127595/41079.html"">192、复活小舞！！！</a></dd>
-<dd><a href=""/127_127595/41379.html"">193、准备复活小舞，弄死千道流</a></dd>
-<dd><a href=""/127_127595/41661.html"">194、唐三懵逼，这破草是我妈妈？！！</a></dd>
-<dd><a href=""/127_127595/42269.html"">195、孟德复活小舞，唐三复活老妈</a></dd>
-<dd><a href=""/127_127595/42414.html"">196、雪崩傻眼，独孤博对孟德太过恭敬</a></dd>
-<dd><a href=""/127_127595/42561.html"">197、柳二龙老师，我顶不住了</a></dd>
-<dd><a href=""/127_127595/42628.html"">198、孟德八十二级，这还是人类吗？！！</a></dd>
-<dd><a href=""/127_127595/42675.html"">199、柳二龙老师，和孟德单独相处？！！</a></dd>
-<dd><a href=""/127_127595/42753.html"">200、孟德实力太强，宁风致震惊！</a></dd>
-<dd><a href=""/127_127595/42754.html"">201、唐三吸收不了魂骨，无福消受！</a></dd>
-<dd><a href=""/127_127595/42780.html"">202、力之一族，认孟德为主</a></dd>
-<dd><a href=""/127_127595/42781.html"">203、人妖不乐，小爷气死你！</a></dd>
-<dd><a href=""/127_127595/43333.html"">204、敏之一族，白沉香</a></dd>
-<dd><a href=""/127_127595/44205.html"">205、震惊！泰坦竟然称呼孟德为主人？</a></dd>
-<dd><a href=""/127_127595/44206.html"">206、再度收服，下一个就是白沉香了！</a></dd>
-<dd><a href=""/127_127595/44207.html"">207、七大宗门重选大会？必须争夺！</a></dd>
-<dd><a href=""/127_127595/44656.html"">208、快要见到白沉香，鸡冻坏了！</a></dd>
-<dd><a href=""/127_127595/44794.html"">209、合作之人，孟德！</a></dd>
-<dd><a href=""/127_127595/44835.html"">210、双马尾白沉香，让人心动</a></dd>
-<dd><a href=""/127_127595/44836.html"">211、孟德是......主人？！！</a></dd>
-<dd><a href=""/127_127595/45118.html"">212、小魔女宁荣荣吃醋，白沉香脸红了</a></dd>
-<dd><a href=""/127_127595/45119.html"">213、刮目相看，白沉香对孟德好感度爆棚</a></dd>
-<dd><a href=""/127_127595/45366.html"">214、白沉香爷爷，准备和孟德打架</a></dd>
-<dd><a href=""/127_127595/45367.html"">215、战白鹤！使用小舞的十万年魂环！</a></dd>
-<dd><a href=""/127_127595/45624.html"">216、震惊！孟德天赋，真当妖孽！</a></dd>
-<dd><a href=""/127_127595/45625.html"">217、十万年魂环！小舞出现了！！！</a></dd>
-<dd><a href=""/127_127595/45881.html"">218、小舞，你回去吧</a></dd>
-<dd><a href=""/127_127595/46128.html"">219、孟德才十八岁，恐怖如斯！</a></dd>
-<dd><a href=""/127_127595/46129.html"">220、两百万金魂币，本圣子出了！</a></dd>
-<dd><a href=""/127_127595/46381.html"">221、水晶血龙参，小舞恢复人身</a></dd>
-<dd><a href=""/127_127595/46382.html"">222、老山羊，你竟然不给圣子面子？</a></dd>
-<dd><a href=""/127_127595/46760.html"">223、杨无敌挑衅，孟德能忍？</a></dd>
-<dd><a href=""/127_127595/46761.html"">224、震惊！孟德已经达到八十二级！</a></dd>
-<dd><a href=""/127_127595/47253.html"">225、孟德要认真了，谁比得上他？</a></dd>
-<dd><a href=""/127_127595/47254.html"">226、杨无敌的第三魂技，威慑众人</a></dd>
-<dd><a href=""/127_127595/47396.html"">227、孟德避无可避，使用杀手锏！</a></dd>
-<dd><a href=""/127_127595/47397.html"">228、名场面出现，破魂枪释放！</a></dd>
-<dd><a href=""/127_127595/47659.html"">229、孟德不是很强吗？看你怎么收场！</a></dd>
-<dd><a href=""/127_127595/47660.html"">230、小舞献身，为孟德而战！</a></dd>
-<dd><a href=""/127_127595/47933.html"">231、小舞，你回去吧</a></dd>
-<dd><a href=""/127_127595/47934.html"">232、孟德力破杨无敌，面子丢光了</a></dd>
-<dd><a href=""/127_127595/48200.html"">233、和小舞亲热，准备前往海神岛</a></dd>
-<dd><a href=""/127_127595/48201.html"">234、和武魂殿合作，好处多多！</a></dd>
-<dd><a href=""/127_127595/48462.html"">235、仙品巨花，让杨无敌震惊！</a></dd>
-<dd><a href=""/127_127595/48463.html"">236、该死的孟德，又让他装到了！</a></dd>
-<dd><a href=""/127_127595/48731.html"">237、不服？咱们就打一架！</a></dd>
-<dd><a href=""/127_127595/48976.html"">238、孟德一打三，谁怕了我不说！</a></dd>
-<dd><a href=""/127_127595/49435.html"">239、八翼天使，孟德的实力！！！</a></dd>
-<dd><a href=""/127_127595/49436.html"">240、风笑天失控，孟德杀神领域！</a></dd>
-<dd><a href=""/127_127595/49639.html"">241、火舞对孟德心动，真不一样！</a></dd>
-<dd><a href=""/127_127595/49640.html"">242、想让史莱克搬迁？没门！</a></dd>
-<dd><a href=""/127_127595/49954.html"">243、孟德真狗，就会勾引美女！</a></dd>
-<dd><a href=""/127_127595/49955.html"">244、来到钢铁之城，庚辛城</a></dd>
-<dd><a href=""/127_127595/50159.html"">245、楼高！铁匠协会会长！</a></dd>
-<dd><a href=""/127_127595/50160.html"">246、星罗帝国军队，敢冒犯孟德？</a></dd>
-<dd><a href=""/127_127595/50543.html"">247、神匠大人，竟然管孟德叫主人？！！</a></dd>
-<dd><a href=""/127_127595/50544.html"">248、下马车，公主抱</a></dd>
-<dd><a href=""/127_127595/50591.html"">249、孟德身边的女人，不止三个</a></dd>
-<dd><a href=""/127_127595/50675.html"">250、楼高的亲传弟子，也是铁匠疯子</a></dd>
-<dd><a href=""/127_127595/50844.html"">251、楼高震惊，这个少年肯定大有来头！</a></dd>
-<dd><a href=""/127_127595/50893.html"">252、孟德到底多有钱，一口气拿出这么多</a></dd>
-<dd><a href=""/127_127595/51130.html"">253、迈尔斯，好狗不挡道！</a></dd>
-<dd><a href=""/127_127595/51131.html"">254、宁荣荣姑娘，七宝琉璃宗少宗主担保</a></dd>
-<dd><a href=""/127_127595/51567.html"">255、孟德想杀人，找上武魂分殿</a></dd>
-<dd><a href=""/127_127595/51568.html"">256、孟德进入女浴池，鼻血狂流</a></dd>
-<dd><a href=""/127_127595/51733.html"">257、荣荣竹清，你们又长大不少啊！</a></dd>
-<dd><a href=""/127_127595/51734.html"">258、拍卖会，孟德稳坐钓鱼台</a></dd>
-<dd><a href=""/127_127595/51793.html"">259、楼高的作品，绝对是宝物！</a></dd>
-<dd><a href=""/127_127595/51794.html"">260、千道流的麻烦，我早就想找了！</a></dd>
-<dd><a href=""/127_127595/52184.html"">261、奥斯卡心痛，爱而不得宁荣荣</a></dd>
-<dd><a href=""/127_127595/52185.html"">262、铁匠协会，敌袭！</a></dd>
-<dd><a href=""/127_127595/52480.html"">263、孟德薄纱迈尔斯，震惊！</a></dd>
-<dd><a href=""/127_127595/52481.html"">264、宁荣荣的大腿，孟德你也枕过吧？</a></dd>
-<dd><a href=""/127_127595/52541.html"">265、我戴沐白，总有一天夺回朱竹清！</a></dd>
-<dd><a href=""/127_127595/52747.html"">266、荔枝一族，防御力变强！</a></dd>
-<dd><a href=""/127_127595/52748.html"">267、我摊牌了，我孟德，来自武魂殿</a></dd>
-<dd><a href=""/127_127595/52825.html"">268、柳二龙激动颤抖，孟德你来了？</a></dd>
-<dd><a href=""/127_127595/52826.html"">269、柳二龙老师的身材，真好啊～～～</a></dd>
-<dd><a href=""/127_127595/53046.html"">270、双生武魂？！！玉小刚发飙了</a></dd>
-<dd><a href=""/127_127595/53258.html"">271、雪夜大帝中毒？危险！</a></dd>
-<dd><a href=""/127_127595/53259.html"">272、雪晴和，你吃什么飞醋？</a></dd>
-<dd><a href=""/127_127595/53260.html"">273、雪清河油盐不进？能进别的</a></dd>
-<dd><a href=""/127_127595/53465.html"">274、孟德搂着小舞，吃瓜咯！</a></dd>
-<dd><a href=""/127_127595/53671.html"">275、杨无敌打工仔，一对二！</a></dd>
-<dd><a href=""/127_127595/53672.html"">276、推锅千道流，孟德的计划</a></dd>
-<dd><a href=""/127_127595/53866.html"">277、千仞雪摊牌身份，十指相扣</a></dd>
-<dd><a href=""/127_127595/53867.html"">278、孟德和柳二龙的关系，不纯洁？</a></dd>
-<dd><a href=""/127_127595/54333.html"">279、孟德进入天斗皇室，雪珂昏迷</a></dd>
-<dd><a href=""/127_127595/54334.html"">280、双方混战，孟德相信不是比比东的错</a></dd>
-<dd><a href=""/127_127595/54476.html"">281、七宝琉璃宗被毁，宁风致的选择</a></dd>
-<dd><a href=""/127_127595/54477.html"">282、孟德洗白雪清河，谁能阻止？</a></dd>
-<dd><a href=""/127_127595/54688.html"">283、孟德设计，让雪清河继承皇位</a></dd>
-<dd><a href=""/127_127595/54689.html"">284、千仞雪，弟弟你快进来</a></dd>
-<dd><a href=""/127_127595/55113.html"">285、宁风致退步，年轻人的天下</a></dd>
-<dd><a href=""/127_127595/55114.html"">286、女大不中留，宁荣荣这么大留不住了</a></dd>
-<dd><a href=""/127_127595/55513.html"">287、小舞挡下？孟德护住</a></dd>
-<dd><a href=""/127_127595/55514.html"">288、十二翼天使神，出现！</a></dd>
-<dd><a href=""/127_127595/55721.html"">289、为孟德公子而战！！！</a></dd>
-<dd><a href=""/127_127595/55722.html"">290、束手就擒，孟德威风</a></dd>
-<dd><a href=""/127_127595/55922.html"">291、开除玉小刚？雪清河在哪儿！</a></dd>
-<dd><a href=""/127_127595/55923.html"">292、和孟德作对？真的能赢吗</a></dd>
-<dd><a href=""/127_127595/56219.html"">293、孙女配不上孟德，暖床都不够格！</a></dd>
-<dd><a href=""/127_127595/56332.html"">294、来人闹事，唐三吓傻</a></dd>
-<dd><a href=""/127_127595/56527.html"">295、小舞姐，一定是我的！！！</a></dd>
-<dd><a href=""/127_127595/56715.html"">296、孟德，让你看清楚谁才适合小舞</a></dd>
-<dd><a href=""/127_127595/56734.html"">297、海神岛！更进一步！</a></dd>
-<dd><a href=""/127_127595/56895.html"">298、充满危机，充满机遇</a></dd>
-<dd><a href=""/127_127595/56896.html"">299、唐三yy小舞，忘记海神岛危机</a></dd>
-<dd><a href=""/127_127595/57089.html"">300、姐姐，你好美</a></dd>
-<dd><a href=""/127_127595/57090.html"">301、海神岛里，有复活小舞的方法！</a></dd>
-<dd><a href=""/127_127595/57350.html"">302、动身修炼，海神岛</a></dd>
-<dd><a href=""/127_127595/57373.html"">303、千仞雪质问，爷爷呢？</a></dd>
-<dd><a href=""/127_127595/57537.html"">304、昊天宗的决定</a></dd>
-<dd><a href=""/127_127595/57538.html"">305、大供奉？天下第一侩子手</a></dd>
-<dd><a href=""/127_127595/57547.html"">306、即将前往，海神岛</a></dd>
-<dd><a href=""/127_127595/57631.html"">307、海神岛上，不要杀人</a></dd>
-<dd><a href=""/127_127595/57632.html"">308、白沉香嫌弃，马红俊你真恶心</a></dd>
-<dd><a href=""/127_127595/57826.html"">309、剑斗罗的考验，能否保护荣荣</a></dd>
-<dd><a href=""/127_127595/58077.html"">310、双领域，笼罩全场！</a></dd>
-<dd><a href=""/127_127595/58084.html"">311、宁荣荣的加持，拉满</a></dd>
-<dd><a href=""/127_127595/58352.html"">312、剑斗罗的试炼，封号斗罗都挡不住！</a></dd>
-<dd><a href=""/127_127595/58353.html"">313、孟德的心性，是不会骄傲自满的！</a></dd>
-<dd><a href=""/127_127595/58549.html"">314、马红俊，想要得到白沉香的认可！</a></dd>
-<dd><a href=""/127_127595/58630.html"">315、宁风致，带孟德见雪清河？</a></dd>
-<dd><a href=""/127_127595/58727.html"">316、姐姐，放心吧</a></dd>
-<dd><a href=""/127_127595/58831.html"">317、瀚海乾坤罩，奇妙！</a></dd>
-<dd><a href=""/127_127595/58931.html"">318、宁荣荣的洗面奶，真香</a></dd>
-<dd><a href=""/127_127595/59044.html"">319、出发，海神岛！</a></dd>
-<dd><a href=""/127_127595/59425.html"">320、双马尾加攻速</a></dd>
-<dd><a href=""/127_127595/59475.html"">321、孟公子，不对劲</a></dd>
-<dd><a href=""/127_127595/59625.html"">322、令人作呕</a></dd>
-<dd><a href=""/127_127595/59719.html"">323、狼盗，杀无赦</a></dd>
-<dd><a href=""/127_127595/59807.html"">324、清理狼盗，齐心协力</a></dd>
-<dd><a href=""/127_127595/59915.html"">325、唐三这么强？</a></dd>
-<dd><a href=""/127_127595/60018.html"">326、马红俊的爆发力，恐怖如斯</a></dd>
-<dd><a href=""/127_127595/60425.html"">327、狂化状态</a></dd>
-<dd><a href=""/127_127595/60426.html"">328、万年魂兽？有魂骨吗！</a></dd>
-<dd><a href=""/127_127595/60427.html"">329、魂骨给我吗？！！</a></dd>
-<dd><a href=""/127_127595/60428.html"">330、白沉香围着孟德转，马红骏吃醋了</a></dd>
-<dd><a href=""/127_127595/60429.html"">331、进入瀚海城</a></dd>
-<dd><a href=""/127_127595/60430.html"">332、有艳遇吗？</a></dd>
-<dd><a href=""/127_127595/60431.html"">333、妾身，一定给客观安排好</a></dd>
-<dd><a href=""/127_127595/60432.html"">334、我孟德，可不是那种男人</a></dd>
-<dd><a href=""/127_127595/60433.html"">335、曹香组合，不太对劲？！！</a></dd>
-<dd><a href=""/127_127595/60434.html"">336、海魂师的斗争</a></dd>
-<dd><a href=""/127_127595/61044.html"">337、海迫兄弟，吓麻了</a></dd>
-<dd><a href=""/127_127595/61360.html"">338、海迫兄弟兄弟，落败</a></dd>
-<dd><a href=""/127_127595/61387.html"">339、一万金魂币，绝好魂导器</a></dd>
-<dd><a href=""/127_127595/61518.html"">340、这豆腐，不吃白不吃</a></dd>
-<dd><a href=""/127_127595/61519.html"">341、瀚海乾坤罩的神妙！</a></dd>
-<dd><a href=""/127_127595/61599.html"">342、海神岛，抵达！</a></dd>
-<dd><a href=""/127_127595/61671.html"">343、强大魂兽，遍布海图</a></dd>
-<dd><a href=""/127_127595/61755.html"">344、哥，算我求你了</a></dd>
-<dd><a href=""/127_127595/62064.html"">345、三环魂尊，不过如此</a></dd>
-<dd><a href=""/127_127595/62258.html"">346、团长大人，是个美女？</a></dd>
-<dd><a href=""/127_127595/62558.html"">347、给我，滚出来！</a></dd>
-<dd><a href=""/127_127595/62559.html"">348、空洞的目光，刺破黑暗</a></dd>
-<dd><a href=""/127_127595/63452.html"">349、圣光伏魔剑！现身！</a></dd>
-<dd><a href=""/127_127595/63453.html"">350、等我回来，我会保护你们的！</a></dd>
-<dd><a href=""/127_127595/63454.html"">351、震惊！这个孟德到底是何方神圣？</a></dd>
-<dd><a href=""/127_127595/63455.html"">352、紫珍珠海盗团，带我见一个人</a></dd>
-<dd><a href=""/127_127595/63456.html"">353、感谢孟德公子，这就带您找团长去</a></dd>
-<dd><a href=""/127_127595/63457.html"">354、打爆团长，解救伙伴</a></dd>
-<dd><a href=""/127_127595/63458.html"">355、住手，你们不要再打了！</a></dd>
-<dd><a href=""/127_127595/63766.html"">356、和小舞，生米煮成熟饭</a></dd>
-<dd><a href=""/127_127595/63767.html"">357、点穴紫珍珠，控制她！</a></dd>
-<dd><a href=""/127_127595/63768.html"">358、孟德，我要让你喝我洗脚水</a></dd>
-<dd><a href=""/127_127595/64090.html"">359、与紫珍珠的赌约，敢不敢？</a></dd>
-<dd><a href=""/127_127595/64324.html"">360、紫珍珠，你已经输了</a></dd>
-<dd><a href=""/127_127595/64372.html"">361、老娘长这么大，竟被孟德羞辱了</a></dd>
-<dd><a href=""/127_127595/64440.html"">362、海神岛，那是海魂师的世界</a></dd>
-<dd><a href=""/127_127595/64511.html"">363、海神的坐骑，深海魔鲸！</a></dd>
-<dd><a href=""/127_127595/65347.html"">364、孟公子，多多保重</a></dd>
-<dd><a href=""/127_127595/65348.html"">365、下海，起航！</a></dd>
-<dd><a href=""/127_127595/65349.html"">366、安全了！太好了！</a></dd>
-<dd><a href=""/127_127595/65350.html"">367、美景，陶醉了</a></dd>
-<dd><a href=""/127_127595/65924.html"">368、海神大人，庇护岛屿</a></dd>
-<dd><a href=""/127_127595/65925.html"">369、有孟德，这波稳了</a></dd>
-</dl>
-</div>
-</div>
-<div id=""footer"" name=""footer"">
-<div class=""footer_link"">强烈推荐：
-<a href=""/89_89230/"" target=""_blank"">知只周津南全文免费阅读</a><a href=""/54_54572/"" target=""_blank"">我的四合院避难所</a><a href=""/56_56304/"" target=""_blank"">明克街13号</a><a href=""/43_43203/"" target=""_blank"">上门姐夫楚天舒乔诗媛</a><a href=""/74_74105/"" target=""_blank"">关毅穿越三国笔趣</a><a href=""/73_73944/"" target=""_blank"">三国：我的爷爷是关羽</a><a href=""/68_68315/"" target=""_blank"">新婚夜，植物人老公被我撩醒了！</a><a href=""/42_42835/"" target=""_blank"">生存作业</a><a href=""/46_46518/"" target=""_blank"">回到明朝当首富</a><a href=""/42_42110/"" target=""_blank"">驭房我不止有问心术</a><a href=""/7_7851/"" target=""_blank"">不死武皇</a> </div>
-<div class=""footer_cont"">
-<p>《<a href=""https://www.ahfgb.com/127_127595/"">斗罗v：开局截胡小舞，我气死唐三</a>》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的网游小说，文学迷转载收集<a href=""https://www.ahfgb.com/127_127595/"">斗罗v：开局截胡小舞，我气死唐三</a>最新章节。
-</p>
-<p>本站所有小说为转载作品，所有章节均由网友上传，转载至本站只是为了宣传本书让更多读者欣赏。</p>
-<p>Copyright &copy; 2016 <a href=""https://www.biquge.biz/"" style=""color: #FF0000;"" target=""_blank"">笔趣鸽</a> All Rights Reserved.</p>
-<p>欢迎收藏本站
-<a href=""https://www.ahfgb.com/sitemap/bookindex.xml"">网站地图</a>
-<a href=""https://www.ahfgb.com/map/1/1.html"">网站导航</a></p> </div>
-</div>
-</div>
-<script type=""text/javascript"">//wap
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement(""script"");
-  hm.src = ""https://hm.baidu.com/hm.js?c427b9aaffde78b124f459f1ce60c6c7"";
-  var s = document.getElementsByTagName(""script"")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-//wap
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement(""script"");
-  hm.src = ""https://hm.baidu.com/hm.js?90054a730135362efec6916409782aa9"";
-  var s = document.getElementsByTagName(""script"")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-(function() {
-  var hm = document.createElement(""script"");
-  hm.src = ""https://hm.baidu.com/hm.js?faa6f77dc9da9f85c8522b7a4db1748a"";
-  var s = document.getElementsByTagName(""script"")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();</script>
-<script type=""application/ld+json"">{
-	""@context"": ""https://ziyuan.baidu.com/contexts/cambrian.jsonld"",
-	""@id"": ""https://www.ahfgb.com/127_127595/"",
-	""appid"": """",
- 	""title"": ""斗罗v：开局截胡小舞，我气死唐三(鱼不划水)最新章节_斗罗v：开局截胡小舞，我气死唐三全文阅读 - 笔趣鸽"",
-	""images"": [""https://www.ahfgb.com/img/127/127595.jpg""],
-	""description"": ""【曹贼+玩梗++暧昧+搞笑+虐唐三团】
-孟德穿越斗罗世界，觉醒签到系统。
-孟德身为比比东义子，跟随原剧情，开启截胡之路！
-开局截胡小舞，气晕唐三！
-截胡宁荣荣，奥斯卡羡慕！
-截胡朱竹清，戴沐白急眼！
-截胡柳二龙，大师戴绿帽！
-复活阿银再截胡，让唐三喊我爸！
-截胡比比东女皇，我的孝心变质了！
-·······
-多年以后。
-武魂帝国之主·神界执掌者·世间第一人·孟德回首道。
-“本曹贼，不过想把魏武遗风发扬光大罢了。”
-“没想到，转眼就成人间神界的主人了。”"",
-	""pubDate"": ""2023-04-24T16:53:51"",
-	""upDate"": ""2023-12-16T14:56:28""
-}</script>
-<script>novelVisit('127595')</script>
-</body>
-</html>
-            ";
+            this.TextValue = StaticValues.testChapter;
+
 #endif
 
             //设置图标
@@ -741,6 +178,12 @@ var _hmt = _hmt || [];
 
         private void button1_Click(object sender, EventArgs e)
         {
+            button1.Focus();
+            TestRegex();
+        }
+
+        private void TestRegex()
+        {
             try
             {
                 this.regex = Item.CreateRegex(this.regexValue);
@@ -750,30 +193,64 @@ var _hmt = _hmt || [];
                 this.regex = null;
                 MessageBox.Show($"正则表达式错误!\n{err.Message}", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            if (regex==null)
+
+            if (regex == null)
             {
                 this.richTextBox1.Text = this.TextValue;
             }
             else
             {
-                var matchs = regex.Matches(this.TextValue);
-                this.richTextBox1.Focus();
-                //Console.WriteLine(matchs.Count);
-                if (matchs.Count>0)
+                Matches = regex.Matches(this.TextValue);
+
+                if (Matches != null && Matches.Count > 0)
                 {
-                    this.richTextBox1.Text = this.TextValue;
-                    for (int i = 0; i < matchs.Count; i++)
+                    // 暂停布局，防止重绘和闪烁
+                    richTextBox1.SuspendLayout();
+                    richTextBox1.Text = this.TextValue;  // 只设置一次文本
+
+                    richTextBox1.Select(0, 0);  // 确保开始选择前没有选中的文本
+
+                    foreach (Match match in Matches)
                     {
-                        var match = matchs[i];
-                        for (int j = 0; j < Math.Min(match.Groups.Count,colors.Count); j++)
+                        for (int j = 0; j < Math.Min(match.Groups.Count, colors.Count); j++)
                         {
                             var group = match.Groups[j];
-                            this.richTextBox1.Select(group.Index, group.Length);
-                            this.richTextBox1.SelectionColor = colors[j];
+                            richTextBox1.Select(group.Index, group.Length);
+                            richTextBox1.SelectionColor = colors[j];
                         }
                     }
+
+                    // 恢复布局
+                    richTextBox1.ResumeLayout();
+
+                    // 转到第一个匹配
+                    richTextBox1.Focus();
+                    var g = Matches[0].Groups[0];
+                    richTextBox1.Select(g.Index, g.Length);
                 }
             }
+        }
+
+        /// <summary>
+        /// 将不可见字符串可视化
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string VisualizeInvisibles(string input)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in input)
+            {
+                if (char.IsWhiteSpace(c))
+                {
+                    sb.Append(c == '\n' ? "\\n" : c == '\r' ? "\\r" : c == '\t' ? "\\t" : " ");
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
         }
 
         private void richTextBox2_TextChanged(object sender, EventArgs e)
@@ -785,17 +262,22 @@ var _hmt = _hmt || [];
 
         private void 清空内容ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.TextValue = "";
             this.richTextBox1.Text = "";
         }
 
         private void 清空正则ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.regexValue = "";
             this.richTextBox2.Text = "";
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            this.TextValue = "";
             this.richTextBox1.Text = "";
+
+            this.regexValue = "";
             this.richTextBox2.Text = "";
         }
 
@@ -822,14 +304,48 @@ var _hmt = _hmt || [];
             this.richTextBox2.Text = this.regexValue;
         }
 
-        private void 测试正则ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            button1_Click(sender, e);
-        }
-
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void 测试正则ToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            //button1_Click(sender, e);
+            button1.Focus();
+            TestRegex();
+        }
+
+        private void 下一个匹配ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Matches != null && Matches.Count > 0)
+            {
+                matchesIndex = (matchesIndex + 1) % Matches.Count;
+                var match = Matches[matchesIndex];
+                this.richTextBox1.Focus();
+                this.richTextBox1.Select(match.Index, match.Length);
+                //this.richTextBox1.ScrollToCaret(); // 确保选中的文本可见
+            }
+            else
+            {
+                MessageBox.Show("没有正则测试结果!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void 上一个匹配ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Matches != null && Matches.Count > 0)
+            {
+                matchesIndex = (matchesIndex - 1 + Matches.Count) % Matches.Count;
+                var match = Matches[matchesIndex];
+                this.richTextBox1.Focus();
+                this.richTextBox1.Select(match.Index, match.Length);
+                //this.richTextBox1.ScrollToCaret(); // 确保选中的文本可见
+            }
+            else
+            {
+                MessageBox.Show("没有正则测试结果!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
