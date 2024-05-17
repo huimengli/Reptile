@@ -244,7 +244,7 @@ namespace ReptileUI
                 try
                 {
                     htmlValue = Program.pythonGet.Get(textBox1.Text);
-                    Item.Log(htmlValue);
+                    //Item.Log(htmlValue);
                 }
                 catch (Exception err)
                 {
