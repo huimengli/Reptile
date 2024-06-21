@@ -5,20 +5,20 @@ import time
 import random
 import math
 
-webUrl = "http://m.bamxs.com/daoxu.asp?id=51523";
-webUrlForEach = " ";
+webUrl = "https://www.crlsxny.com/zcxs/110594/";
+webUrlForEach = "https:";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 11                              #初始推荐章节数量
+start = 10 + -3                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
-haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [7,10];                           #等待时间([最小值,最大值])
-maxErrorTimes = 10;                          #章节爬取最大错误次数
+maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 
 #----------------------------------------------------------#
@@ -34,7 +34,6 @@ def getForEachUrl(url:str):
     r.append(end[0]);
     #print(r);
     return ".".join(r);
-    
 webUrlForEach = webUrlForEach and webUrlForEach or getForEachUrl(webUrl);
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
 headers = {
@@ -525,17 +524,19 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
-            text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
+            # text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />.https:')
             #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
             #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
             #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+            text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
             #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+            # text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:posterror')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
             #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
@@ -547,7 +548,7 @@ try:
             #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-            text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
+            # text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
             #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
@@ -670,4 +671,10 @@ except Exception as e:
     #print("\x1b[31;1m[Error]\x1b[0m\t" + str(e) + "\n");
     consoleWrite("[Error]","red");
     print(str(e));
+    #因为无法调试,现在需要抛出当前状态
+    consoleWrite("[Url]","green");
+    consoleWrite(str(url),"green");
+    print("");
+    consoleWrite("[Value]","white");
+    consoleWrite(str(eachData),"white");
     raise e;
