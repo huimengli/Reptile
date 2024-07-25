@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ReptileUI.Tools
 {
@@ -96,6 +97,27 @@ namespace ReptileUI.Tools
             //_sw = new StreamWriter(_file.OpenWrite(), Encoding.UTF8);
         }
 
+        /// <summary>
+        /// 将INI数据保存到本地
+        /// </summary>
+        public void Save()
+        {
+            _file.Create();
+            using (_sw = new StreamWriter(_file.OpenWrite(), new UTF8Encoding(false)))
+            {
+                WriteAll();
+            }
+        }
+
+        /// <summary>
+        /// 关闭并保存INI配置文件
+        /// </summary>
+        public void Close()
+        {
+            Save();
+            _file = null;
+        }
+
         #region 内部使用函数
 
         /// <summary>
@@ -157,6 +179,7 @@ namespace ReptileUI.Tools
                             if (_value[""]==null)
                             {
                                 _section = new DictionaryEX<string, string>();
+                                _value.Add("", _section);
                             }
                             else
                             {
@@ -176,7 +199,63 @@ namespace ReptileUI.Tools
                 }
             }
         }
+
+        /// <summary>
+        /// 内部使用:将所有数据写入文件
+        /// </summary>
+        private void WriteAll()
+        {
+            // 写入无节头数据
+            if (_value[""]!=null)
+            {
+                //写入节内容
+                foreach (var item in _value[""])
+                {
+                    _sw.WriteLine($"{item.Key}={item.Value}");
+                }
+                //写入空行
+                _sw.WriteLine();
+            }
+            // 写入有节头数据
+            foreach (var section in _value)
+            {
+                if (!String.IsNullOrWhiteSpace(section.Key))
+                {
+                    //写入节头
+                    _sw.WriteLine($"[{section.Key.ToUpper()}]");
+                    //写入节内容
+                    foreach (var item in section.Value)
+                    {
+                        _sw.WriteLine($"{item.Key}={item.Value}");
+                    }
+                    //写入空行
+                    _sw.WriteLine();
+                }
+            }
+        }
         #endregion
+
+        /// <summary>
+        /// 创建Ini节
+        /// </summary>
+        /// <param name="sectionName"></param>
+        public void CreateSection(string sectionName)
+        {
+            if (_file==null)
+            {
+                Item.Log("配置文件已关闭!");
+                return;
+            }
+            if (_value[sectionName]!=null)
+            {
+                Item.Log("ini节已经存在!");
+                return;
+            }
+            else
+            {
+                _value.Add(sectionName, new DictionaryEX<string, string>());
+            }
+        }
 
         /// <summary>
         /// 写入值到Ini文件。
@@ -187,6 +266,11 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void Write(string section,string key,string value)
         {
+            if (_file == null)
+            {
+                Item.Log("配置文件已关闭!");
+                return;
+            }
             var _section = _value[section];
             if (_section==null)
             {
@@ -208,6 +292,11 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void WriteNow(string section,string key,string value)
         {
+            if (_file == null)
+            {
+                Item.Log("配置文件已关闭!");
+                return;
+            }
             var _section = _value[section];
             if (_section == null)
             {
@@ -230,6 +319,11 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public string Read(string section,string key)
         {
+            if (_file == null)
+            {
+                Item.Log("配置文件已关闭!");
+                return "";
+            }
             var _section = _value[section];
             if (_section==null)
             {
@@ -251,6 +345,11 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public string Read(string section,string key,string defaultValue)
         {
+            if (_file == null)
+            {
+                Item.Log("配置文件已关闭!");
+                return "";
+            }
             var _section = _value[section];
             if (_section==null)
             {
@@ -269,6 +368,11 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public DictionaryEX<string,string> ReadSection(string section)
         {
+            if (_file == null)
+            {
+                Item.Log("配置文件已关闭!");
+                return null;
+            }
             return _value[section]??new DictionaryEX<string, string>();
         }
     }

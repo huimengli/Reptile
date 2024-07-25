@@ -36,6 +36,7 @@ namespace ReptileUI
 
             //初始化INI读取模块
             Program.iniFile = new IniFileOperation2(Program.settingIni);
+            
             //初始化python爬虫工具
             Program.pythonGet = new Python();
             //Program.pythonGet.SetEndText(Item.TempEnd);
@@ -254,9 +255,37 @@ namespace ReptileUI
             else if (radioButton2.Checked)
             {
                 // 尚不支持ChromeDriver
+                MessageBox.Show("尚不支持ChromeDriver","错误!",MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             RegexTest regexTest = new RegexTest(comboBox1.Text,htmlValue);
             regexTest.Show();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_Click(object sender, EventArgs e)
+        {
+            //初始化工作INI模块
+            try
+            {
+                Program.workIni = new IniFileOperation2("output.ini");
+            }
+            catch (FileNotFoundException)
+            {
+                FileInfo file = new FileInfo("output.ini");
+                var tempStream = file.Create();
+                tempStream.Close();
+                Program.workIni = new IniFileOperation2("output.ini");
+                Program.workIni.Write("", Program.WEB_URL, "");
+                Program.workIni.Write("", Program.WEB_URLS, "");
+                Program.workIni.Write("", Program.WEB_NAMES, "");
+                Program.workIni.Write("", Program.WEB_INDEX, "0");
+                //保存
+                Program.workIni.Close();
+            }
         }
     }
 }

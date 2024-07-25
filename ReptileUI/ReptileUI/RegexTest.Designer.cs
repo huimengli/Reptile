@@ -60,19 +60,17 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(17, 34);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.richTextBox1.Location = new System.Drawing.Point(13, 27);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(1032, 525);
+            this.richTextBox1.Size = new System.Drawing.Size(775, 421);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(923, 22);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Location = new System.Drawing.Point(692, 18);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 26);
+            this.button1.Size = new System.Drawing.Size(77, 21);
             this.button1.TabIndex = 2;
             this.button1.Text = "测试";
             this.button1.UseVisualStyleBackColor = true;
@@ -80,24 +78,22 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(923, 56);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Location = new System.Drawing.Point(692, 45);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(103, 36);
+            this.button2.Size = new System.Drawing.Size(77, 29);
             this.button2.TabIndex = 3;
             this.button2.Text = "确认";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.richTextBox2);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Location = new System.Drawing.Point(17, 568);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(13, 454);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(1033, 104);
+            this.groupBox1.Size = new System.Drawing.Size(775, 83);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "正则界面";
@@ -105,12 +101,11 @@
             // richTextBox2
             // 
             this.richTextBox2.AcceptsTab = true;
-            this.richTextBox2.Location = new System.Drawing.Point(9, 22);
-            this.richTextBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.richTextBox2.Location = new System.Drawing.Point(7, 18);
             this.richTextBox2.Multiline = false;
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBox2.Size = new System.Drawing.Size(904, 69);
+            this.richTextBox2.Size = new System.Drawing.Size(679, 56);
             this.richTextBox2.TabIndex = 4;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
@@ -123,8 +118,7 @@
             this.正则ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1067, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 25);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -144,84 +138,84 @@
             this.toolStripSeparator4,
             this.退出ToolStripMenuItem});
             this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
-            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(77, 24);
+            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(66, 21);
             this.操作ToolStripMenuItem.Text = "操作 (&O)";
             // 
             // 清空内容ToolStripMenuItem
             // 
             this.清空内容ToolStripMenuItem.Name = "清空内容ToolStripMenuItem";
-            this.清空内容ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.清空内容ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清空内容ToolStripMenuItem.Text = "清空内容";
             this.清空内容ToolStripMenuItem.Click += new System.EventHandler(this.清空内容ToolStripMenuItem_Click);
             // 
             // 清空正则ToolStripMenuItem
             // 
             this.清空正则ToolStripMenuItem.Name = "清空正则ToolStripMenuItem";
-            this.清空正则ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.清空正则ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清空正则ToolStripMenuItem.Text = "清空正则";
             this.清空正则ToolStripMenuItem.Click += new System.EventHandler(this.清空正则ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 26);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(124, 22);
             this.toolStripMenuItem1.Text = "全部清空";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(121, 6);
             // 
             // 重置文本ToolStripMenuItem
             // 
             this.重置文本ToolStripMenuItem.Name = "重置文本ToolStripMenuItem";
-            this.重置文本ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.重置文本ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.重置文本ToolStripMenuItem.Text = "重置文本";
             this.重置文本ToolStripMenuItem.Click += new System.EventHandler(this.重置文本ToolStripMenuItem_Click);
             // 
             // 重置正则ToolStripMenuItem
             // 
             this.重置正则ToolStripMenuItem.Name = "重置正则ToolStripMenuItem";
-            this.重置正则ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.重置正则ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.重置正则ToolStripMenuItem.Text = "重置正则";
             this.重置正则ToolStripMenuItem.Click += new System.EventHandler(this.重置正则ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(144, 26);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(124, 22);
             this.toolStripMenuItem2.Text = "全部重置";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(121, 6);
             // 
             // 撤销ToolStripMenuItem
             // 
             this.撤销ToolStripMenuItem.Enabled = false;
             this.撤销ToolStripMenuItem.Name = "撤销ToolStripMenuItem";
-            this.撤销ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.撤销ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.撤销ToolStripMenuItem.Text = "撤销";
             // 
             // 重做ToolStripMenuItem
             // 
             this.重做ToolStripMenuItem.Enabled = false;
             this.重做ToolStripMenuItem.Name = "重做ToolStripMenuItem";
-            this.重做ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.重做ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.重做ToolStripMenuItem.Text = "重做";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(121, 6);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -233,27 +227,27 @@
             this.下一个匹配ToolStripMenuItem,
             this.上一个匹配ToolStripMenuItem});
             this.正则ToolStripMenuItem.Name = "正则ToolStripMenuItem";
-            this.正则ToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.正则ToolStripMenuItem.Size = new System.Drawing.Size(64, 21);
             this.正则ToolStripMenuItem.Text = "正则 (&R)";
             // 
             // 测试正则ToolStripMenuItem
             // 
             this.测试正则ToolStripMenuItem.Name = "测试正则ToolStripMenuItem";
             this.测试正则ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.测试正则ToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.测试正则ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.测试正则ToolStripMenuItem.Text = "测试正则";
             this.测试正则ToolStripMenuItem.Click += new System.EventHandler(this.测试正则ToolStripMenuItem_Click_1);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(226, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(188, 6);
             // 
             // 下一个匹配ToolStripMenuItem
             // 
             this.下一个匹配ToolStripMenuItem.Name = "下一个匹配ToolStripMenuItem";
             this.下一个匹配ToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.下一个匹配ToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.下一个匹配ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.下一个匹配ToolStripMenuItem.Text = "下一个匹配";
             this.下一个匹配ToolStripMenuItem.Click += new System.EventHandler(this.下一个匹配ToolStripMenuItem_Click);
             // 
@@ -261,20 +255,19 @@
             // 
             this.上一个匹配ToolStripMenuItem.Name = "上一个匹配ToolStripMenuItem";
             this.上一个匹配ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-            this.上一个匹配ToolStripMenuItem.Size = new System.Drawing.Size(229, 26);
+            this.上一个匹配ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.上一个匹配ToolStripMenuItem.Text = "上一个匹配";
             this.上一个匹配ToolStripMenuItem.Click += new System.EventHandler(this.上一个匹配ToolStripMenuItem_Click);
             // 
             // RegexTest
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 686);
+            this.ClientSize = new System.Drawing.Size(800, 549);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "RegexTest";
             this.Text = "正则测试页面";

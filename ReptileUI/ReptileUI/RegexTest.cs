@@ -351,5 +351,11 @@ namespace ReptileUI
                 MessageBox.Show("没有正则测试结果!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
     }
 }

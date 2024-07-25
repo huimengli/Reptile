@@ -45,9 +45,34 @@ namespace ReptileUI
         public static readonly string ENT_TEXT = "###END###";
 
         /// <summary>
+        /// 工作配置文件中目录Url位置
+        /// </summary>
+        public static readonly string WEB_URL = "webUrl";
+
+        /// <summary>
+        /// 工作配置文件中各个章节Url存放,以逗号分隔
+        /// </summary>
+        public static readonly string WEB_URLS = "urls";
+
+        /// <summary>
+        /// 工作配置文件中各个章节名称,以逗号分隔
+        /// </summary>
+        public static readonly string WEB_NAMES = "names";
+
+        /// <summary>
+        /// 工作配置文件中保存进度用指针
+        /// </summary>
+        public static readonly string WEB_INDEX = "index";
+
+        /// <summary>
         /// ini配置文件操作模块
         /// </summary>
         public static IniFileOperation2 iniFile;
+
+        /// <summary>
+        /// 上次工作配置ini
+        /// </summary>
+        public static IniFileOperation2 workIni;
 
         /// <summary>
         /// Python的Urllib3爬虫工具
