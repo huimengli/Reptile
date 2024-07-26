@@ -64,6 +64,12 @@
       <DependentUpon>RegexTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Rule\ReadRules.cs" />
+    <Compile Include="Select.cs" >
+		<SubType>Form</SubType>
+	</Compile>
+    <Compile Include="Select.Designer.cs">
+      <DependentUpon>Select.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestValue\StaticValues.cs" />
     <Compile Include="Tools\Base64.cs" />
     <Compile Include="Tools\IniFileOperation.cs" />
@@ -86,6 +92,9 @@
     </Compile>
     <EmbeddedResource Include="RegexTest.resx">
       <DependentUpon>RegexTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Select.resx">
+      <DependentUpon>Select.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Setting.ini" />
     <None Include="Properties\Settings.settings">

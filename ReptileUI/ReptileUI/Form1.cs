@@ -250,20 +250,50 @@ namespace ReptileUI
                 catch (Exception err)
                 {
                     MessageBox.Show(err.Message,"错误!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    return;
                 }
             }
             else if (radioButton2.Checked)
             {
                 // 尚不支持ChromeDriver
                 MessageBox.Show("尚不支持ChromeDriver","错误!",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            RegexTest regexTest = new RegexTest(comboBox1.Text,htmlValue);
+            RegexTest regexTest = new RegexTest("查看界面无法修改正则表达式",htmlValue);
             regexTest.Show();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            var htmlValue = "";
+            if (radioButton1.Checked)
+            {
+                try
+                {
+                    htmlValue = Program.pythonGet.Get(textBox1.Text);
+                    //Item.Log(htmlValue);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message, "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else if (radioButton2.Checked)
+            {
+                // 尚不支持ChromeDriver
+                MessageBox.Show("尚不支持ChromeDriver", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            using (RegexTest dialog = new RegexTest(comboBox1.Text, htmlValue))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    comboBox1.Text = dialog.regexValue;
+                    Item.Log(comboBox1.Text);
+                    this.toolTip1.SetToolTip(comboBox1, comboBox1.Text);
+                }
+            }
         }
 
         private void button_Click(object sender, EventArgs e)
@@ -284,7 +314,68 @@ namespace ReptileUI
                 Program.workIni.Write("", Program.WEB_NAMES, "");
                 Program.workIni.Write("", Program.WEB_INDEX, "0");
                 //保存
-                Program.workIni.Close();
+                Program.workIni.Save();
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var htmlValue = "";
+            if (radioButton1.Checked)
+            {
+                try
+                {
+                    htmlValue = Program.pythonGet.Get(textBox1.Text);
+                    //Item.Log(htmlValue);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message, "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else if (radioButton2.Checked)
+            {
+                // 尚不支持ChromeDriver
+                MessageBox.Show("尚不支持ChromeDriver", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count==0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误","错误!",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string,string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters) {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER,options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+
+                }
             }
         }
     }
