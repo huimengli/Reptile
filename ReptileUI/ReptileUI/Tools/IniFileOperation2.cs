@@ -102,7 +102,8 @@ namespace ReptileUI.Tools
         /// </summary>
         public void Save()
         {
-            _file.Create();
+            var file = _file.Create();
+            file.Close();
             using (_sw = new StreamWriter(_file.OpenWrite(), new UTF8Encoding(false)))
             {
                 WriteAll();
@@ -302,13 +303,13 @@ namespace ReptileUI.Tools
             {
                 _section = new DictionaryEX<string, string>();
                 _value.Add(section, _section);
-
             }
             var oldVal = _section[key];
             if (oldVal == null)
             {
                 _section.Add(key, value);
             }
+            Save();
         }
 
         /// <summary>
