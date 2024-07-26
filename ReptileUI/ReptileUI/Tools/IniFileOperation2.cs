@@ -242,6 +242,7 @@ namespace ReptileUI.Tools
         /// <param name="sectionName"></param>
         public void CreateSection(string sectionName)
         {
+            sectionName = sectionName.Trim().ToUpper();
             if (_file==null)
             {
                 Item.Log("配置文件已关闭!");
@@ -267,6 +268,7 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void Write(string section,string key,string value)
         {
+            section = section.Trim().ToUpper();
             if (_file == null)
             {
                 Item.Log("配置文件已关闭!");
@@ -293,6 +295,7 @@ namespace ReptileUI.Tools
         /// <param name="value">要写入的值。</param>
         public void WriteNow(string section,string key,string value)
         {
+            section = section.Trim().ToUpper();
             if (_file == null)
             {
                 Item.Log("配置文件已关闭!");
@@ -320,6 +323,7 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public string Read(string section,string key)
         {
+            section = section.Trim().ToUpper();
             if (_file == null)
             {
                 Item.Log("配置文件已关闭!");
@@ -346,6 +350,7 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public string Read(string section,string key,string defaultValue)
         {
+            section = section.Trim().ToUpper();
             if (_file == null)
             {
                 Item.Log("配置文件已关闭!");
@@ -369,6 +374,7 @@ namespace ReptileUI.Tools
         /// <returns></returns>
         public DictionaryEX<string,string> ReadSection(string section)
         {
+            section = section.Trim().ToUpper();
             if (_file == null)
             {
                 Item.Log("配置文件已关闭!");
