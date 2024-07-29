@@ -5,7 +5,7 @@ import time
 import random
 import math
 
-webUrl = "http://m.bamxs.com/daoxu.asp?id=51523";
+webUrl = "https://www.shuhaige.net/304118/";
 webUrlForEach = " ";
 file = "output.txt";
 ini = "output.ini";
@@ -20,6 +20,7 @@ haveTitle = False;                          #是否有数字章节头(为了小�
 timeWait = [7,10];                           #等待时间([最小值,最大值])
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
+nextPage = True;                            #是否有第二页
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
