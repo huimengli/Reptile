@@ -184,5 +184,15 @@ namespace ReptileUI.Rule
                 .ValueList()
                 .Amplify(t => new Regex(t));
         }
+
+        /// <summary>
+        /// 添加读取章节的正则
+        /// </summary>
+        /// <param name="readDD"></param>
+        public void addDD(string regex)
+        {
+            readDDs.Add(Item.CreateRegex(regex));
+
+        }
     }
 }

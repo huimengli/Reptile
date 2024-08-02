@@ -29,14 +29,24 @@ namespace ReptileUI
         private List<(string, string)> options;
 
         /// <summary>
+        /// 初始化指针
+        /// </summary>
+        private int? optionIndex;
+
+        /// <summary>
+        /// 测试用正则
+        /// </summary>
+        public string testRegex;
+
+        /// <summary>
         /// 选中的对象
         /// </summary>
-        public string selectValue;
+        public (string,string) selectValue;
 
         /// <summary>
         /// 选中的指针
         /// </summary>
-        public int selectIndex;
+        public int selectIndex = 0;
 
         public Select(SelectEnum @enum,List<(string,string)> options)
         {
@@ -46,6 +56,8 @@ namespace ReptileUI
             this.selectEnum = @enum;
             this.selectIndex = 0;
             this.options = options;
+            this.optionIndex = null;
+            this.testRegex = "";
 
             //设置选择器标头
             this.Text = @enum.GetTitle();
@@ -54,9 +66,60 @@ namespace ReptileUI
             this.Icon = (Icon)resource.GetObject("favicon");
         }
 
+        public Select(SelectEnum @enum,List<(string,string)> options,int optionIndex):this(@enum,options)
+        {
+            //设置参数
+            this.optionIndex=optionIndex;
+        }
+
+        public Select(SelectEnum @enum,List<(string,string)> options,string testRegex):this(@enum,options)
+        {
+            //设置参数
+            this.testRegex=testRegex;
+        }
+
         private void Select_Load(object sender, EventArgs e)
         {
+            this.listBox1.Items.Clear();
+            this.listBox1.SelectedItems.Clear();
+            this.options.ForEach(item =>
+            {
+                this.listBox1.Items.Add(item.Item2);
+            });
+            if (this.optionIndex!=null)
+            {
+                this.listBox1.SelectedIndex = this.optionIndex.Value;
+            }
+        }
 
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.selectIndex = this.listBox1.SelectedIndex;
+            this.selectValue = this.options[selectIndex];
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.DialogResult=DialogResult.OK;
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (this.listBox1.SelectedIndex<0)
+            {
+                MessageBox.Show("没有选中章节!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+
+            }
         }
     }
 
