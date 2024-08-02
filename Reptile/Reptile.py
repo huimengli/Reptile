@@ -21,6 +21,7 @@ timeWait = [7,10];                           #等待时间([最小值,最大值]
 maxErrorTimes = 10;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 nextPage = True;                            #是否有第二页
+proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
@@ -55,8 +56,8 @@ r = random.Random();
 iniCount = 4;                               #ini行数
 errorTimes = 0;                             #错误次数
 if needProxy:                               #设置代理(小飞机)
-    os.environ["http_proxy"] = "http://127.0.0.1:33210";
-    os.environ["https_proxy"] = "http://127.0.0.1:33210";
+    os.environ["http_proxy"] = proxyUrl;
+    os.environ["https_proxy"] = proxyUrl;
 
 if needVerify==False:
     urllib3.disable_warnings();
@@ -367,7 +368,7 @@ try:
         #    'https':'127.0.0.1:33210',    
         #};
         #http = urllib3.ProxyManager(proxy,headers = headers);
-        http = urllib3.ProxyManager("http://127.0.0.1:33210",headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
+        http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
     else:
         http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
 
