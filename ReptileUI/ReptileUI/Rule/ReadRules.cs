@@ -13,6 +13,26 @@ namespace ReptileUI.Rule
     /// </summary>
     public class ReadRules
     {
+        #region 固定抬头值
+
+        /// <summary>
+        /// 读取章节的头部
+        /// </summary>
+        private static readonly string READ_DD = "readDD";
+
+        /// <summary>
+        /// 读取大段的头部
+        /// </summary>
+        private static readonly string READ_TEXT = "text";
+
+        /// <summary>
+        /// 读取多行的头部
+        /// </summary>
+        private static readonly string READ_LINE = "text";
+
+        #endregion
+
+        #region 存储数据位置
         /// <summary>
         /// 读取章节的正则存储
         /// </summary>
@@ -27,7 +47,9 @@ namespace ReptileUI.Rule
         /// 读取多行文章的正则存储
         /// </summary>
         private List<Regex> readLines = new List<Regex>();
-        
+
+        #endregion
+
         /// <summary>
         /// 给外部访问用的
         /// </summary>
@@ -62,20 +84,6 @@ namespace ReptileUI.Rule
         }
 
         /// <summary>
-        /// 添加读取章节的正则表达式
-        /// </summary>
-        /// <param name="regex"></param>
-        public void AddReadDD(Regex regex)
-        {
-            readDDs.Add(regex);
-            Program.iniFile.Write(
-                Program.readDD,
-                $"readDD{readDDs.Count}",
-                regex.ToString()
-            );
-        }
-
-        /// <summary>
         /// 获取读取章节的正则
         /// </summary>
         /// <param name="index"></param>
@@ -96,20 +104,6 @@ namespace ReptileUI.Rule
         }
 
         /// <summary>
-        /// 添加读取大段文章的正则表达式
-        /// </summary>
-        /// <param name="regex"></param>
-        public void AddReadText(Regex regex)
-        {
-            readTexts.Add(regex);
-            Program.iniFile.Write(
-                Program.readText,
-                $"text{readTexts.Count}",
-                regex.ToString()
-            );
-        }
-
-        /// <summary>
         /// 获取读取大段文章的正则表达式
         /// </summary>
         /// <param name="index"></param>
@@ -124,20 +118,6 @@ namespace ReptileUI.Rule
             {
                 return null;
             }
-        }
-        
-        /// <summary>
-        /// 添加读取多行文章的正则表达式
-        /// </summary>
-        /// <param name="regex"></param>
-        public void AddReadLine(Regex regex)
-        {
-            readLines.Add(regex);
-            Program.iniFile.Write(
-                Program.readLine,
-                $"text{readLines.Count}",
-                regex.ToString()
-            );
         }
 
         /// <summary>
@@ -164,20 +144,21 @@ namespace ReptileUI.Rule
         {
             var text = Program.iniFile.Read(Program.uiSetting, "file");
 
-            var read = new Regex(@"readDD[\d]+");
+            var read = new Regex(READ_DD+@"[\d]+");
             var dict = Program.iniFile.ReadSection(Program.readDD);
             readDDs = dict
                 .Filter((k,v)=> read.IsMatch(k))
                 .ValueList()
                 .Amplify(t=>new Regex(t));
 
-            read = new Regex(@"text[\d]+");
+            read = new Regex(READ_TEXT+@"[\d]+");
             dict = Program.iniFile.ReadSection(Program.readText);
             readTexts = dict
                 .Filter((k, v) => read.IsMatch(k))
                 .ValueList()
                 .Amplify(t => new Regex(t));
 
+            read = new Regex(READ_LINE + @"[\d]+");
             dict = Program.iniFile.ReadSection(Program.readLine);
             readLines = dict
                 .Filter((k, v) => read.IsMatch(k))
@@ -189,9 +170,40 @@ namespace ReptileUI.Rule
         /// 添加读取章节的正则
         /// </summary>
         /// <param name="readDD"></param>
-        public void addDD(string regex)
+        public void AddDD(string regex)
         {
             readDDs.Add(Item.CreateRegex(regex));
+        }
+
+        /// <summary>
+        /// 添加读取大段文章的正则
+        /// </summary>
+        /// <param name="regex"></param>
+        public void AddText(string regex)
+        {
+            readTexts.Add(Item.CreateRegex(regex));
+        }
+
+        /// <summary>
+        /// 添加读取多行的正则
+        /// </summary>
+        /// <param name="regex"></param>
+        public void AddLine(string regex)
+        {
+            readLines.Add(Item.CreateRegex(regex));
+        }
+
+        /// <summary>
+        /// 将正则保存进INI文件
+        /// </summary>
+        public void Save()
+        {
+            // 清空相关节内容
+            Program.iniFile.Clear(Program.readDD);
+            Program.iniFile.Clear(Program.readText);
+            Program.iniFile.Clear(Program.readLine);
+
+            // 写入已有节内容
 
         }
     }

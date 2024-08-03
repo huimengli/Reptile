@@ -382,5 +382,27 @@ namespace ReptileUI.Tools
             }
             return _value[section]??new DictionaryEX<string, string>();
         }
+
+        /// <summary>
+        /// 清空整个INI数据库
+        /// </summary>
+        public void Clear()
+        {
+            _value = new DictionaryEX<string, DictionaryEX<string, string>>();
+            _value.Add("", new DictionaryEX<string, string>());
+        }
+
+        /// <summary>
+        /// 清空INI某个节的全部内容
+        /// </summary>
+        /// <param name="sectionName"></param>
+        public void Clear(string sectionName)
+        {
+            var section = _value[sectionName];
+            if (section!=null)
+            {
+                _value[sectionName] = new DictionaryEX<string, string>();
+            }
+        }
     }
 }

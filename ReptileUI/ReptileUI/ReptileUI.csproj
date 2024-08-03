@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Class\DictionaryEX.cs" />
     <Compile Include="Enums\CodingMode.cs" />
+    <Compile Include="Enums\SelectEnum.cs" />
     <Compile Include="Errors\PythonException.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -64,9 +65,9 @@
       <DependentUpon>RegexTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Rule\ReadRules.cs" />
-    <Compile Include="Select.cs" >
-		<SubType>Form</SubType>
-	</Compile>
+    <Compile Include="Select.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Select.Designer.cs">
       <DependentUpon>Select.cs</DependentUpon>
     </Compile>

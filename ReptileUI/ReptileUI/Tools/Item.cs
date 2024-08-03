@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReptileUI.Class;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -737,6 +738,14 @@ namespace ReptileUI.Tools
             return new List<Tkey>(keys);
         }
 
+        /// <summary>
+        /// 将列表进行转换
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         public static List<R> Amplify<T,R>(this List<T> ts,Func<T,R> func)
         {
             var ret = new List<R>();
@@ -747,6 +756,47 @@ namespace ReptileUI.Tools
             });
 
             return ret;
+        }
+
+        /// <summary>
+        /// 对List<T>的每个元素进行指定操作
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="action"></param>
+        public static void ForEach<T>(this List<T> ts,Action<T,int> action)
+        {
+            for (int i = 0; i < ts.Count; i++)
+            {
+                action.Invoke(ts[i], i);
+            }
+        }
+
+        /// <summary>
+        /// 添加了转为增强型字典的函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="getKey"></param>
+        /// <returns></returns>
+        public static DictionaryEX<R,T> ToDictionaryEX<T,R>(this List<T> ts,Func<T,R> getKey)
+        {
+            var ret = new DictionaryEX<R, T>();
+
+            ts.ForEach(t =>
+            {
+                ret.Add(getKey.Invoke(t), t);
+            });
+
+            return ret;
+        }
+
+        public static DictionaryEX<R,T> ToDictionaryEX<T,R>(this List<T> ts,Func<T,int,R> getKey)
+        {
+            var ret = new DictionaryEX<R, T>();
+
+
         }
     }
 }

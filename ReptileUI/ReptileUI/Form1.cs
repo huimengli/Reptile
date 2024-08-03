@@ -1,4 +1,5 @@
-﻿using ReptileUI.Properties;
+﻿using ReptileUI.Enums;
+using ReptileUI.Properties;
 using ReptileUI.Rule;
 using ReptileUI.Tools;
 using System;
@@ -123,7 +124,11 @@ namespace ReptileUI
 
         private void Form1_Unload(object sender, FormClosedEventArgs e)
         {
+            // 关闭命令行进程
             Item.CMDClose();
+
+            // 保存INI配置文件
+            Program.iniFile.Close();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -403,6 +408,11 @@ namespace ReptileUI
             var htmlValue = "";
             if (radioButton1.Checked)
             {
+                if (File.Exists(Program.TOOL_NAME) == false)
+                {
+                    MessageBox.Show("找不到Python爬虫程序!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return "找不到Python爬虫程序!";
+                }
                 try
                 {
                     htmlValue = Program.pythonGet.Get(url);
