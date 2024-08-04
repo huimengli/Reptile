@@ -772,31 +772,6 @@ namespace ReptileUI.Tools
             }
         }
 
-        /// <summary>
-        /// 添加了转为增强型字典的函数
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="R"></typeparam>
-        /// <param name="ts"></param>
-        /// <param name="getKey"></param>
-        /// <returns></returns>
-        public static DictionaryEX<R,T> ToDictionaryEX<T,R>(this List<T> ts,Func<T,R> getKey)
-        {
-            var ret = new DictionaryEX<R, T>();
-
-            ts.ForEach(t =>
-            {
-                ret.Add(getKey.Invoke(t), t);
-            });
-
-            return ret;
-        }
-
-        public static DictionaryEX<R,T> ToDictionaryEX<T,R>(this List<T> ts,Func<T,int,R> getKey)
-        {
-            var ret = new DictionaryEX<R, T>();
-
-
-        }
+        
     }
 }

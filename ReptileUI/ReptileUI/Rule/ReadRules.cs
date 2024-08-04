@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ReptileUI.Class;
 
 namespace ReptileUI.Rule
 {
@@ -204,7 +205,13 @@ namespace ReptileUI.Rule
             Program.iniFile.Clear(Program.readLine);
 
             // 写入已有节内容
-
+            readDDs.ToDictionaryEX((regex, index) =>
+            {
+                return $"{READ_DD}{index}";
+            }).Map(item =>
+            {
+                return (item.Item1, item.Item2.ToString());
+            });
         }
     }
 }

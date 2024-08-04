@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\DictionaryEX.cs" />
+    <Compile Include="Class\KeyValuePairEX.cs" />
     <Compile Include="Enums\CodingMode.cs" />
     <Compile Include="Enums\SelectEnum.cs" />
     <Compile Include="Errors\PythonException.cs" />
