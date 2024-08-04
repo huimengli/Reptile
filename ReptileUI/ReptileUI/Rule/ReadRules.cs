@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ReptileUI.Class;
+using ReptileUI.Enums;
+using System.Windows.Forms;
 
 namespace ReptileUI.Rule
 {
@@ -204,14 +206,85 @@ namespace ReptileUI.Rule
             Program.iniFile.Clear(Program.readText);
             Program.iniFile.Clear(Program.readLine);
 
-            // 写入已有节内容
+            // 写入读取章节的正则内容
             readDDs.ToDictionaryEX((regex, index) =>
             {
                 return $"{READ_DD}{index}";
-            }).Map(item =>
+            }).ForEach(item =>
             {
-                return (item.Item1, item.Item2.ToString());
+                Program.iniFile.Write(Program.readDD, item.Key, item.Value.ToString());
             });
+
+            // 写入读取整段的正则内容
+            readTexts.ToDictionaryEX((regex, index) =>
+            {
+                return $"{READ_TEXT}{index}";
+            }).ForEach(item =>
+            {
+                Program.iniFile.Write(Program.readText, item.Key, item.Value.ToString());
+            });
+
+            // 写入读取多行的正则内容
+            readLines.ToDictionaryEX((regex, index) => $"{READ_LINE}{index}")
+            .ForEach(item =>
+            {
+                Program.iniFile.Write(Program.readLine, item.Key, item.Value.ToString());
+            });
+
+            // 保存ini数据
+            Program.iniFile.Save();
+        }
+
+        /// <summary>
+        /// 选择某个模块刷新并保存
+        /// </summary>
+        /// <param name="enum"></param>
+        public void Save(ReadRuleEnum @enum)
+        {
+            switch (@enum)
+            {
+                case ReadRuleEnum.READ_DD:
+                    Program.iniFile.Clear(Program.readDD);
+
+                    // 写入读取章节的正则内容
+                    readDDs.ToDictionaryEX((regex, index) =>
+                    {
+                        return $"{READ_DD}{index}";
+                    }).ForEach(item =>
+                    {
+                        Program.iniFile.Write(Program.readDD, item.Key, item.Value.ToString());
+                    });
+                    break;
+                case ReadRuleEnum.READ_TEXT:
+                    Program.iniFile.Clear(Program.readText);
+
+                    // 写入读取整段的正则内容
+                    readTexts.ToDictionaryEX((regex, index) =>
+                    {
+                        return $"{READ_TEXT}{index}";
+                    }).ForEach(item =>
+                    {
+                        Program.iniFile.Write(Program.readText, item.Key, item.Value.ToString());
+                    });
+                    break;
+                case ReadRuleEnum.READ_LINE:
+                    Program.iniFile.Clear(Program.readLine);
+
+                    // 写入读取多行的正则内容
+                    readLines.ToDictionaryEX((regex, index) => $"{READ_LINE}{index}")
+                    .ForEach(item =>
+                    {
+                        Program.iniFile.Write(Program.readLine, item.Key, item.Value.ToString());
+                    });
+                    break;
+                case ReadRuleEnum.NONE:
+                default:
+                    MessageBox.Show("错误的模块选择!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+            }
+
+            // 保存ini数据
+            Program.iniFile.Save();
         }
     }
 }

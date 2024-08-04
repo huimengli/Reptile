@@ -433,6 +433,24 @@ namespace ReptileUI.Class
 
         #region 通用遍历功能
         /// <summary>
+        /// 将字典中每个键值对进行遍历操作
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="action"></param>
+        public static void ForEach<TKey,TValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Action<KeyValuePair<TKey,TValue>> action
+        )
+        {
+            foreach (var item in dict)
+            {
+                action.Invoke(item);
+            }
+        }
+
+        /// <summary>
         /// 将字典中的每个键值对进行遍历操作
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
@@ -472,22 +490,22 @@ namespace ReptileUI.Class
 
         #region 遍历功能(KeyValuePair)
 
-        /// <summary>
-        /// 将字典中的每个键值对进行遍历操作
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dict"></param>
-        /// <param name="action"></param>
-        public static void ForEach<TKey,TValue>(
-            this DictionaryEX<TKey,TValue> dict,
-            Action<KeyValuePair<TKey,TValue>> action
-        ){
-            foreach (var item in dict)
-            {
-                action.Invoke(item);
-            }
-        }
+        ///// <summary>
+        ///// 将字典中的每个键值对进行遍历操作
+        ///// </summary>
+        ///// <typeparam name="TKey"></typeparam>
+        ///// <typeparam name="TValue"></typeparam>
+        ///// <param name="dict"></param>
+        ///// <param name="action"></param>
+        //public static void ForEach<TKey,TValue>(
+        //    this DictionaryEX<TKey,TValue> dict,
+        //    Action<KeyValuePair<TKey,TValue>> action
+        //){
+        //    foreach (var item in dict)
+        //    {
+        //        action.Invoke(item);
+        //    }
+        //}
 
         /// <summary>
         /// 将字典中的每个键对值进行操作并转换
@@ -558,22 +576,22 @@ namespace ReptileUI.Class
 
         #region 遍历功能(Tuple)
 
-        /// <summary>
-        /// 将字典中的每个键值对进行遍历操作
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="dict"></param>
-        /// <param name="action"></param>
-        public static void ForEach<TKey,TValue>(
-            this DictionaryEX<TKey,TValue> dict,
-            Action<(TKey,TValue)> action
-        ){
-            foreach (var item in dict)
-            {
-                action.Invoke((item.Key, item.Value));
-            }
-        }
+        ///// <summary>
+        ///// 将字典中的每个键值对进行遍历操作
+        ///// </summary>
+        ///// <typeparam name="TKey"></typeparam>
+        ///// <typeparam name="TValue"></typeparam>
+        ///// <param name="dict"></param>
+        ///// <param name="action"></param>
+        //public static void ForEach<TKey,TValue>(
+        //    this DictionaryEX<TKey,TValue> dict,
+        //    Action<(TKey,TValue)> action
+        //){
+        //    foreach (var item in dict)
+        //    {
+        //        action.Invoke((item.Key, item.Value));
+        //    }
+        //}
 
         /// <summary>
         /// 
@@ -593,7 +611,7 @@ namespace ReptileUI.Class
             var ret = new DictionaryEX<RKey, RValue>();
             dict.ForEach(item =>
             {
-                var itemRet = func(item);
+                var itemRet = func((item.Key,item.Value));
                 ret.Add(itemRet.Item1, itemRet.Item2);
             });
             return ret;

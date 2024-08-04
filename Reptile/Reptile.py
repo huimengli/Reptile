@@ -5,7 +5,7 @@ import time
 import random
 import math
 
-webUrl = "https://www.shuhaige.net/304118/";
+webUrl = "https://www.lieshu.cc/10003279/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
