@@ -245,14 +245,14 @@ namespace ReptileUI
         private void button5_Click(object sender, EventArgs e)
         {
             var htmlValue = GetHtmlValue(textBox1.Text);
-            RegexTest regexTest = new RegexTest("查看界面无法修改正则表达式",htmlValue);
+            RegexTest regexTest = new RegexTest("查看界面无法修改正则表达式",htmlValue, textBox1.Text);
             regexTest.Show();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             var htmlValue = GetHtmlValue(textBox1.Text);
-            using (RegexTest dialog = new RegexTest(comboBox1.Text, htmlValue))
+            using (RegexTest dialog = new RegexTest(comboBox1.Text, htmlValue, textBox1.Text))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -331,11 +331,11 @@ namespace ReptileUI
                     else
                     {
                         var tuple = select.selectValue;
-                        MessageBox.Show(tuple.Item1);
+                        //MessageBox.Show(tuple.Item1);
                         htmlValue = GetHtmlValue(tuple.Item1);
 
                         // 打开正则界面
-                        using (RegexTest regexTest = new RegexTest(this.comboBox2.Text,htmlValue))
+                        using (RegexTest regexTest = new RegexTest(this.comboBox2.Text,htmlValue,tuple.Item1))
                         {
                             if (regexTest.ShowDialog() == DialogResult.OK)
                             {

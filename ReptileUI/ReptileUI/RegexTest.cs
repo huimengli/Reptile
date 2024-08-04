@@ -18,7 +18,6 @@ namespace ReptileUI
 {
     public partial class RegexTest : Form
     {
-
         /// <summary>
         /// 资源文件
         /// </summary>
@@ -151,9 +150,16 @@ namespace ReptileUI
             this.TextValue = textValue;
         }
 
+        public RegexTest(string regexValue,string textValue,string UrlValue) : this(regexValue, textValue)
+        {
+            this.textBox1.Text = UrlValue;
+        }
+
         public RegexTest()
         {
             InitializeComponent();
+
+            //设置
 
             //设置初始参数
             this.TextValue = "";
@@ -161,7 +167,6 @@ namespace ReptileUI
 
 #if TEST_VALUE
             this.TextValue = StaticValues.testChapter;
-
 #endif
 
             //设置图标
