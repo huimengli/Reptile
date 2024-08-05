@@ -66,6 +66,9 @@ namespace ReptileUI
             this.TitleName = new System.Windows.Forms.TextBox();
             this.button = new System.Windows.Forms.Button();
             this.ETA = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -199,6 +202,9 @@ namespace ReptileUI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button9);
+            this.groupBox1.Controls.Add(this.textBox6);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.textBox5);
             this.groupBox1.Controls.Add(this.label5);
@@ -213,7 +219,7 @@ namespace ReptileUI
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(226, 23);
+            this.button4.Location = new System.Drawing.Point(199, 22);
             this.button4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(90, 30);
@@ -227,18 +233,18 @@ namespace ReptileUI
             this.textBox5.Location = new System.Drawing.Point(112, 22);
             this.textBox5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(103, 28);
+            this.textBox5.Size = new System.Drawing.Size(79, 28);
             this.textBox5.TabIndex = 3;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 25);
+            this.label5.Location = new System.Drawing.Point(24, 28);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 18);
             this.label5.TabIndex = 2;
-            this.label5.Text = "跳过数量";
+            this.label5.Text = "开始跳过";
             // 
             // groupBox2
             // 
@@ -462,6 +468,35 @@ namespace ReptileUI
             this.ETA.TabIndex = 17;
             this.ETA.Text = "ETA: 1小时58分钟";
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(486, 22);
+            this.button9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(90, 30);
+            this.button9.TabIndex = 8;
+            this.button9.Text = "测试";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(399, 22);
+            this.textBox6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(79, 28);
+            this.textBox6.TabIndex = 7;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(311, 28);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(80, 18);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "结束指针";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -539,6 +574,9 @@ namespace ReptileUI
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label10;
     }
 }
 

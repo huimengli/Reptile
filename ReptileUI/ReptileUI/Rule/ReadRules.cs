@@ -212,7 +212,7 @@ namespace ReptileUI.Rule
                 return $"{READ_DD}{index}";
             }).ForEach(item =>
             {
-                Program.iniFile.Write(Program.readDD, item.Key, item.Value.ToString());
+                Program.iniFile.Write(Program.readDD, item.Key, Item.RegexToIni(item.Value));
             });
 
             // 写入读取整段的正则内容
@@ -221,14 +221,14 @@ namespace ReptileUI.Rule
                 return $"{READ_TEXT}{index}";
             }).ForEach(item =>
             {
-                Program.iniFile.Write(Program.readText, item.Key, item.Value.ToString());
+                Program.iniFile.Write(Program.readText, item.Key, Item.RegexToIni(item.Value));
             });
 
             // 写入读取多行的正则内容
             readLines.ToDictionaryEX((regex, index) => $"{READ_LINE}{index}")
             .ForEach(item =>
             {
-                Program.iniFile.Write(Program.readLine, item.Key, item.Value.ToString());
+                Program.iniFile.Write(Program.readLine, item.Key, Item.RegexToIni(item.Value));
             });
 
             // 保存ini数据
@@ -252,7 +252,7 @@ namespace ReptileUI.Rule
                         return $"{READ_DD}{index}";
                     }).ForEach(item =>
                     {
-                        Program.iniFile.Write(Program.readDD, item.Key, item.Value.ToString());
+                        Program.iniFile.Write(Program.readDD, item.Key, Item.RegexToIni(item.Value));
                     });
                     break;
                 case ReadRuleEnum.READ_TEXT:
@@ -264,7 +264,7 @@ namespace ReptileUI.Rule
                         return $"{READ_TEXT}{index}";
                     }).ForEach(item =>
                     {
-                        Program.iniFile.Write(Program.readText, item.Key, item.Value.ToString());
+                        Program.iniFile.Write(Program.readText, item.Key, Item.RegexToIni(item.Value));
                     });
                     break;
                 case ReadRuleEnum.READ_LINE:
@@ -274,7 +274,7 @@ namespace ReptileUI.Rule
                     readLines.ToDictionaryEX((regex, index) => $"{READ_LINE}{index}")
                     .ForEach(item =>
                     {
-                        Program.iniFile.Write(Program.readLine, item.Key, item.Value.ToString());
+                        Program.iniFile.Write(Program.readLine, item.Key, Item.RegexToIni(item.Value));
                     });
                     break;
                 case ReadRuleEnum.NONE:

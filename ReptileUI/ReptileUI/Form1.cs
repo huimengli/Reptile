@@ -461,6 +461,51 @@ namespace ReptileUI
             }
         }
 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count == 0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string, string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters)
+            {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                //Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER_REVERSE, options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+                    var index = select.selectIndex;
+                    this.textBox6.Text = index.ToString();
+                    Program.iniFile.Write("", Program.WEB_INDEX, index.ToString());
+                }
+            }
+        }
+
         #region 功能模块
 
         /// <summary>

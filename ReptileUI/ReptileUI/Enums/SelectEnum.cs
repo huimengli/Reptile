@@ -19,8 +19,10 @@ namespace ReptileUI.Enums
         /// 章节选择
         /// </summary>
         CHAPTER = 1,
-
-
+        /// <summary>
+        /// 反向选择章节
+        /// </summary>
+        CHAPTER_REVERSE = 2,
     }
 
     /// <summary>
@@ -39,6 +41,7 @@ namespace ReptileUI.Enums
             switch (@enum)
             {
                 case SelectEnum.CHAPTER:
+                case SelectEnum.CHAPTER_REVERSE:
                     ret = "选择章节";
                     break;
                 case SelectEnum.None:

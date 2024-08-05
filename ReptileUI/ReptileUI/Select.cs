@@ -1,5 +1,6 @@
 ﻿using ReptileUI.Enums;
 using ReptileUI.Properties;
+using ReptileUI.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -83,20 +84,50 @@ namespace ReptileUI
         {
             this.listBox1.Items.Clear();
             this.listBox1.SelectedItems.Clear();
-            this.options.ForEach(item =>
+            switch (this.selectEnum)
             {
-                this.listBox1.Items.Add(item.Item2);
-            });
-            if (this.optionIndex!=null)
-            {
-                this.listBox1.SelectedIndex = this.optionIndex.Value;
+                case SelectEnum.CHAPTER:
+                    this.options.ForEach(item =>
+                    {
+                        this.listBox1.Items.Add(item.Item2);
+                    });
+                    if (this.optionIndex != null)
+                    {
+                        this.listBox1.SelectedIndex = this.optionIndex.Value;
+                    }
+                    break;
+                case SelectEnum.CHAPTER_REVERSE:
+                    this.options.ReverseThis().ForEach(item =>
+                    {
+                        this.listBox1.Items.Add(item.Item2);
+                    });
+                    if (this.optionIndex != null)
+                    {
+                        this.listBox1.SelectedIndex = this.options.Count - this.optionIndex.Value;
+                    }
+                    break;
+                case SelectEnum.None:
+                default:
+                    break;
             }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.selectIndex = this.listBox1.SelectedIndex;
-            this.selectValue = this.options[selectIndex];
+            switch (this.selectEnum)
+            {
+                case SelectEnum.CHAPTER:
+                    this.selectValue = this.options[selectIndex];
+                    break;
+                case SelectEnum.CHAPTER_REVERSE:
+                    this.selectValue = this.options[selectIndex];
+                    this.selectIndex = this.options.Count - this.selectIndex;
+                    break;
+                case SelectEnum.None:
+                default:
+                    break;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

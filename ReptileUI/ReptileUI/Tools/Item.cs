@@ -772,6 +772,16 @@ namespace ReptileUI.Tools
             }
         }
 
-        
+        /// <summary>
+        /// 反转当前这个列表顺序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <returns></returns>
+        public static List<T> ReverseThis<T>(this List<T> ts)
+        {
+            ts.Reverse();
+            return ts;
+        }
     }
 }
