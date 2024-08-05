@@ -451,7 +451,7 @@ namespace ReptileUI.Tools
             {
                 return new Regex("");
             }
-            var read = new Regex("^[\"']?([^\r\n]+)[\"']$");
+            var read = new Regex("^[\"']?([^\r\n]+)[\"']?$");
             var value = read.Match(iniValue);
             if (value.Success)
             {
