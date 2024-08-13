@@ -20,6 +20,8 @@ haveTitle = True;                          #是否有数字章节头(为了小�
 timeWait = [7,10];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
+nextPage = True;                            #是否有第二页
+proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
@@ -53,8 +55,8 @@ r = random.Random();
 iniCount = 4;                               #ini行数
 errorTimes = 0;                             #错误次数
 if needProxy:                               #设置代理(小飞机)
-    os.environ["http_proxy"] = "http://127.0.0.1:33210";
-    os.environ["https_proxy"] = "http://127.0.0.1:33210";
+    os.environ["http_proxy"] = proxyUrl;
+    os.environ["https_proxy"] = proxyUrl;
 
 if needVerify==False:
     urllib3.disable_warnings();
@@ -94,6 +96,8 @@ replacements = {
     "&gt;": ">",
     "澹": "淡"
 }
+tempIndex = 0;                              #为了翻页读取内容
+noNextPage = False;                         #为了翻页读取内容
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -363,7 +367,7 @@ try:
         #    'https':'127.0.0.1:33210',    
         #};
         #http = urllib3.ProxyManager(proxy,headers = headers);
-        http = urllib3.ProxyManager("http://127.0.0.1:33210",headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
+        http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
     else:
         http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
 
@@ -506,14 +510,18 @@ try:
         if url == webUrlForEach+passUrl or y==passName:
             i+=1;
             continue;
-        res = http.request("GET",url,None,headers);
-        #print(res.status);
-        try:
-            eachData = res.data.decode("utf-8");
-        except UnicodeDecodeError as err2:
-            eachData = res.data.decode("gbk",errors= (ignoreDecode==False and 'replace'or'ignore'));
-
-        #print(eachData);
+        
+        def getPage(url):
+            global tempIndex;
+            
+            #print(url);
+            res = http.request("GET",url,None,headers);
+            #print(res.status);
+            try:
+                eachData = res.data.decode("utf-8");
+            except UnicodeDecodeError as err2:
+                eachData = res.data.decode("gbk",errors= (ignoreDecode==False and 'replace'or'ignore'));
+            #print(eachData);
         
         
         if isLines==False:
@@ -564,100 +572,138 @@ try:
             #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
             text = re.compile(r'<p>([^<>]*)<\/p>')
         
-        #eachData = eachData.replace("\x3C","<");    #修复特殊字符
+            #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
-        allText = text.findall(eachData);
+            allText = text.findall(eachData);
+            
+            if nextPage and tempIndex>=2 and len(allText)==0:
+                noNextPage = True;
+                return;
 
-        if isLines == False:
-            try:
-                allText = allText[0];
-                errorTimes = 0;
-            except IndexError:
-                #休眠一次时间后重试
-                errorTimes +=1;
-                if errorTimes==1:
-                    print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
-                consoleWrite("[error] ","red");
-                print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
-                if errorTimes>maxErrorTimes:
-                    raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
-                time.sleep(r.randint(timeWait[0],timeWait[1]));
-                continue;
-            #allText = allText.replace("&nbsp;"," ");
-            #allText = allText.replace("<br /><br />","\n");
-            #allText = allText.replace("<br/><br/>","\n");
-            #allText = allText.replace("<br><br>","\n");
-            #allText = allText.replace("<br />","\n");
-            #allText = allText.replace("<br/>","\n");
-            #allText = allText.replace("<br>","\n");
-            #allText = allText.replace("<p>","");
-            #allText = allText.replace("</p>","\n");
-            #allText = allText.replace("\n\n","\n");
-            #allText = allText.replace("\n\n","\n");
-            #allText = allText.replace("\n\n","\n");
-            #allText = allText.replace("</div>","\n");
-            #allText = allText.replace("&ldquo;","\"");
-            #allText = allText.replace("&lsquo;","'");
-            #allText = allText.replace("&rsquo;","'");
-            #allText = allText.replace("&rdquo;","\"");
-            #allText = allText.replace("&hellip;","…");
-            #allText = allText.replace("&mdash;","—");
-            #allText = allText.replace("&amp;","&");
-            #allText = allText.replace("&lt;","<");
-            #allText = allText.replace("&gt;",">");
-            #allText = allText.replace("澹","淡");
+            if isLines == False:
+                try:
+                    allText = allText[0];
+                    errorTimes = 0;
+                except IndexError:
+                    #休眠一次时间后重试
+                    errorTimes +=1;
+                    if errorTimes==1:
+                        print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
+                    consoleWrite("[error] ","red");
+                    print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
+                    if errorTimes>maxErrorTimes:
+                        raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
+                    time.sleep(r.randint(timeWait[0],timeWait[1]));
+                    noNextPage = True;
+                    return;
+                #allText = allText.replace("&nbsp;"," ");
+                #allText = allText.replace("<br /><br />","\n");
+                #allText = allText.replace("<br/><br/>","\n");
+                #allText = allText.replace("<br><br>","\n");
+                #allText = allText.replace("<br />","\n");
+                #allText = allText.replace("<br/>","\n");
+                #allText = allText.replace("<br>","\n");
+                #allText = allText.replace("<p>","");
+                #allText = allText.replace("</p>","\n");
+                #allText = allText.replace("\n\n","\n");
+                #allText = allText.replace("\n\n","\n");
+                #allText = allText.replace("\n\n","\n");
+                #allText = allText.replace("</div>","\n");
+                #allText = allText.replace("&ldquo;","\"");
+                #allText = allText.replace("&lsquo;","'");
+                #allText = allText.replace("&rsquo;","'");
+                #allText = allText.replace("&rdquo;","\"");
+                #allText = allText.replace("&hellip;","…");
+                #allText = allText.replace("&mdash;","—");
+                #allText = allText.replace("&amp;","&");
+                #allText = allText.replace("&lt;","<");
+                #allText = allText.replace("&gt;",">");
+                #allText = allText.replace("澹","淡");
 
-            # 使用循环进行替换
-            for old, new in replacements.items():
-                allText = allText.replace(old, new)
-                # 处理字符串前后的空白字符串
-                allText = allText.strip();
-            if removeHTML:
-                re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
+                # 使用循环进行替换
+                for old, new in replacements.items():
+                    allText = allText.replace(old, new)
+                    # 处理字符串前后的空白字符串
+                    allText = allText.strip();
+                if removeHTML:
+                    re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
 
-        else:
-            if len(allText)==0:
-                #休眠一次时间后重试
-                errorTimes +=1;
-                if errorTimes==1:
-                    print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
-                consoleWrite("[error] ","red");
-                print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
-                if errorTimes>maxErrorTimes:
-                    raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
-                time.sleep(r.randint(timeWait[0],timeWait[1]));
-                continue;
             else:
-                for j in range(0,len(allText)):
-                    for old, new in replacements.items():
-                        allText[j] = allText[j].replace(old,new);
-                    #去掉行前后的空白字符串
-                    allText[j] = allText[j].strip();
-                errorTimes = 0;        
+                if len(allText)==0:
+                    #休眠一次时间后重试
+                    errorTimes +=1;
+                    if errorTimes==1:
+                        print("当前章节指针:"+str(i),"章节名称:",y,"\n","章节网址:",url);
+                    consoleWrite("[error] ","red");
+                    print("爬取失败,等待重试中,重试次数:"+str(errorTimes));
+                    if errorTimes>maxErrorTimes:
+                        raise IndexError("爬取第"+str(i+1)+"章节失败.\n章节名称:"+y+"\n章节网址:\n"+url+"\n");
+                    time.sleep(r.randint(timeWait[0],timeWait[1]));
+                    noNextPage = True;
+                    return;
+                else:
+                    for j in range(0,len(allText)):
+                        for old, new in replacements.items():
+                            allText[j] = allText[j].replace(old,new);
+                        #去掉行前后的空白字符串
+                        allText[j] = allText[j].strip();
+                    errorTimes = 0;        
 
-        openWriteAdd("\n\n");
-        if haveTitle:
-            openWriteAdd(y);
-        else:
-            openWriteAdd("第"+str(i+1)+"章 "+ y);
-        openWriteAdd("\n\n");
+            openWriteAdd("\n\n");
+            if tempIndex==0:
+                if haveTitle:
+                    openWriteAdd(y);
+                else:
+                    openWriteAdd("第"+str(i+1)+"章 "+ y);
+                openWriteAdd("\n\n");
+                tempIndex+=1;
+            elif nextPage:
+                openWriteAdd("(第"+tempIndex+"页)")
+                openWriteAdd("\n\n");
 
-        if isLines == False:
-            openWriteAdd(allText);                      #单行内容
-        else:
-            openWrites(allText);                        #多行内容
-            #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
+            if isLines == False:
+                openWriteAdd(allText);                      #单行内容
+            else:
+                openWrites(allText);                        #多行内容
+                #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
-        if haveTitle:
-            #print("\r",y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
-            consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
-            print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
-        else:
-            #print("\r","第"+str(i+1)+"章"+y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
-            consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
-            print(format_string3("第"+str(i+1)+"章"+y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+            if haveTitle:
+                #print("\r",y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+                consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
+                
+                if nextPage==False:
+                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                else:
+                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+            else:
+                #print("\r","第"+str(i+1)+"章"+y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
+                consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
+                if nextPage==False:
+                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                else:
+                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+
+        getPage(url);
+        if nextPage and noNextPage==False:
+            tempIndex = tempIndex<=1 and 2 or tempIndex+1;
+            tempUrls = url.split("/");
+            tempI = len(tempUrls) - 1;
+            for ti in range(len(tempUrls)-1,-1,-1):
+                if tempUrls[ti] != "":
+                    tempParts = tempUrls[ti].split(".");
+                    readPart = re.compile("\d$");
+                    for tj in range(len(tempParts)-1,-1,-1):
+                        if len(readPart.findall(tempParts[tj]))==1:
+                            tempParts[tj] = tempParts[tj]+"_"+str(tempIndex);
+                            tempUrls[ti] = ".".join(tempParts);
+                            break;
+                    break;
+            tempUrl = "/".join(tempUrls);
+            getPage(tempUrl);
 
         i+=1;
+        tempIndex = 0;
+        noNextPage = False;
         changeIniIndex(i);
         #time.sleep(r.randint(3,7));             #有爬取限制的网站
         #time.sleep(r.randint(0,1));             #无爬取限制的网站

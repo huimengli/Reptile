@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReptileUI.Class;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -450,7 +451,7 @@ namespace ReptileUI.Tools
             {
                 return new Regex("");
             }
-            var read = new Regex("^[\"']?([^\r\n]+)[\"']$");
+            var read = new Regex("^[\"']?([^\r\n]+)[\"']?$");
             var value = read.Match(iniValue);
             if (value.Success)
             {
@@ -737,6 +738,14 @@ namespace ReptileUI.Tools
             return new List<Tkey>(keys);
         }
 
+        /// <summary>
+        /// 将列表进行转换
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         public static List<R> Amplify<T,R>(this List<T> ts,Func<T,R> func)
         {
             var ret = new List<R>();
@@ -747,6 +756,32 @@ namespace ReptileUI.Tools
             });
 
             return ret;
+        }
+
+        /// <summary>
+        /// 对List<T>的每个元素进行指定操作
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="action"></param>
+        public static void ForEach<T>(this List<T> ts,Action<T,int> action)
+        {
+            for (int i = 0; i < ts.Count; i++)
+            {
+                action.Invoke(ts[i], i);
+            }
+        }
+
+        /// <summary>
+        /// 反转当前这个列表顺序
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ts"></param>
+        /// <returns></returns>
+        public static List<T> ReverseThis<T>(this List<T> ts)
+        {
+            ts.Reverse();
+            return ts;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ReptileUI.Properties;
+﻿using ReptileUI.Enums;
+using ReptileUI.Properties;
 using ReptileUI.Rule;
 using ReptileUI.Tools;
 using System;
@@ -36,6 +37,7 @@ namespace ReptileUI
 
             //初始化INI读取模块
             Program.iniFile = new IniFileOperation2(Program.settingIni);
+            
             //初始化python爬虫工具
             Program.pythonGet = new Python();
             //Program.pythonGet.SetEndText(Item.TempEnd);
@@ -122,7 +124,11 @@ namespace ReptileUI
 
         private void Form1_Unload(object sender, FormClosedEventArgs e)
         {
+            // 关闭命令行进程
             Item.CMDClose();
+
+            // 保存INI配置文件
+            Program.iniFile.Close();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -238,25 +244,306 @@ namespace ReptileUI
 
         private void button5_Click(object sender, EventArgs e)
         {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            RegexTest regexTest = new RegexTest("查看界面无法修改正则表达式",htmlValue, textBox1.Text);
+            regexTest.Show();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            using (RegexTest dialog = new RegexTest(comboBox1.Text, htmlValue, textBox1.Text))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    comboBox1.Text = dialog.regexValue;
+                    Item.Log(comboBox1.Text);
+                    this.toolTip1.SetToolTip(comboBox1, $"用于读取章节路径的正则表达式,\n当前正则:{comboBox1.Text}");
+
+                }
+            }
+        }
+
+        private void button_Click(object sender, EventArgs e)
+        {
+            //初始化工作INI模块
+            try
+            {
+                Program.workIni = new IniFileOperation2("output.ini");
+            }
+            catch (FileNotFoundException)
+            {
+                FileInfo file = new FileInfo("output.ini");
+                var tempStream = file.Create();
+                tempStream.Close();
+                Program.workIni = new IniFileOperation2("output.ini");
+                Program.workIni.Write("", Program.WEB_URL, "");
+                Program.workIni.Write("", Program.WEB_URLS, "");
+                Program.workIni.Write("", Program.WEB_NAMES, "");
+                Program.workIni.Write("", Program.WEB_INDEX, "0");
+                //保存
+                Program.workIni.Save();
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);            
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count==0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误","错误!",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string,string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters) {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                //Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER,options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+                    var index = select.selectIndex;
+                    if (index == -1)
+                    {
+                        MessageBox.Show("没有选中任何章节!","警告",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        var tuple = select.selectValue;
+                        //MessageBox.Show(tuple.Item1);
+                        htmlValue = GetHtmlValue(tuple.Item1);
+
+                        // 打开正则界面
+                        using (RegexTest regexTest = new RegexTest(this.comboBox2.Text,htmlValue,tuple.Item1))
+                        {
+                            if (regexTest.ShowDialog() == DialogResult.OK)
+                            {
+                                this.comboBox2.Text = regexTest.regexValue;
+                                Item.Log(comboBox2.Text);
+                                this.toolTip1.SetToolTip(comboBox2, $"用于读取整个章节的正则表达式,\n当前正则:{comboBox2.Text}");
+
+                                // 添加到正则列表中
+                                // TODO:写到这里
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count == 0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string, string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters)
+            {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                //Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER, options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+                    var index = select.selectIndex;
+                    this.textBox5.Text = index.ToString();
+                    Program.iniFile.Write("", Program.WEB_INDEX, index.ToString());
+                }
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count == 0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string, string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters)
+            {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                //Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER, options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+                    var index = select.selectIndex;
+                    if (index == -1)
+                    {
+                        MessageBox.Show("没有选中任何章节!", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        var tuple = select.selectValue;
+                        //MessageBox.Show(tuple.Item1);
+                        htmlValue = GetHtmlValue(tuple.Item1);
+
+                        // 打开正则界面
+                        using (RegexTest regexTest = new RegexTest(this.comboBox3.Text, htmlValue, tuple.Item1))
+                        {
+                            if (regexTest.ShowDialog() == DialogResult.OK)
+                            {
+                                this.comboBox3.Text = regexTest.regexValue;
+                                Item.Log(comboBox3.Text);
+                                this.toolTip1.SetToolTip(comboBox3, $"用于读取多行内容的正则表达式,\n当前正则:{comboBox2.Text}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var htmlValue = GetHtmlValue(textBox1.Text);
+            var readChapter = Item.CreateRegex(comboBox1.Text);
+            var chapters = readChapter.Matches(htmlValue);
+            if (chapters.Count == 0)
+            {
+                // 没读取到章节数据
+                MessageBox.Show("读取章节数据错误", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var baseUrl = textBox2.Text.Replace('"', ' ').Trim();
+            var options = new List<(string, string)>();
+            //var readUrl = new Regex("^href=\"([^\"]*)\"$");
+            var readUrl = new Regex("^/");
+            var readTitle = new Regex("[\u4e00-\u9fa5]+");
+            foreach (Match match in chapters)
+            {
+                var item = ("", "");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    if (readUrl.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item1 = baseUrl + match.Groups[i].Value;
+                    }
+                    else if (readTitle.IsMatch(match.Groups[i].Value))
+                    {
+                        item.Item2 = match.Groups[i].Value;
+                    }
+                }
+                //Item.Log(item.Item1 + " " + item.Item2);
+                options.Add(item);
+            }
+
+            using (Select select = new Select(SelectEnum.CHAPTER_REVERSE, options))
+            {
+                if (select.ShowDialog() == DialogResult.OK)
+                {
+                    var index = select.selectIndex;
+                    this.textBox6.Text = index.ToString();
+                    Program.iniFile.Write("", Program.WEB_INDEX, index.ToString());
+                }
+            }
+        }
+
+        #region 功能模块
+
+        /// <summary>
+        /// 获取网页内容
+        /// <br />
+        /// 之后如果需要添加读取方式,修改此函数就行
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public string GetHtmlValue(string url)
+        {
             var htmlValue = "";
             if (radioButton1.Checked)
             {
+                if (File.Exists(Program.TOOL_NAME) == false)
+                {
+                    MessageBox.Show("找不到Python爬虫程序!", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return "找不到Python爬虫程序!";
+                }
                 try
                 {
-                    htmlValue = Program.pythonGet.Get(textBox1.Text);
+                    htmlValue = Program.pythonGet.Get(url);
                     //Item.Log(htmlValue);
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show(err.Message,"错误!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(err.Message, "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else if (radioButton2.Checked)
             {
                 // 尚不支持ChromeDriver
+                MessageBox.Show("尚不支持ChromeDriver", "错误!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            RegexTest regexTest = new RegexTest(comboBox1.Text,htmlValue);
-            regexTest.Show();
+            return htmlValue;
         }
+
+        #endregion
+
     }
 }

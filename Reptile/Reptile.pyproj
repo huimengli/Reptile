@@ -11,8 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Reptile</Name>
     <RootNamespace>Reptile</RootNamespace>
-    <InterpreterId>MSBuild|env39|$(MSBuildProjectFullPath)</InterpreterId>
-    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,19 +31,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env36\">
-      <Id>env36</Id>
-      <Version>3.6</Version>
-      <Description>env36 (Python 3.6 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-    <Interpreter Include="env39\">
-      <Id>env39</Id>
+    <Interpreter Include="env1\">
+      <Id>env1</Id>
       <Version>3.9</Version>
-      <Description>env39 (Python 3.9 (64-bit))</Description>
+      <Description>env1 (Python 3.9 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

@@ -52,6 +52,11 @@ namespace ReptileUI.Class
         // 异常:
         //   T:System.ArgumentNullException:
         //     key 为 null。
+        /// <summary>
+        /// 获取或设置与指定的键关联的值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public new TValue this[TKey key]
         {
             set
@@ -380,6 +385,284 @@ namespace ReptileUI.Class
             }
             ret.Append("}");
             return ret.ToString();
+        }
+
+        #endregion
+
+        #region ToDictionaryEX
+        /// <summary>
+        /// 添加了转为增强型字典的函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="getKey"></param>
+        /// <returns></returns>
+        public static DictionaryEX<R, T> ToDictionaryEX<T, R>(this List<T> ts, Func<T, R> getKey)
+        {
+            var ret = new DictionaryEX<R, T>();
+
+            ts.ForEach(t =>
+            {
+                ret.Add(getKey.Invoke(t), t);
+            });
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 添加了转为增强型字典的函数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="ts"></param>
+        /// <param name="getKey"></param>
+        /// <returns></returns>
+        public static DictionaryEX<R, T> ToDictionaryEX<T, R>(this List<T> ts, Func<T, int, R> getKey)
+        {
+            var ret = new DictionaryEX<R, T>();
+
+            ts.ForEach((t, i) =>
+            {
+                ret.Add(getKey(t, i), t);
+            });
+
+            return ret;
+        }
+        #endregion
+
+        #region 通用遍历功能
+        /// <summary>
+        /// 将字典中每个键值对进行遍历操作
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="action"></param>
+        public static void ForEach<TKey,TValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Action<KeyValuePair<TKey,TValue>> action
+        )
+        {
+            foreach (var item in dict)
+            {
+                action.Invoke(item);
+            }
+        }
+
+        /// <summary>
+        /// 将字典中的每个键值对进行遍历操作
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        public static void ForEach<TKey, TValue>(
+            this DictionaryEX<TKey, TValue> dict,
+            Action<TKey, TValue> action
+        )
+        {
+            foreach (var item in dict)
+            {
+                action.Invoke(item.Key, item.Value);
+            }
+        }
+
+        /// <summary>
+        /// 将字典中的每个键值对进行遍历操作
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="action"></param>
+        public static void ForEach<TKey, TValue>(
+            this DictionaryEX<TKey, TValue> dict,
+            Action<TKey, TValue, int> action
+        )
+        {
+            var index = 0;
+            foreach (var item in dict)
+            {
+                action.Invoke(item.Key, item.Value, index++);
+            }
+        }
+
+        #endregion
+
+        #region 遍历功能(KeyValuePair)
+
+        ///// <summary>
+        ///// 将字典中的每个键值对进行遍历操作
+        ///// </summary>
+        ///// <typeparam name="TKey"></typeparam>
+        ///// <typeparam name="TValue"></typeparam>
+        ///// <param name="dict"></param>
+        ///// <param name="action"></param>
+        //public static void ForEach<TKey,TValue>(
+        //    this DictionaryEX<TKey,TValue> dict,
+        //    Action<KeyValuePair<TKey,TValue>> action
+        //){
+        //    foreach (var item in dict)
+        //    {
+        //        action.Invoke(item);
+        //    }
+        //}
+
+        /// <summary>
+        /// 将字典中的每个键对值进行操作并转换
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey, RValue> Map<TKey, TValue, RKey, RValue>(
+            this DictionaryEX<TKey, TValue> dict,
+            Func<KeyValuePair<TKey,TValue>,KeyValuePair<RKey,RValue>> func
+        ){
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach(item =>
+            {
+                var itemRet = func(item);
+                ret.Add(itemRet.Key, itemRet.Value);
+            });
+            return ret;
+        }
+
+        /// <summary>
+        /// 将字典中的每个键对值进行操作并转换
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey,RValue> Map<TKey,TValue,RKey,RValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Func<TKey,TValue,KeyValuePair<RKey,RValue>> func
+        ){
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach((key, value) =>
+            {
+                var itemRet = func(key, value);
+                ret.Add(itemRet.Key, itemRet.Value);
+            });
+            return ret;
+        }
+
+        /// <summary>
+        /// 将字典中的每个键对值进行操作并转换
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey,RValue> Map<TKey,TValue,RKey,RValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Func<TKey,TValue,int,KeyValuePair<RKey,RValue>> func
+        ){
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach((key, value, index) =>
+            {
+                var itemRet = func(key, value, index);
+                ret.Add(itemRet.Key, itemRet.Value);
+            });
+            return ret;
+        }
+        #endregion
+
+        #region 遍历功能(Tuple)
+
+        ///// <summary>
+        ///// 将字典中的每个键值对进行遍历操作
+        ///// </summary>
+        ///// <typeparam name="TKey"></typeparam>
+        ///// <typeparam name="TValue"></typeparam>
+        ///// <param name="dict"></param>
+        ///// <param name="action"></param>
+        //public static void ForEach<TKey,TValue>(
+        //    this DictionaryEX<TKey,TValue> dict,
+        //    Action<(TKey,TValue)> action
+        //){
+        //    foreach (var item in dict)
+        //    {
+        //        action.Invoke((item.Key, item.Value));
+        //    }
+        //}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey,RValue> Map<TKey,TValue,RKey,RValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Func<(TKey,TValue),(RKey,RValue)> func
+        )
+        {
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach(item =>
+            {
+                var itemRet = func((item.Key,item.Value));
+                ret.Add(itemRet.Item1, itemRet.Item2);
+            });
+            return ret;
+        }
+
+        /// <summary>
+        /// 将字典中的每个键对值进行操作并转换
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey,RValue> Map<TKey,TValue,RKey,RValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Func<TKey,TValue,(RKey,RValue)> func
+        )
+        {
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach((key, value) =>
+            {
+                var itemRet = func(key, value);
+                ret.Add(itemRet.Item1, itemRet.Item2);
+            });
+            return ret;
+        }
+
+        /// <summary>
+        /// 将字典中的每个键对值进行操作并转换
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="RKey"></typeparam>
+        /// <typeparam name="RValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static DictionaryEX<RKey,RValue> Map<TKey,TValue,RKey,RValue>(
+            this DictionaryEX<TKey,TValue> dict,
+            Func<TKey,TValue,int,(RKey,RValue)> func
+        )
+        {
+            var ret = new DictionaryEX<RKey, RValue>();
+            dict.ForEach((key, value, index) =>
+            {
+                var itemRet = func(key, value, index);
+                ret.Add(itemRet.Item1, itemRet.Item2);
+            });
+            return ret;
         }
 
         #endregion

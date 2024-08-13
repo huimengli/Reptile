@@ -2,6 +2,7 @@ import urllib3
 import math
 import argparse
 import sys
+import os
 
 # 设置命令行参数解析
 parser = argparse.ArgumentParser(description='网页内容爬取脚本。')
@@ -49,7 +50,7 @@ if __name__ == "__main__":
                 data = res.data.decode("utf-8")
             
             except UnicodeDecodeError as err:
-                data = res.data.decode("gbk");
+                data = res.data.decode("gbk", errors='replace'); #无法解析的字符替换掉
 
             try:
                 if output:
