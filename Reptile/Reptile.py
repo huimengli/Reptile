@@ -722,6 +722,6 @@ except Exception as e:
     consoleWrite("[Url]","green");
     consoleWrite(str(url),"green");
     print("");
-    consoleWrite("[Value]","white");
-    consoleWrite(str(eachData),"white");
+    # consoleWrite("[Value]","white");
+    # consoleWrite(str(eachData),"white");
     raise e;
