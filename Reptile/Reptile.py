@@ -20,7 +20,7 @@ haveTitle = True;                          #是否有数字章节头(为了小�
 timeWait = [7,10];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = True;                            #是否有第二页
+nextPage = False;                            #是否有第二页
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
 #----------------------------------------------------------#
@@ -524,55 +524,55 @@ try:
             #print(eachData);
         
         
-        if isLines==False:
-            #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
-            #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
-            #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
-            # text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
-            #text = re.compile(r'div id="content">([\s\S]*)<br /><br />.https:')
-            #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
-            #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
-            #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
-            #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
-            #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
-            # text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:posterror')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
-            #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
-            #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
-            #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
-            #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
-            #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
-            # text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
-            #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
-            #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
-            #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
-            #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
-            #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
-            #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
-            #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)请收藏本站：http')
-            #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
-            #text = re.compile(r'<div id="conter_tip">([\s\S]*)<div id="conter_tip">')
-        else:
-            #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-            text = re.compile(r'<p>([^<>]*)<\/p>')
+            if isLines==False:
+                #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
+                #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
+                #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
+                #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+                #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="bottem2">')
+                #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n\t\ ]*<div class="readerFooterNav"')
+                #text = re.compile(r'div id="content">([\s\S]*)<br /><br /><p>')
+                #text = re.compile(r'div id="content">([\s\S]*)<p>三月，初春。<\/p>')
+                #text = re.compile(r'div id="content">([\s\S]*)<br /><br />.https:')
+                #text = re.compile(r'<div class="content" id="chaptercontent">([\s\S]*)<div class="info bottominfo">')
+                #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
+                #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
+                #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
+                #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
+                #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
+                #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:posterror')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
+                #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
+                #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
+                #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
+                #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
+                #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
+                #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+                #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
+                #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
+                #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)<p class="readinline">')
+                #text = re.compile(r'<div id="chaptercontent" class="Readarea ReadAjax_content">([\s\S]*)请收藏本站：http')
+                #text = re.compile(r'<div id="htmlContent">([\s\S]*)<div class="bottem">')
+                #text = re.compile(r'<div id="conter_tip">([\s\S]*)<div id="conter_tip">')
+            else:
+                #text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
+                text = re.compile(r'<p>([^<>]*)<\/p>')
         
-            #eachData = eachData.replace("\x3C","<");    #修复特殊字符
+                #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
             allText = text.findall(eachData);
             
@@ -596,6 +596,7 @@ try:
                     time.sleep(r.randint(timeWait[0],timeWait[1]));
                     noNextPage = True;
                     return;
+            
                 #allText = allText.replace("&nbsp;"," ");
                 #allText = allText.replace("<br /><br />","\n");
                 #allText = allText.replace("<br/><br/>","\n");
