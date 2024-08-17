@@ -47,8 +47,16 @@ if %choice% leq 0 if %choice% gtr %count% (
 :: 设置选择的虚拟环境路径
 set VIRTUAL_ENV=!env_%choice%!
 
+:: 检测图标
+echo now dir: %CD%
+if exist favicon.ico (
+    echo Icon file exists
+) else (
+    echo Icon file not found
+)
+
 :: 调用 PyInstaller 来打包 Python 脚本
-call %VIRTUAL_ENV%\Scripts\pyinstaller.exe --add-data "write.exe;." --onefile %SCRIPT_FULL_NAME%
+call %VIRTUAL_ENV%\Scripts\pyinstaller.exe --add-data "write.exe;." --icon favicon.ico --onefile %SCRIPT_FULL_NAME%
 
 :: 检查 main.exe 是否生成
 if not exist dist\%EXECUTABLE_NAME% (
