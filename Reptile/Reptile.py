@@ -132,18 +132,23 @@ def exists(path:str):
     '''
     判断文件是否存在
     '''
-    return os._exists(path);
+    # return os._exists(path);
+    exists = os.path.exists(path)
+    # print(f"file exists: {exists}")
+    return exists;
+    
 
 def openReadLines(path:str):
     '''
     打开文件读取里面的所有行
     '''
+    ret = []
     if exists(path)==False:
         raise Exception(path+"不存在!");
     with open(path,"r",encoding="utf-8") as f:
         allValue = f.readlines();
-        return allValue;
-    return []
+        ret = allValue;
+    return ret;
 
 def saveIni(url:str,urladds:list,names:list,index:int):
     '''
