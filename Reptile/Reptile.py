@@ -5,23 +5,26 @@ import time
 import random
 import math
 
-webUrl = "https://www.123yqw.com/129/129225/";
+webUrl = "https://www.bqgge.com/index/202196/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 19                              #初始推荐章节数量
+start = 10 + -10                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
+isLines = True;                             #内容是否是多行的
+linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [3,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = False;                            #是否有第二页
+nextPage = True;                            #是否有第二页(内容是否有第多页)
+titleLimit = 50;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
+
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
@@ -47,7 +50,9 @@ headers = {
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2} class="[^"]+">[\t\0\ \n]*<[Aa] ?(style=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
-readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
+#readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
+#readDD = re.compile(r'<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"] ?title=["\']([^"\'<>]*)[\'"][^<>]*>');
+readDD = re.compile(r'<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*><dd>([^<>]*)<\/dd>');
 #readDD = re.compile(r'<[dd|li]{2} class="book-item">[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style|alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
@@ -365,22 +370,21 @@ def to_fullwidth(s):
             fullwidth_chars += char
     return fullwidth_chars
 
-try:
-    # 实例化产生请求对象
-    
-    if needProxy:
-        #proxy = {
-        #    'http':'127.0.0.1:33210',    
-        #    'https':'127.0.0.1:33210',    
-        #};
-        #http = urllib3.ProxyManager(proxy,headers = headers);
-        http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
-    else:
-        http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
-
+def getAllDD(http,i:int):
+    '''
+    获取章节
+    '''
+    # 处理页面url
     # get请求指定网址
-    #res = http.request("GET",webUrl)
-    res = http.request("GET",webUrl,None,headers);
+    if titleLimit>=0:
+        newUrl = webUrl + str(i+1) + "/";
+        #res = http.request("GET",webUrl)
+        res = http.request("GET",newUrl,None,headers);
+
+    else:
+        #res = http.request("GET",webUrl)
+        res = http.request("GET",webUrl,None,headers);
+    
 
     #res = http.request(
     #   "GET",
@@ -391,8 +395,8 @@ try:
     #    fields={'id':100,'name':'lisi'}, #请求参数信息
     #)
 
-    # 获取HTTP状态码
-    print("status:%d" % res.status)
+    # # 获取HTTP状态码
+    # print("status:%d" % res.status)
 
     try:
         # 获取响应内容
@@ -412,9 +416,45 @@ try:
     allDD = allDD2;
     
     allDD = allDD[start:]              #消除初始推荐章节
+    if titleLimit > 0:
+        allDD = allDD[:titleLimit];
     
+    print("["+allDD[0][-1]+"..."+allDD[-1][-1]+"]")
+    return allDD;
+
+try:
+    # 实例化产生请求对象
+    if needProxy:
+        #proxy = {
+        #    'http':'127.0.0.1:33210',    
+        #    'https':'127.0.0.1:33210',    
+        #};
+        #http = urllib3.ProxyManager(proxy,headers = headers);
+        http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
+    else:
+        http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
+
+    allDD = [];
     urladds = [];
     names = [];
+    i = 0;
+
+    allDD = [];
+    if titleLimit>= 0:
+        tempDD = getAllDD(http,i);
+        while len(tempDD)==titleLimit:
+            for x in range(0,titleLimit):
+                allDD.append(tempDD[x]);
+            i+=1;
+            # 等待,防止被ban
+            time.sleep(r.randint(timeWait[0],timeWait[1]));
+            tempDD = getAllDD(http,i);
+        # 加入最后一部分章节
+        for x in range(0,len(tempDD)):
+            allDD.append(tempDD[x]);
+    else:
+        allDD = getAllDD(http,i);
+    
     i = 0;
 
     #判断INI是否存在
@@ -471,8 +511,6 @@ try:
             names.append(y);
         saveIni(webUrl,urladds,names,0);
 
-    #urladds = urladds[i:]             #跳过已有章节
-    #names = names[i:]             #跳过已有章节
     need = len(urladds);
     pageCount = len(allDD);         #总章节数量
 
@@ -650,7 +688,7 @@ try:
                     noNextPage = True;
                     return;
                 else:
-                    for j in range(0,len(allText)):
+                    for j in range(linesRemove[0],len(allText) - linesRemove[1]):
                         for old, new in replacements.items():
                             allText[j] = allText[j].replace(old,new);
                         #去掉行前后的空白字符串
@@ -666,13 +704,16 @@ try:
                 openWriteAdd("\n\n");
                 tempIndex+=1;
             elif nextPage:
-                openWriteAdd("(第"+tempIndex+"页)")
+                openWriteAdd("(第"+str(tempIndex)+"页)")
                 openWriteAdd("\n\n");
 
             if isLines == False:
                 openWriteAdd(allText);                      #单行内容
             else:
-                openWrites(allText);                        #多行内容
+                rets = [];
+                for x in range(linesRemove[0],len(allText) - linesRemove[1]): #忽略行
+                    rets.append(allText[x]);
+                openWrites(rets);                        #多行内容
                 #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
         
             if haveTitle:
@@ -727,7 +768,7 @@ except Exception as e:
     print(str(e));
     #因为无法调试,现在需要抛出当前状态
     consoleWrite("[Url]","green");
-    consoleWrite(str(url),"green");
+    # consoleWrite(str(url),"green");
     print("");
     # consoleWrite("[Value]","white");
     # consoleWrite(str(eachData),"white");
