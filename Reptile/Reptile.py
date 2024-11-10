@@ -5,7 +5,7 @@ import time
 import random
 import math
 
-webUrl = "https://www.bqgge.com/index/213279/";
+webUrl = "http://www.liudatxt.la/so/132630/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
@@ -15,14 +15,14 @@ passName = "无标题章节";                    #排除的对象(章节名排�
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = True;                             #内容是否是多行的
+isLines = False;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [3,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = True;                            #是否有第二页(内容是否有第多页)
-titleLimit = 50;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+nextPage = False;                            #是否有第二页(内容是否有第多页)
+titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
 
@@ -31,14 +31,9 @@ def getForEachUrl(url:str):
     '''
     获取前部拼接头
     '''
-    ret = url.split(".");
-    end = ret[-1].split("/");
-
-    #print(ret);
-    r = ret[:-1];
-    r.append(end[0]);
-    #print(r);
-    return ".".join(r);
+    ret = url.split("/");
+    r = ret[:3]
+    return "/".join(r);
 webUrlForEach = webUrlForEach and webUrlForEach or getForEachUrl(webUrl);
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
 headers = {
@@ -50,9 +45,9 @@ headers = {
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt=[^<>]*)? href=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)(<!>)?<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2} class="[^"]+">[\t\0\ \n]*<[Aa] ?(style=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
-#readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
+readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"] ?title=["\']([^"\'<>]*)[\'"][^<>]*>');
-readDD = re.compile(r'<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*><dd>([^<>]*)<\/dd>');
+# readDD = re.compile(r'<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*><dd>([^<>]*)<\/dd>');
 #readDD = re.compile(r'<[dd|li]{2} class="book-item">[\t\0\ \n]*<[Aa] ?(style=?[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[dd|li]{2}>[\t\0\ \n]*<[Aa] ?(style|alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
 #readDD = re.compile(r'<[Aa] ?(alt|title=[^<>]*)? href ?=["\']([^"\'<>]*)[\'"][^<>]*>([^<>]*)<\/[Aa]>');
@@ -419,7 +414,10 @@ def getAllDD(http,i:int):
     if titleLimit > 0:
         allDD = allDD[:titleLimit];
     
-    print("["+allDD[0][-1]+"..."+allDD[-1][-1]+"]")
+    if len(allDD)>0:
+        print("["+allDD[0][-1]+"..."+allDD[-1][-1]+"]");
+    else:
+        print("[]");
     return allDD;
 
 try:
@@ -571,6 +569,7 @@ try:
         
             if isLines==False:
                 #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
+                #text = re.compile(r'div id="content">([\s\S]*)'+webUrlForEach.split("/")[-1])
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>\n<a')
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\r\n]*<a')
                 #text = re.compile(r'<div class="posterror">([\s\S]*)[\r\n]*<a href="javascript:;" on')
@@ -584,7 +583,7 @@ try:
                 #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-                # text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
+                #text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
@@ -594,12 +593,13 @@ try:
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
+                text = re.compile(r'<div id="content">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
-                text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
+                #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
