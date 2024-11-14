@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "http://www.liudatxt.la/so/132630/";
+webUrl = "https://www.xs74w.com/124/124149/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + -10                              #初始推荐章节数量
+start = 10 + 18                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -556,6 +556,7 @@ try:
         
         def getPage(url):
             global tempIndex;
+            global errorTimes;
             
             #print(url);
             res = http.request("GET",url,None,headers);
@@ -589,11 +590,11 @@ try:
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:posterror')
-                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+                text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
-                text = re.compile(r'<div id="content">([\s\S]*)<div id="center_tip">')
+                #text = re.compile(r'<div id="content">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
@@ -768,7 +769,10 @@ except Exception as e:
     print(str(e));
     #因为无法调试,现在需要抛出当前状态
     consoleWrite("[Url]","green");
-    # consoleWrite(str(url),"green");
+    try:
+        consoleWrite(str(url),"green");
+    except:
+        consoleWrite("URL不存在!","red");
     print("");
     # consoleWrite("[Value]","white");
     # consoleWrite(str(eachData),"white");
