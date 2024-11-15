@@ -5,23 +5,23 @@ import time
 import random
 import math
 
-webUrl = "https://www.xs74w.com/124/124149/";
+webUrl = "http://www.55xs.org/25_25038/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 18                              #初始推荐章节数量
+start = 10 + -4                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
+isLines = True;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [3,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = False;                            #是否有第二页(内容是否有第多页)
+nextPage = True;                            #是否有第二页(内容是否有第多页)
 titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
