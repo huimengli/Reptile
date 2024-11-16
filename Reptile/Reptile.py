@@ -5,11 +5,11 @@ import time
 import random
 import math
 
-webUrl = "http://www.55xs.org/25_25038/";
+webUrl = "https://ntwta.org/xs/241767/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + -4                              #初始推荐章节数量
+start = 10 + 9                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -22,7 +22,9 @@ timeWait = [3,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 nextPage = True;                            #是否有第二页(内容是否有第多页)
-titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+titleLimit = 100;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
+pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 
 
@@ -372,7 +374,7 @@ def getAllDD(http,i:int):
     # 处理页面url
     # get请求指定网址
     if titleLimit>=0:
-        newUrl = webUrl + str(i+1) + "/";
+        newUrl = webUrl + str(i+pageStart) + "/";
         #res = http.request("GET",webUrl)
         res = http.request("GET",newUrl,None,headers);
 
@@ -410,7 +412,14 @@ def getAllDD(http,i:int):
         allDD2.append(t);
     allDD = allDD2;
     
-    allDD = allDD[start:]              #消除初始推荐章节
+    #消除初始章节
+    if i==0:
+        #消除初始推荐(第一页推荐章节)章节
+        allDD = allDD[start:]
+    else:
+        #清除非第一页推荐章节
+        allDD = allDD[pageRemove:];
+
     if titleLimit > 0:
         allDD = allDD[:titleLimit];
     
