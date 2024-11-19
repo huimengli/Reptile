@@ -5,24 +5,24 @@ import time
 import random
 import math
 
-webUrl = "https://ntwta.org/xs/241767/";
+webUrl = "https://www.nfxs.com/book/123765/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 9                              #初始推荐章节数量
+start = 10 + 1                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
-needVerify = False;                         #是否需要网页ssl证书验证
+needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = True;                             #内容是否是多行的
+isLines = False;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [3,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 nextPage = True;                            #是否有第二页(内容是否有第多页)
-titleLimit = 100;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
@@ -599,7 +599,7 @@ try:
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:;" on')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<a href="javascript:posterror')
-                text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
@@ -612,7 +612,7 @@ try:
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
-                #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                text = re.compile(r'div id="content">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
