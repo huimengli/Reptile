@@ -5,24 +5,25 @@ import time
 import random
 import math
 
-webUrl = "https://www.nfxs.com/book/123765/";
+webUrl = "https://ntwta.org/xs/241767/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 9                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = True;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
+isLines = True;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
-timeWait = [3,7];                           #等待时间([最小值,最大值])
+timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
 nextPage = True;                            #是否有第二页(内容是否有第多页)
-titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+nextPageStart = 0;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
+titleLimit = 100;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
@@ -100,6 +101,7 @@ replacements = {
 }
 tempIndex = 0;                              #为了翻页读取内容
 noNextPage = False;                         #为了翻页读取内容
+startTime = time.time();                    #为了计算爬取时间
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -172,6 +174,7 @@ def getTime(second:int):
     '''
     根据秒计算时间
     '''
+    second = math.floor(second);
     s = second % 60
     second = second // 60
     m = second % 60
@@ -179,9 +182,27 @@ def getTime(second:int):
     h = second % 24
     second = second // 24
     ret = second and str(second) + "天" or ""
-    ret+= h and str(h) + "小时" or ""
+    ret += h and str(h) + "小时" or ""
     ret += m and str(m) + "分钟" or ""
     ret += str(s) + "秒"
+    return ret;
+
+def getTime2(second:int):
+    '''
+    根据秒计算时间
+    英文显示
+    '''
+    second = math.floor(second);
+    s = second % 60
+    second = second // 60
+    m = second % 60
+    second = second // 60
+    h = second % 24
+    second = second // 24
+    ret = second and str(second) + "d " or ""
+    ret += str(h) + ":"
+    ret += str(m) + ":"
+    ret += str(s)
     return ret;
 
 def write(text, color):
@@ -446,7 +467,6 @@ try:
     names = [];
     i = 0;
 
-    allDD = [];
     if titleLimit>= 0:
         tempDD = getAllDD(http,i);
         while len(tempDD)==titleLimit:
@@ -520,42 +540,9 @@ try:
 
     need = len(urladds);
     pageCount = len(allDD);         #总章节数量
+    startTime = time.time();        #用来计算用时
 
-    while(i<len(names)):
-        
-        #以下是读取P行的代码
-
-        #x = urladds[j];
-        #y = names[j];
-        #url = webUrlForEach+x;
-        #res = http.request("GET",url);
-        ##print(res.status);
-        #try:
-        #    eachData = res.data.decode("utf-8");
-        #except UnicodeDecodeError as err2:
-        #    eachData = res.data.decode("gbk");
-
-        ##print(eachData);
-        
-        ##text = re.compile(r'<p class=".*">([^<>]*)<\/p>')
-        #text = re.compile(r'<p>([^<>]*)<\/p>')
-        
-        #allText = text.findall(eachData);
-        ##allText = allText[0];
-        ##allText = allText.replace("&nbsp;"," ");
-        ##allText = allText.replace("<br /><br />","\n");
-        ##openWriteAdd(allText);
-        #openWriteAdd("\r\n");
-        #openWriteAdd(y);
-        #openWriteAdd("\r\n");
-        ##openWrites(allText);
-        #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
-        #print("第"+str(i)+"章已经下载完成");
-        #i+=1;
-        #changeIniIndex(i);
-        #time.sleep(r.randint(3,7));
-
-        
+    while(i<len(names)):        
         x = urladds[i];
         y = names[i];
         url = webUrlForEach+x;
@@ -566,6 +553,7 @@ try:
         def getPage(url):
             global tempIndex;
             global errorTimes;
+            global noNextPage;
             
             #print(url);
             res = http.request("GET",url,None,headers);
@@ -575,7 +563,13 @@ try:
             except UnicodeDecodeError as err2:
                 eachData = res.data.decode("gbk",errors= (ignoreDecode==False and 'replace'or'ignore'));
             #print(eachData);
-        
+            
+            #判断页面是否被重定向
+            nowUrl = res.geturl();
+            nowUrl = webUrlForEach + (nowUrl and nowUrl.split("?")[0] or "");
+            if nowUrl != url:
+                noNextPage = True;
+                return;        
         
             if isLines==False:
                 #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
@@ -631,7 +625,7 @@ try:
 
             allText = text.findall(eachData);
             
-            if nextPage and tempIndex>=2 and len(allText)==0:
+            if nextPage and len(allText)==0:
                 noNextPage = True;
                 return;
 
@@ -651,30 +645,6 @@ try:
                     time.sleep(r.randint(timeWait[0],timeWait[1]));
                     noNextPage = True;
                     return;
-            
-                #allText = allText.replace("&nbsp;"," ");
-                #allText = allText.replace("<br /><br />","\n");
-                #allText = allText.replace("<br/><br/>","\n");
-                #allText = allText.replace("<br><br>","\n");
-                #allText = allText.replace("<br />","\n");
-                #allText = allText.replace("<br/>","\n");
-                #allText = allText.replace("<br>","\n");
-                #allText = allText.replace("<p>","");
-                #allText = allText.replace("</p>","\n");
-                #allText = allText.replace("\n\n","\n");
-                #allText = allText.replace("\n\n","\n");
-                #allText = allText.replace("\n\n","\n");
-                #allText = allText.replace("</div>","\n");
-                #allText = allText.replace("&ldquo;","\"");
-                #allText = allText.replace("&lsquo;","'");
-                #allText = allText.replace("&rsquo;","'");
-                #allText = allText.replace("&rdquo;","\"");
-                #allText = allText.replace("&hellip;","…");
-                #allText = allText.replace("&mdash;","—");
-                #allText = allText.replace("&amp;","&");
-                #allText = allText.replace("&lt;","<");
-                #allText = allText.replace("&gt;",">");
-                #allText = allText.replace("澹","淡");
 
                 # 使用循环进行替换
                 for old, new in replacements.items():
@@ -712,10 +682,10 @@ try:
                 else:
                     openWriteAdd("第"+str(i+1)+"章 "+ y);
                 openWriteAdd("\n\n");
-                tempIndex+=1;
             elif nextPage:
-                openWriteAdd("(第"+str(tempIndex)+"页)")
+                openWriteAdd("(第"+str(tempIndex+(1-nextPageStart))+"页)")
                 openWriteAdd("\n\n");
+            tempIndex+=1;                                   #页面增加
 
             if isLines == False:
                 openWriteAdd(allText);                      #单行内容
@@ -725,26 +695,25 @@ try:
                     rets.append(allText[x]);
                 openWrites(rets);                        #多行内容
                 #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
-        
+            
+            #用于计算当前用时
+            nowTime = time.time();
             if haveTitle:
-                #print("\r",y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
                 consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
                 
                 if nextPage==False:
-                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2)+" UT: "+getTime2(nowTime - startTime));
                 else:
-                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2)+" UT: "+getTime2(nowTime - startTime));
             else:
-                #print("\r","第"+str(i+1)+"章"+y+"已经下载完成 进度: "+str(math.floor(i/pageCount*10000)/100)+"% ,ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2),end="             ",flush=True);
                 consoleWrite(f"[{math.floor(i/pageCount*10000)/100:.2f}%]","green");
                 if nextPage==False:
-                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                    print(format_string3(y)+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2)+" UT: "+getTime2(nowTime - startTime));
                 else:
-                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2));
+                    print(format_string3(y+" "+str(tempIndex)+"页")+"已经下载完成    ETA: "+getTime((pageCount-i)*(timeWait[0]+timeWait[1])//2)+" UT: "+getTime2(nowTime - startTime));
 
         getPage(url);
-        if nextPage and noNextPage==False:
-            tempIndex = tempIndex<=1 and 2 or tempIndex+1;
+        while nextPage and noNextPage==False:
             tempUrls = url.split("/");
             tempI = len(tempUrls) - 1;
             for ti in range(len(tempUrls)-1,-1,-1):
@@ -753,7 +722,7 @@ try:
                     readPart = re.compile("\d$");
                     for tj in range(len(tempParts)-1,-1,-1):
                         if len(readPart.findall(tempParts[tj]))==1:
-                            tempParts[tj] = tempParts[tj]+"_"+str(tempIndex);
+                            tempParts[tj] = tempParts[tj]+"_"+str(tempIndex+nextPageStart);
                             tempUrls[ti] = ".".join(tempParts);
                             break;
                     break;
@@ -764,16 +733,15 @@ try:
         tempIndex = 0;
         noNextPage = False;
         changeIniIndex(i);
-        #time.sleep(r.randint(3,7));             #有爬取限制的网站
-        #time.sleep(r.randint(0,1));             #无爬取限制的网站
-        time.sleep(r.randint(timeWait[0],timeWait[1]));
+        time.sleep(r.randint(timeWait[0],timeWait[1])); #等待时间绕过爬取限制
     print("");
     consoleWrite("小说已经下载完成","DarkGreen");
+    endTime = time.time();
+    consoleWrite("总计用时: "+getTime(math.floor(endTime - startTime)),"DarkCyan");
     print("");
 
 except Exception as e:
     #changeIniIndex(i);
-    #print("\x1b[31;1m[Error]\x1b[0m\t" + str(e) + "\n");
     consoleWrite("[Error]","red");
     print(str(e));
     #因为无法调试,现在需要抛出当前状态
