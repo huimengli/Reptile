@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import driver
 import urllib3
 import re
 import os
@@ -5,7 +6,11 @@ import time
 import random
 import math
 
-webUrl = "https://ntwta.org/xs/241767/";
+from selenium import webdriver;
+from selenium.webdriver.common.keys import Keys;
+from selenium.webdriver.common.by import By;
+
+webUrl = "https://www.tzkczc.com/115_115479/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
@@ -13,7 +18,7 @@ start = 10 + 9                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
-needVerify = True;                         #是否需要网页ssl证书验证
+needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = True;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
@@ -27,6 +32,7 @@ titleLimit = 100;                            #章节页面显示限制(网页无
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
+usingTools = "urllib3";                     #使用工具(urllib3或者selenium)
 
 
 #----------------------------------------------------------#
@@ -41,7 +47,7 @@ webUrlForEach = webUrlForEach and webUrlForEach or getForEachUrl(webUrl);
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' }
 headers = {
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-    'Cookie':'Hm_lvt_4a91b5b58ea34940313795aaa14f9fd9=1714749322; Hm_lpvt_4a91b5b58ea34940313795aaa14f9fd9=1714750022'
+    # 'Cookie':'Hm_lvt_4a91b5b58ea34940313795aaa14f9fd9=1714749322; Hm_lpvt_4a91b5b58ea34940313795aaa14f9fd9=1714750022'
 }
 #readDD = re.compile(r'<dd>[\t\0\ \n]*<a href="(.*)"');
 #readDD = re.compile(r'<[dd|li]{2} class="col-4">[\t\0\ \n]*<a href="([^"<>]*)"[^<>]*>([^<>]*)<\/a>');
@@ -450,17 +456,30 @@ def getAllDD(http,i:int):
         print("[]");
     return allDD;
 
+class Http:
+    '''
+    用于转换selenium
+    '''
+    
+    def __init__(self,driver):
+        self.driver = driver;
+    
+    def request(mothed="GET",url="",body=None,fields=None,headers={},json={}):
+        
+    
+
 try:
     # 实例化产生请求对象
-    if needProxy:
-        #proxy = {
-        #    'http':'127.0.0.1:33210',    
-        #    'https':'127.0.0.1:33210',    
-        #};
-        #http = urllib3.ProxyManager(proxy,headers = headers);
-        http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
-    else:
-        http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
+    if usingTools == "urllib3":
+        if needProxy:
+            http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
+        else:
+            http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
+    elif usingTools == "selenium":
+        driver = webdriver.Chrome();
+        
+        if needProxy:
+            http = Http();
 
     allDD = [];
     urladds = [];
