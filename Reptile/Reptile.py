@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import driver
 import urllib3
 import re
 import os
@@ -7,32 +6,39 @@ import random
 import math
 
 from selenium import webdriver;
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.keys import Keys;
 from selenium.webdriver.common.by import By;
+from selenium.webdriver.common.proxy import Proxy,ProxyType;
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait;
+from selenium.webdriver.support import expected_conditions as EC;
+
+import undetected_chromedriver as uc;
 
 webUrl = "https://www.tzkczc.com/115_115479/";
-webUrlForEach = "";
+webUrlForEach = "https:";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 9                              #初始推荐章节数量
+start = 10 + -3                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = True;                             #内容是否是多行的
+isLines = False;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = True;                            #是否有第二页(内容是否有第多页)
-nextPageStart = 0;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
-titleLimit = 100;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+nextPage = False;                            #是否有第二页(内容是否有第多页)
+nextPageStart = 1;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
+titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
-usingTools = "urllib3";                     #使用工具(urllib3或者selenium)
+usingTools = "uc";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
 
 
 #----------------------------------------------------------#
@@ -456,17 +462,97 @@ def getAllDD(http,i:int):
         print("[]");
     return allDD;
 
+class SeleniumHttpResponse:
+    '''
+    用于转换selenium返回结果
+    '''
+    def __init__(self,url,data:str,status):
+        self.url = url;
+        self.data = data.encode("utf-8");
+        self.status = status;
+
+    def geturl(self):
+        return self.url;
+
 class Http:
     '''
     用于转换selenium
     '''
     
-    def __init__(self,driver):
+    def __init__(self,driver:WebDriver):
         self.driver = driver;
+        self._request_count = 0;    #调用了几次request功能(用于在第一次调用时过反爬虫检测)
     
-    def request(mothed="GET",url="",body=None,fields=None,headers={},json={}):
+    def request(self,mothed="GET",url="",body=None,fields=None,headers={},json={}):
+        driver = self.driver;
+        #访问网站
+        driver.get(url);
         
-    
+        #第一次访问章节目录界面需要等待反爬虫机制
+        if self._request_count==0:
+            print(driver.title);
+            input("等待反爬机制审查,通过请按下回车键继续执行下一步...");
+        self.__close_else__();
+
+        #等待
+        wait = WebDriverWait(driver,10);
+        wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
+
+        #显示全部章节的结构需要翻页到最底部
+        if titleLimit == -1 and self._request_count == 0:
+            js = driver.execute_script      #获取JavaScriptExecutor
+            #执行向下滚轮脚本
+            js('''
+                var callback = arguments[arguments.length - 1];
+                window.scrollTo = function (y, duration) {
+                    duration = duration * 1000;
+                    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+                    var distance = y - scrollTop;
+                    var scrollCount = duration / 10;
+                    var everyDistance = distance / scrollCount;
+                    var count = 0;
+                    for (var index = 1; index <= scrollCount; index++) {
+                        setTimeout(function () {
+                            window.scrollBy(0, everyDistance);
+                            count++;
+                            if (count === scrollCount) {
+                                callback(); // 在滚动完成后调用回调
+                            }
+                        }, 10 * index);
+                    }
+                };
+                scrollTo(1000000, 60); // 用一分钟翻页，降低爬虫被 ban 的可能性
+            ''');
+
+        #返回转换后的结果
+        res = SeleniumHttpResponse(
+            url=driver.current_url,
+            data=driver.page_source,
+            status=200
+        );
+        
+        #调用接口计数加1
+        self._request_count += 1;
+        
+        return res;
+
+    def __close_else__(self):
+        '''
+        关闭除了当前窗口外的所有窗口
+        '''
+        driver = self.driver;
+        # 获取当前所有窗口句柄
+        window_handles = driver.window_handles
+        main_window = driver.current_window_handle  # 主窗口句柄
+
+        # 遍历所有窗口句柄，关闭非主窗口
+        for handle in window_handles:
+            if handle != main_window:
+                driver.switch_to.window(handle)
+                driver.close()
+
+        # 回到主窗口
+        driver.switch_to.window(main_window)
 
 try:
     # 实例化产生请求对象
@@ -475,11 +561,39 @@ try:
             http = urllib3.ProxyManager(proxyUrl,headers = headers,cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"));
         else:
             http = urllib3.PoolManager(cert_reqs = (needVerify==False and 'CERT_NONE' or "CERT_REQUIRED"))
-    elif usingTools == "selenium":
-        driver = webdriver.Chrome();
-        
+    elif usingTools == "selenium" or usingTools == "uc":        
+        #设置启动参数
+        options = webdriver.ChromeOptions();
+        options.add_argument("--remote-allow-origins=*")    # 允许所有请求
+        options.add_argument("--disable-gpu")               # 禁用 GPU
+        options.add_argument("--no-sandbox")                # 禁用沙盒
+        options.add_argument("lang=zh_CN.UTF-8")            # 设置语言
+        caps = DesiredCapabilities.CHROME                   # 配置日志
+        caps["goog:loggingPrefs"] = {"browser": "ALL"}
+
+        # 设置页面加载策略
+        options.page_load_strategy = "normal"
+
+
+        #判断是否需要代理
         if needProxy:
-            http = Http();
+            proxy = Proxy();
+            proxy.proxyType = ProxyType.MANUAL;
+            proxy.http_proxy = proxyUrl;
+            proxy.ssl_proxy = proxyUrl;
+            
+            #添加代理
+            options.proxy = proxy;
+
+        #创建浏览器实例
+        # driver = webdriver.Chrome(options=options,desired_capabilities=caps);
+        if usingTools == "uc":
+            driver = uc.Chrome(options=options);
+        else:
+            driver = webdriver.Chrome(options=options);
+        
+        #翻译结构
+        http = Http(driver);
 
     allDD = [];
     urladds = [];
@@ -585,7 +699,8 @@ try:
             
             #判断页面是否被重定向
             nowUrl = res.geturl();
-            nowUrl = webUrlForEach + (nowUrl and nowUrl.split("?")[0] or "");
+            nowUrl = (nowUrl.startswith("http")==False and webUrlForEach or "") + (nowUrl and nowUrl.split("?")[0] or "");
+            
             if nowUrl != url:
                 noNextPage = True;
                 return;        
@@ -606,7 +721,7 @@ try:
                 #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-                #text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
+                text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
@@ -625,7 +740,7 @@ try:
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
-                text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
