@@ -39,7 +39,7 @@ pageStart = 0;                              #章节分页起始页(0或者1)(网
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 usingTools = "uc";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
-
+pageLoadTimeout = 30                        #页面最大等待时间(单位:秒)(selenium/uc专用)
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
@@ -484,19 +484,40 @@ class Http:
         self._request_count = 0;    #调用了几次request功能(用于在第一次调用时过反爬虫检测)
     
     def request(self,mothed="GET",url="",body=None,fields=None,headers={},json={}):
+        global errorTimes;
+
         driver = self.driver;
         #访问网站
-        driver.get(url);
-        
-        #第一次访问章节目录界面需要等待反爬虫机制
+        try:
+            driver.get(url);
+        except Exception as e:
+            print("页面加载超时，停止加载...")
+            driver.execute_script("window.stop();")  # 停止页面加载
+            if input("回车继续执行代码,输入内容后回车则退出并显示报错") == "":
+                pass
+            else:
+                raise e;
+
+        #第一次访问打印访问内容标题
         if self._request_count==0:
             print(driver.title);
-            input("等待反爬机制审查,通过请按下回车键继续执行下一步...");
         self.__close_else__();
 
         #等待
         wait = WebDriverWait(driver,10);
         wait.until(EC.visibility_of_element_located((By.TAG_NAME, "body")))
+
+        #读取内容判断是否触发反爬虫机制
+        data = driver.page_source;
+        while 'Cloudflare' in data: #检测是否有Cloudflare保护
+            input("等待反爬机制审查,通过请按下回车键继续执行下一步...");
+            #需要重新读取页面内容
+            data = driver.page_source;
+            if errorTimes < maxErrorTimes:
+                errorTimes += 1;
+            else:
+                raise("连续的发爬虫审查!请检察是否有误");
+    
 
         #显示全部章节的结构需要翻页到最底部
         if titleLimit == -1 and self._request_count == 0:
@@ -527,7 +548,7 @@ class Http:
         #返回转换后的结果
         res = SeleniumHttpResponse(
             url=driver.current_url,
-            data=driver.page_source,
+            data=data,
             status=200
         );
         
@@ -574,7 +595,6 @@ try:
         # 设置页面加载策略
         options.page_load_strategy = "normal"
 
-
         #判断是否需要代理
         if needProxy:
             proxy = Proxy();
@@ -591,6 +611,9 @@ try:
             driver = uc.Chrome(options=options);
         else:
             driver = webdriver.Chrome(options=options);
+        
+        #设置最大等待时间
+        driver.set_page_load_timeout = pageLoadTimeout;
         
         #翻译结构
         http = Http(driver);
@@ -672,7 +695,7 @@ try:
         saveIni(webUrl,urladds,names,0);
 
     need = len(urladds);
-    pageCount = len(allDD);         #总章节数量
+    pageCount = len(allDD) or 1;         #总章节数量
     startTime = time.time();        #用来计算用时
 
     while(i<len(names)):        
