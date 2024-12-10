@@ -1,3 +1,4 @@
+from selenium.webdriver.remote.webelement import WebElement
 import urllib3
 import re
 import os
@@ -16,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.tzkczc.com/115_115479/";
-webUrlForEach = "https:";
+webUrl = "https://www.balshuzhai.cc/ibook/44349/44349166/";
+webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + -3                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -38,8 +39,9 @@ titleLimit = -1;                            #章节页面显示限制(网页无�
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
-usingTools = "uc";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
+usingTools = "selenium";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
 pageLoadTimeout = 30                        #页面最大等待时间(单位:秒)(selenium/uc专用)
+cssQuery = "#content";                      #css查询节点规则(selenium/uc专用)
 
 #----------------------------------------------------------#
 def getForEachUrl(url:str):
@@ -466,13 +468,26 @@ class SeleniumHttpResponse:
     '''
     用于转换selenium返回结果
     '''
-    def __init__(self,url,data:str,status):
+    def __init__(self,url,data:str,status,driver:WebDriver):
         self.url = url;
         self.data = data.encode("utf-8");
         self.status = status;
+        self.driver = driver;
 
     def geturl(self):
+        '''
+        获取URL
+        '''
         return self.url;
+
+    def getDom(self,rule):
+        '''
+        获取节点对象(使用css规则)
+        '''
+        try:
+            return self.driver.find_elements(By.CSS_SELECTOR,rule);
+        except Exception:
+            return None;
 
 class Http:
     '''
@@ -549,7 +564,8 @@ class Http:
         res = SeleniumHttpResponse(
             url=driver.current_url,
             data=data,
-            status=200
+            status=200,
+            driver=driver
         );
         
         #调用接口计数加1
@@ -780,7 +796,13 @@ try:
         
                 #eachData = eachData.replace("\x3C","<");    #修复特殊字符
 
-            allText = text.findall(eachData);
+            if usingTools == "urllib3":
+                allText = text.findall(eachData);
+            else:
+                doms = res.getDom(cssQuery);
+                allText = [];
+                for x in doms:
+                    allText.append(x.text);                
             
             if nextPage and len(allText)==0:
                 noNextPage = True;
