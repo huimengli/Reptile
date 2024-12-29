@@ -17,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.balshuzhai.cc/ibook/44349/44349166/";
+webUrl = "https://www.doucehua5.com/xs/146115.html";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 13                              #初始推荐章节数量
+start = 10 + 21                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -39,7 +39,7 @@ titleLimit = -1;                            #章节页面显示限制(网页无�
 pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
-usingTools = "selenium";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
+usingTools = "urllib3";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
 pageLoadTimeout = 30                        #页面最大等待时间(单位:秒)(selenium/uc专用)
 cssQuery = "#content";                      #css查询节点规则(selenium/uc专用)
 
@@ -760,7 +760,7 @@ try:
                 #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
-                text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
+                #text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)<br><br>\n为您提供大神薪意')
@@ -772,6 +772,7 @@ try:
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<script>read3')
                 #text = re.compile(r'<div id="content">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
+                text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div align="center">')
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
