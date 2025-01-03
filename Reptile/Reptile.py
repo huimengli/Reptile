@@ -1,4 +1,3 @@
-from selenium.webdriver.remote.webelement import WebElement
 import urllib3
 import re
 import os
@@ -12,6 +11,7 @@ from selenium.webdriver.common.keys import Keys;
 from selenium.webdriver.common.by import By;
 from selenium.webdriver.common.proxy import Proxy,ProxyType;
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait;
 from selenium.webdriver.support import expected_conditions as EC;
 
@@ -116,6 +116,7 @@ replacements = {
 tempIndex = 0;                              #为了翻页读取内容
 noNextPage = False;                         #为了翻页读取内容
 startTime = time.time();                    #为了计算爬取时间
+isWindows = os.name == 'nt'                 #判断是否是windows系统
 #----------------------------------------------------------#
 
 def openWriteAdd(s:str):
@@ -257,9 +258,18 @@ def consoleWrite(text,color):
     '''
     调用c#写控制台软件
     用于写有颜色的字符串
+    
+    根据系统判断调用
     '''
-    value = dir_path+"\\write.exe "+text+" -C "+color;
-    os.system(value);
+    try:
+        if isWindows:
+            # 使用windows系统情况下,调用c#程序打印有颜色的字符串
+            value = dir_path+"\\write.exe "+text+" -C "+color;
+            os.system(value);
+        else:
+            write(text,color);
+    except Exception:
+        print(text,end="");
 
 def format_string(s,max_len=20):
     '''
