@@ -17,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.doucehua5.com/xs/146115.html";
+webUrl = "https://www.luoyang3515.com/book/15910/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 21                              #初始推荐章节数量
+start = 10 + 15                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -33,11 +33,13 @@ haveTitle = True;                          #是否有数字章节头(为了小�
 timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = False;                            #是否有第二页(内容是否有第多页)
+nextPage = True;                            #是否有更多页(内容是否有第多页)
 nextPageStart = 1;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
-titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
-pageStart = 0;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
-pageRemove = 10 + 1;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
+maxPages = 2;                               #分页最大限制(-1或者2,3...)(特殊网站XX_6.html还是显示第二页内容,无法触发换页动作)
+titleLimit = 30;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
+pageStart = 1;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
+pageEndValue = ".html";                     #章节页面页面最后追加内容("/"或者".html"),取决于网站规则
+pageRemove = 10 + 15;                        #章节分页第二页起,推荐章节(或者无用章节)的数量                            
 proxyUrl = "http://127.0.0.1:33210";        #代理所使用的地址
 usingTools = "urllib3";                     #使用工具[urllib3,selenium或uc](undetected-chromedriver 是一个专为绕过反自动化检测而设计的 ChromeDriver 封装库。它通过隐藏 Selenium 的特征，降低被检测为机器人的可能性。)
 pageLoadTimeout = 30                        #页面最大等待时间(单位:秒)(selenium/uc专用)
@@ -419,7 +421,7 @@ def getAllDD(http,i:int):
     # 处理页面url
     # get请求指定网址
     if titleLimit>=0:
-        newUrl = webUrl + str(i+pageStart) + "/";
+        newUrl = webUrl + str(i+pageStart) + pageEndValue;
         #res = http.request("GET",webUrl)
         res = http.request("GET",newUrl,None,headers);
 
@@ -746,14 +748,20 @@ try:
                 eachData = res.data.decode("gbk",errors= (ignoreDecode==False and 'replace'or'ignore'));
             #print(eachData);
             
-            #判断页面是否被重定向
+            #判断页面是否被重定向(如果被重定向就判断,此章节没有更多页面内容了)
             nowUrl = res.geturl();
             nowUrl = (nowUrl.startswith("http")==False and webUrlForEach or "") + (nowUrl and nowUrl.split("?")[0] or "");
             
             if nowUrl != url:
                 noNextPage = True;
-                return;        
+                return;  
         
+            #通过最大页面数量限制(这种方式比较蠢,但是有些网站XX_6.html依旧显示第二页内容,且URL地址不变更,没有别的办法)
+            if maxPages>0:
+                if (tempIndex + nextPageStart) > maxPages:
+                    noNextPage = True;
+                    return;
+                    
             if isLines==False:
                 #text = re.compile(r'<div id="chaptercontent"[^<>]*>([\s\S]*)'+webUrlForEach)
                 #text = re.compile(r'div id="content">([\s\S]*)'+webUrlForEach.split("/")[-1])
@@ -783,7 +791,8 @@ try:
                 #text = re.compile(r'<div id="content">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div id="center_tip">')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)<div align="center">')
-                text = re.compile(r'<div id="content" deep="3">([\s\S]*)浩瀚的宇宙中，一片星系的生灭')
+                #text = re.compile(r'<div id="content" deep="3">([\s\S]*)浩瀚的宇宙中，一片星系的生灭')
+                text = re.compile(r'id=["\']content["\']>([\s\S]*)id=["\']contentdec["\']><div')
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
