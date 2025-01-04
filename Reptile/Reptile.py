@@ -883,7 +883,7 @@ try:
                     openWriteAdd("第"+str(i+1)+"章 "+ y);
                 openWriteAdd("\n\n");
             elif nextPage:
-                openWriteAdd("(第"+str(tempIndex+(1-nextPageStart))+"页)")
+                openWriteAdd("(第"+str(tempIndex+(2-nextPageStart))+"页)")
                 openWriteAdd("\n\n");
             tempIndex+=1;                                   #页面增加
 
