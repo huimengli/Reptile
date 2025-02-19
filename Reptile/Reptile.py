@@ -17,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.nfxs.com/book/120882/";
-webUrlForEach = "";
+webUrl = "http://www.biqukai.net/bq/159/159901/";
+webUrlForEach = "http://www.biqukai.net/bq/159/159901/";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 1                              #初始推荐章节数量
+start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -29,11 +29,11 @@ needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
 isLines = False;                             #内容是否是多行的
 linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
-haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
+haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = True;                            #是否有更多页(内容是否有第多页)
+nextPage = False;                            #是否有更多页(内容是否有第多页)
 nextPageStart = 0;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
 maxPages = 2;                               #分页最大限制(-1或者2,3...)(特殊网站XX_6.html还是显示第二页内容,无法触发换页动作)
 titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
@@ -754,7 +754,7 @@ try:
             nowUrl = res.geturl();
             nowUrl = (nowUrl.startswith("http")==False and webUrlForEach or "") + (nowUrl and nowUrl.split("?")[0] or "");
             
-            if nowUrl != url:
+            if nextPage and nowUrl != url:
                 noNextPage = True;
                 return;  
         
@@ -779,7 +779,7 @@ try:
                 #text = re.compile(r'<div id="content" name="content">([\s\S]*)<center class="clear">')
                 #text = re.compile(r'<div class="content" id="content">([\s\S]*)<div class="section-opt')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<\/div>\n<script>read3')
-                text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<div class="bottem2">')
                 #text = re.compile(r'div id="content">([\s\S]*)<\/div>[\n\t\0\r\ ]*<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<br /><br />\(https')
@@ -798,6 +798,7 @@ try:
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
+                text = re.compile(r'div id="content">([\s\S]*)<center class="sitenamec">')
                 #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
