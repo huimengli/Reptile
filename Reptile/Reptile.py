@@ -17,25 +17,25 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "http://www.biqukai.net/bq/159/159901/";
-webUrlForEach = "http://www.biqukai.net/bq/159/159901/";
+webUrl = "https://www.7qs.org/190727/";
+webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 0                              #初始推荐章节数量
+start = 10 + 21                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = False;                             #内容是否是多行的
-linesRemove = [0,0];                        #多行内容删除(前后各删除几行?)
+isLines = True;                             #内容是否是多行的
+linesRemove = [1,2];                        #多行内容删除(前后各删除几行?)
 haveTitle = False;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = False;                            #是否有更多页(内容是否有第多页)
-nextPageStart = 0;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
-maxPages = 2;                               #分页最大限制(-1或者2,3...)(特殊网站XX_6.html还是显示第二页内容,无法触发换页动作)
+nextPage = True;                            #是否有更多页(内容是否有第多页)
+nextPageStart = 1;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
+maxPages = -1;                               #分页最大限制(-1或者2,3...)(特殊网站XX_6.html还是显示第二页内容,无法触发换页动作)
 titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
 pageStart = 1;                              #章节分页起始页(0或者1)(网页无法显示章节,通常原URL只显示第一部分,这个值表示第二部分是从/1/还是/2/)
 pageEndValue = ".html";                     #章节页面页面最后追加内容("/"或者".html"),取决于网站规则
@@ -828,6 +828,9 @@ try:
                 for x in doms:
                     allText.append(x.text);                
             
+            # 筛选出有用的内容
+            baseText = allText.copy();
+            allText = allText[linesRemove[0]:-linesRemove[1]]
             if nextPage and len(allText)==0:
                 noNextPage = True;
                 return;
@@ -871,7 +874,7 @@ try:
                     noNextPage = True;
                     return;
                 else:
-                    for j in range(linesRemove[0],len(allText) - linesRemove[1]):
+                    for j in range(len(allText)):
                         for old, new in replacements.items():
                             allText[j] = allText[j].replace(old,new);
                         #去掉行前后的空白字符串
@@ -893,10 +896,11 @@ try:
             if isLines == False:
                 openWriteAdd(allText);                      #单行内容
             else:
-                rets = [];
-                for x in range(linesRemove[0],len(allText) - linesRemove[1]): #忽略行
-                    rets.append(allText[x]);
-                openWrites(rets);                        #多行内容
+                # rets = [];
+                # for x in range(linesRemove[0],len(allText) - linesRemove[1]): #忽略行
+                #     rets.append(allText[x]);
+                # openWrites(rets);                        #多行内容
+                openWrites(allText);                        #多行内容
                 #openWrites(allText[:len(allText)-3]);       #去掉最后行尾网站信息
             
             #用于计算当前用时
