@@ -17,23 +17,23 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.7qs.org/190727/";
+webUrl = "https://www.bqwxg8.cc/wenzhang/21921/21921230/";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 21                              #初始推荐章节数量
+start = 10 + 13                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
 needVerify = False;                         #是否需要网页ssl证书验证
 ignoreDecode = False;                        #忽略解码错误内容
-isLines = True;                             #内容是否是多行的
+isLines = False;                             #内容是否是多行的
 linesRemove = [1,2];                        #多行内容删除(前后各删除几行?)
 haveTitle = True;                          #是否有数字章节头(为了小说阅读器辨别章节用)
 timeWait = [5,7];                           #等待时间([最小值,最大值])
 maxErrorTimes = 1;                          #章节爬取最大错误次数
 removeHTML = False;                         #是否移除文章中的URL地址(测试功能)
-nextPage = True;                            #是否有更多页(内容是否有第多页)
+nextPage = False;                            #是否有更多页(内容是否有第多页)
 nextPageStart = 1;                          #分页起始(0或者1)(判断第二页是XX_1.html还是XX_2.html)
 maxPages = -1;                               #分页最大限制(-1或者2,3...)(特殊网站XX_6.html还是显示第二页内容,无法触发换页动作)
 titleLimit = -1;                            #章节页面显示限制(网页无法显示全部章节,每页只显示多少章节,-1表示全章节显示)
@@ -798,7 +798,7 @@ try:
                 #text = re.compile(r'<div id="content">([\s\S]*)[\r\n]*<br>网页版章节内容慢')
                 #text = re.compile(r'<div id="content" deep="3">([\s\S]*)无尽的昏迷过后')
                 #text = re.compile(r'div id="content">([\s\S]*)无尽的昏迷过后')
-                text = re.compile(r'div id="content">([\s\S]*)<center class="sitenamec">')
+                #text = re.compile(r'div id="content">([\s\S]*)<center class="sitenamec">')
                 #text = re.compile(r'div id="content">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" deep="3">([\s\S]*)有的人死了，但没有完全死……')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
@@ -806,7 +806,8 @@ try:
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
-                #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>app2\(\);</script>')
+                #text = re.compile(r'div id="content" class="showtxt">([\s\S]{10,})<script>app2\(\);</script>')
+                text = re.compile(r'<script>app2\(\);<\/script>([\s\S]{10,})<script>app2\(\);<\/script>')
                 #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
                 #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
                 #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
@@ -827,13 +828,6 @@ try:
                 allText = [];
                 for x in doms:
                     allText.append(x.text);                
-            
-            # 筛选出有用的内容
-            baseText = allText.copy();
-            allText = allText[linesRemove[0]:-linesRemove[1]]
-            if nextPage and len(allText)==0:
-                noNextPage = True;
-                return;
 
             if isLines == False:
                 try:
@@ -861,6 +855,13 @@ try:
                     re.sub(r'([HhＨｈΗ]|[WwＷω]|[MmＭｍＭ])[^\n]{9,100}[MmＭｍＭ]',"",allText); #将各种网址删除的正则(测试)
 
             else:
+                # 筛选出有用的内容
+                baseText = allText.copy();
+                allText = allText[linesRemove[0]:-linesRemove[1]]
+                if nextPage and len(allText)==0:
+                    noNextPage = True;
+                    return;
+            
                 if len(allText)==0:
                     #休眠一次时间后重试
                     errorTimes +=1;

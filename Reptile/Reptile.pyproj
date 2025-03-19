@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>9fc28a85-0258-46a5-8832-38291df1189d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Reptile.py</StartupFile>
+    <StartupFile>TempReptile.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
