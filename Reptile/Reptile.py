@@ -17,11 +17,11 @@ from selenium.webdriver.support import expected_conditions as EC;
 
 import undetected_chromedriver as uc;
 
-webUrl = "https://www.bqwxg8.cc/wenzhang/21921/21921230/";
+webUrl = "http://www.yiruan.info/article/188201.html";
 webUrlForEach = "";
 file = "output.txt";
 ini = "output.ini";
-start = 10 + 13                              #初始推荐章节数量
+start = 10 + 0                              #初始推荐章节数量
 passUrl = ''                                #排除的对象(URL排除)
 passName = "无标题章节";                    #排除的对象(章节名排除)
 needProxy = False;                          #下载网站是否需要代理
@@ -804,10 +804,11 @@ try:
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>read3')
                 #text = re.compile(r'div id="content">([\s\S]*)<script>read3')
+                text = re.compile(r'div id="content">([\s\S]*)<script>read_bottom\(\);</script>')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<script>showByJs')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]*)<div class="page_chapter">')
                 #text = re.compile(r'div id="content" class="showtxt">([\s\S]{10,})<script>app2\(\);</script>')
-                text = re.compile(r'<script>app2\(\);<\/script>([\s\S]{10,})<script>app2\(\);<\/script>')
+                #text = re.compile(r'<script>app2\(\);<\/script>([\s\S]{10,})<script>app2\(\);<\/script>')
                 #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
                 #text = re.compile(r'<script>read2\(\);</script>([\s\S]*)<script>read3')
                 #text = re.compile(r'<script>app2\(\);</script>([\s\S]*)<script>app2\(\);</script>')
